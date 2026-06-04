@@ -1,0 +1,17 @@
+
+{% block content %}
+<h1><center>Study Quiz Hub</center></h1>
+<p>Welcome to the quiz platform!</p>
+{% for quiz in quizzes %}
+<div style="border: 1px solid #ccc; padding: 10px; margin: 10px 0;">
+    <p><strong>{{ quiz.questions }}</strong></p>
+    {% for option in quiz.Option %}
+    <p><input type="radio" name="answer"> {{ option }}</p>
+    {% endfor %}
+</div>
+
+{% endfor %}
+<a href="/Information">study quiz hub</a>
+{% endblock %}
+
+ 

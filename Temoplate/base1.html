@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+            {%block title %}STUDY QUIZ HUB{%endblock%}
+        </title>
+        <style>
+            *{
+                background-origin: padding-box;
+                background-color: aqua;
+                margin :0;
+                
+            }
+            body{
+                background: -moz-linear-gradient();
+                min-height: auto;
+                min-width: auto;
+                font-family:'Courier New', Courier, monospace ;
+                padding: 40px;
+            }
+            nav a {
+            color:black;
+            text-decoration: none;
+            margin: 0 20px;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+
+        </style>
+        
+    </head>
+    <body>
+        <nav>
+
+            <a href="/home">home_page</a>
+            <a href="/Quiz_page">Quiz_page</a>
+            <a href="/Information">Study_quiz_hub</a>
+        </nav>
+        
+        {% block content %}
+
+        {% endblock %}
+        
+    </body>
+</html>

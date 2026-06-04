@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Study Quiz Hub{% endblock %}
+
+{% block content %}
+<h1>Welcome to Study Quiz Hub 👋</h1>
+
+<div style="text-align: center; margin: 30px 0;">
+    <p style="font-size: 1.1em; color: #555; line-height: 1.6;">
+        Test your knowledge with our Python Quiz!
+    </p>
+
+    <div style="margin: 40px 0;">
+        <a href="/Que" style="
+            background-color: #667eea;
+            color: white;
+            padding: 15px 40px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: inline-block;
+            cursor: pointer;
+        " onmouseover="this.style.backgroundColor='#764ba2'" onmouseout="this.style.backgroundColor='#667eea'">
+            Start Quiz 🚀
+        </a>
+    </div>
+
+    <div style="
+        background-color: #f0f0f0;
+        padding: 20px;
+        border-radius: 10px;
+        margin-top: 30px;
+        text-align: left;
+    ">
+        <h3 style="color: #333; margin-bottom: 15px;">📚 About This Quiz:</h3>
+        <ul style="list-style: none; color: #555; line-height: 2;">
+            <li>✓ Multiple choice questions on Python</li>
+            <li>✓ Test your programming knowledge</li>
+            <li>✓ Learn while you practice</li>
+            <li>✓ Instant feedback on answers</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

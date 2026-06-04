@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}About - Study Quiz Hub{% endblock %}
+
+{% block content %}
+<h1>ℹ️ About Study Quiz Hub</h1>
+
+<div style="
+    background-color: #f0f0f0;
+    padding: 30px;
+    border-radius: 10px;
+    line-height: 1.8;
+    color: #333;
+    margin: 30px 0;
+">
+    <h2 style="margin-top: 0;">What is Study Quiz Hub?</h2>
+    <p>
+        Study Quiz Hub is a modern Flask-based web application designed to help students and
+        programmers test their knowledge of Python programming through interactive quizzes.
+    </p>
+
+    <h2>Features:</h2>
+    <ul style="list-style-position: inside; margin: 15px 0;">
+        <li>✓ Multiple choice questions on Python fundamentals</li>
+        <li>✓ Comprehensive question database</li>
+        <li>✓ Immediate feedback with correct answers</li>
+        <li>✓ User-friendly interface</li>
+        <li>✓ Progress tracking capability</li>
+        <li>✓ Responsive design for all devices</li>
+    </ul>
+
+    <h2>How It Works:</h2>
+    <ol style="list-style-position: inside; margin: 15px 0;">
+        <li>Navigate to the Quiz section</li>
+        <li>Read each question carefully</li>
+        <li>View the available options</li>
+        <li>Check the correct answer provided</li>
+        <li>Learn and improve your knowledge</li>
+    </ol>
+
+    <h2>Topics Covered:</h2>
+    <div style="
+        background-color: white;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 15px 0;
+    ">
+        <p>Our quiz covers essential Python concepts including:</p>
+        <ul style="list-style-position: inside;">
+            <li>Input and Output Functions</li>
+            <li>Data Structures (Lists, Tuples, Dictionaries)</li>
+            <li>Programming History and Fundamentals</li>
+            <li>Control Flow and Loops</li>
+            <li>Functions and Definitions</li>
+        </ul>
+    </div>
+
+    <h2>Contact & Support:</h2>
+    <p>
+        If you have any questions, suggestions, or feedback about Study Quiz Hub,
+        please feel free to reach out. We're here to help you succeed in your
+        Python learning journey!
+    </p>
+</div>
+
+<div style="text-align: center; margin-top: 40px;">
+    <a href="/" style="
+        background-color: #667eea;
+        color: white;
+        padding: 10px 30px;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        display: inline-block;
+    " onmouseover="this.style.backgroundColor='#764ba2'" onmouseout="this.style.backgroundColor='#667eea'">
+        ← Back to Home
+    </a>
+</div>
+{% endblock %}
