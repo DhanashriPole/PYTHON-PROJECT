@@ -1,86 +1,138 @@
 {% extends "base1.html" %}
 {% block title %}Study Quiz Hub{% endblock %}
 {% block content %}
-<body style="border-width: 1px;margin: 0px; padding: 0px; border-style: solid; border-color: black;">
+
+<head>
+    <style>
+        table {
+            margin: 30px;
+            background-origin: padding-box;
+            border-collapse: collapse;
+            border-width: 10px;
+        }
+
+        th,
+        td {
+            padding: 15px 40px;
+            border-radius: 0%;
+            border: 4px solid rgb(22, 18, 31);
+
+        }
+
+        th {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: large;
+            font-style: oblique;
+            font-display: fallback;
 
 
-<pre>Study quiz hub contain various type of questions</pre>
-<table border="1">
-    <thead>
-        <tr>
-            <th>Question</th>
-            <th colspan="4">Options</th>
-            <th>Answer</th>
-            
-            </tr>
-        
-    </thead>
-    <tbody>
-        <tr>
-            <td>Which function is used to take input in python ?</td>
-            <td>A. input()</td>
-            <td>B. print()</td>
-            <td>C. len()</td>
-            <td>D. type()</td>
-            <td>A</td>
-        </tr>
-        <tr>
-            <td>Which python data structure stores values in key:value pair ?</td>
-            <td>A. List</td>
-            <td>B. Dictionary</td>
-            <td>C. Set</td>
-            <td>D. Tuple</td>
-            <td>B</td>
-        </tr>
-        <tr>
-            <td>Which of the following is a mutable data type in python ?</td>
-            <td>A. List</td>
-            <td>B. Tuple</td>
-            <td>C. String</td>
-            <td>D. Integer</td>
-            <td>A</td>
+        }
 
-        </tr>
-        <tr>
-            <td>Which of the following is used to define a function in python ?</td>
-            <td>A. func</td>
-            <td>B. def</td>
-            <td>C. function</td>
-            <td>D. define</td>
-            <td>B</td>
-        </tr>
-        <tr>
-            <td>Which of the following is used to handle exceptions in python ?</td>
-            <td>A. try-except</td>
-            <td>B. if-else</td>
-            <td>C. for loop</td>
-            <td>D. while loop</td>
-            <td>A</td>
-        </tr>
-        <tr>
-            <td>Which of the following is used to create a virtual environment in python ?</td>
-            <td>A. venv</td>
-            <td>B. virtualenv</td>
-            <td>C. env</td>
-            <td>D. pyenv</td>
-            <td>A</td>
-        </tr>
-        <tr>
-            <td>Which of the following is used to read a file in python ?</td>
-            <td>A. open()</td>
-            <td>B. read()</td>
-            <td>C. write()</td>
-            <td>D. close()</td>
-            <td>A</td>
-        </tr>
+        td {
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            font-size: medium;
+            font-variant-emoji: emoji;
+
+
+        }
+        h1{
+            font-weight: 100;
+        }
+    </style>
+</head>
+
+<body style=" background-color:aqua;"><br><br>
+
+    <font color="darkred">
+        <h1>
+            <center><u><B>Study quiz hub contain various type of questions</center></u></B>
+        </h1>
+    </font>
+    <table border="1" ;margin:30px 0;padding:15px 40 px;>
+        <thead>
             <tr>
+                <th>No.</th>
+                <th>Question</th>
+                <th colspan="4">Options</th>
+                <th>Answer</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr>
+                <td>1</td>
+                <td>Which function is used to take input in python ?</td>
+                <td>A. input()</td>
+                <td>B. print()</td>
+                <td>C. len()</td>
+                <td>D. type()</td>
+                <td>A</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Which python data structure stores values in key:value pair ?</td>
+                <td>A. List</td>
+                <td>B. Dictionary</td>
+                <td>C. Set</td>
+                <td>D. Tuple</td>
+                <td>B</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Which of the following is a mutable data type in python ?</td>
+                <td>A. List</td>
+                <td>B. Tuple</td>
+                <td>C. String</td>
+                <td>D. Integer</td>
+                <td>A</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>Which of the following is used to define a function in python ?</td>
+                <td>A. func</td>
+                <td>B. def</td>
+                <td>C. function</td>
+                <td>D. define</td>
+                <td>B</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>Which of the following is used to handle exceptions in python ?</td>
+                <td>A. try-except</td>
+                <td>B. if-else</td>
+                <td>C. for loop</td>
+                <td>D. while loop</td>
+                <td>A</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>Which of the following is used to create a virtual environment in python ?</td>
+                <td>A. venv</td>
+                <td>B. virtualenv</td>
+                <td>C. env</td>
+                <td>D. pyenv</td>
+                <td>A</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>Which of the following is used to read a file in python ?</td>
+                <td>A. open()</td>
+                <td>B. read()</td>
+                <td>C. write()</td>
+                <td>D. close()</td>
+                <td>A</td>
+            </tr>
+            <tr>
+                <td>8</td>
                 <td>Which of the following is used to create a class in python ?</td>
                 <td>A. class</td>
                 <td>B. def</td>
                 <td>C. object</td>
                 <td>D. type</td>
                 <td>A</td>
-    </tbody>
-</table>
+            </tr>
+
+        </tbody>
+    </table>
 </body>
 {% endblock %}

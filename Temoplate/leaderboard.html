@@ -1,0 +1,28 @@
+{% extends "base1.html" %}
+{% block title %}Leaderboard{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Top 5 Students Leaderboard</h1>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover bg-white">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Rank</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in leaderboard %}
+                <tr>
+                    <td>{{ student.rank }}</td>
+                    <td>{{ student.name }}</td>
+                    <td>{{ student.score }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
