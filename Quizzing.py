@@ -1,5 +1,11 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect
 app = Flask(__name__, template_folder='Temoplate')
+
+student = {
+    "Name": "",
+    "Score": 0,
+    "Attempted questions": 0
+}
 
 Quizzes = [
     {
@@ -32,13 +38,55 @@ Quizzes = [
 def home_page():
     return render_template('home_page.html')
 
-@app.route("/Quiz_page")
+def update_leaderboard(name, score):
+    leaderboard_entries.append({"name": name, "score": score})
+    leaderboard_entries.sort(key=lambda item: item["score"], reverse=True)
+    top_entries = leaderboard_entries[:5]
+    for idx, entry in enumerate(top_entries, start=1):
+        entry["rank"] = idx
+    leaderboard_entries.clear()
+    leaderboard_entries.extend(top_entries)
+
+@app.route("/Quiz_page", methods=["GET", "POST"])
 def Quiz_page():
-   return render_template("Quiz_page.html",quizzes =Quizzes )
+    if request.method == "POST":
+        name = request.form.get("student_name", "Guest").strip() or "Guest"
+        score = 0
+        attempted = 0
+        for idx, quiz in enumerate(Quizzes, start=1):
+            answer = request.form.get(f"q{idx}", "")
+            if answer:
+                attempted += 1
+                if answer.upper() == quiz["Answer"].upper():
+                    score += 1
+        update_leaderboard(name, score)
+        percentage = round(score / len(Quizzes) * 100, 1)
+        return render_template(
+            "quiz_result.html",
+            name=name,
+            score=score,
+            attempted=attempted,
+            total=len(Quizzes),
+            percentage=percentage,
+            leaderboard=leaderboard_entries,
+        )
+    return render_template("Quiz_page.html", quizzes=Quizzes)
 
 @app.route("/Information")
 def Study_quiz_hub():
      return render_template("Study_quiz_hub.html")
+
+leaderboard_entries = [
+    {"rank": 1, "name": "Aarti", "score": 5},
+    {"rank": 2, "name": "Kaveri", "score": 4},
+    {"rank": 3, "name": "Divya", "score": 4},
+    {"rank": 4, "name": "Rohini", "score": 3},
+    {"rank": 5, "name": "Sowmya", "score": 2}
+]
+
+@app.route("/leaderboard")
+def leaderboard_page():
+    return render_template("leaderboard.html", leaderboard=leaderboard_entries)
 
 if __name__ == "__main__":
    app.run(debug=True)
