@@ -1,0 +1,28 @@
+{% extends "base1.html" %}
+{% block title %}Study Quiz Hub{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Study Quiz Hub</h1>
+    <form method="post" action="/Quiz_page">
+        <div class="mb-4">
+            <label for="student_name" class="form-label">Your name</label>
+            <input id="student_name" name="student_name" class="form-control" placeholder="Enter your name" required
+                value="{{ student_name }}">
+        </div>
+        <div class="mb-4 p-3 border rounded">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3>Question {{ idx + 1 }} of {{ total }}</h3>
+                <span class="badge bg-secondary">Progress {{ idx + 1 }}/{{ total }}</span>
+            </div>
+            <p class="fw-semibold">{{ quiz.questions }}</p>
+            {% for option in quiz.Option %}
+            <label class="d-block mb-2">
+                <input type="radio" name="choice" value="{{ option[0]|upper }}"> {{ option }}
+            </label>
+            {% endfor %}
+        </div>
+        <button type="submit" class="btn btn-primary">{% if idx + 1 == total %}Finish{% else %}Next{% endif %}</button>
+    </form>
+</div>
+{% endblock %}

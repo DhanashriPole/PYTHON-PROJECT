@@ -1,0 +1,24 @@
+{% extends "base1.html" %}
+{% block title %}Student Form{% endblock %}
+{% block content %}
+<div class="page-card p-4">
+    <h2 class="mb-3"><center><b><u>-:Student Form:-</u></b></center></h2>
+    <form method="post" action="/student" class="d-flex flex-column gap-3 align-items-center">
+        <div class="w-100" style="max-width: 420px;">
+            <input type="text" name="name" class="form-control form-control-lg" placeholder="Full name" required>
+        </div>
+        <div class="w-100" style="max-width: 420px;">
+            <input type="email" name="email" class="form-control form-control-lg" placeholder="Email">
+        </div>
+        <div class="w-100" style="max-width: 420px;">
+            <input type="number" name="age" class="form-control form-control-lg" placeholder="Age" min="1">
+        </div>
+        <div class="w-100" style="max-width: 420px;">
+            <input type="text" name="grade" class="form-control form-control-lg" placeholder="Class/Grade">
+        </div>
+        <div>
+            <button class="btn btn-primary btn-md w-auto px-4" type="submit">Submit</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

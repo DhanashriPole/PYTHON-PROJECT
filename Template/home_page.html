@@ -1,0 +1,41 @@
+{% extends "base1.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<div class="page-card p-5 text-center">
+    <h1 class="display-5 mb-3">Welcome to Study Quiz Hub</h1>
+    <p class="lead text-secondary mb-4">Practice Python with interactive quizzes — answer one question at a time and
+        track your progress.</p>
+    <div class="d-flex justify-content-center">
+        <a href="/student" class="btn btn-primary btn-lg">Student login</a>
+    </div>
+
+    <div class="row mt-4 g-3">
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h4 class="card-title">About Me</h4>
+                    <p class="card-text text-muted">Study quiz hub provides more interactive quizzes for practic.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h4 class="card-title">Study Quiz Hub</h4>
+                    <p class="card-text text-muted">Contains practice questions. Start the quiz to answer one question
+                        at a time.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h4 class="card-title">Leaderboard</h4>
+                    <p class="card-text text-muted">Top scorers are displayed on the leaderboard after completing a
+                        quiz.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
