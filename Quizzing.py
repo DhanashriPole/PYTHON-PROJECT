@@ -1,11 +1,15 @@
-from flask import Flask, render_template, request, redirect
-app = Flask(__name__, template_folder='Temoplate')
+import secrets
+from flask import Flask, render_template, request, session, redirect, url_for
+app = Flask(__name__, template_folder='Template')
+app.secret_key = secrets.token_bytes(24)
 
-student = {
-    "Name": "",
-    "Score": 0,
-    "Attempted questions": 0
-}
+leaderboard_entries = [
+    {"rank": 1, "name": "Aarti", "score": 5},
+    {"rank": 2, "name": "Kaveri", "score": 4},
+    {"rank": 3, "name": "Divya", "score": 4},
+    {"rank": 4, "name": "Rohini", "score": 3},
+    {"rank": 5, "name": "Sowmya", "score": 2}
+]
 
 Quizzes = [
     {
@@ -39,6 +43,7 @@ def home_page():
     return render_template('home_page.html')
 
 def update_leaderboard(name, score):
+    
     leaderboard_entries.append({"name": name, "score": score})
     leaderboard_entries.sort(key=lambda item: item["score"], reverse=True)
     top_entries = leaderboard_entries[:5]
@@ -49,40 +54,70 @@ def update_leaderboard(name, score):
 
 @app.route("/Quiz_page", methods=["GET", "POST"])
 def Quiz_page():
+    total = len(Quizzes)
+    if "q_index" not in session:
+        session["q_index"] = 0
+        session["answers"] = []
+        session["student_name"] = ""
+
     if request.method == "POST":
-        name = request.form.get("student_name", "Guest").strip() or "Guest"
-        score = 0
-        attempted = 0
-        for idx, quiz in enumerate(Quizzes, start=1):
-            answer = request.form.get(f"q{idx}", "")
-            if answer:
-                attempted += 1
-                if answer.upper() == quiz["Answer"].upper():
+        student_name = request.form.get("student_name", "Guest").strip() or "Guest"
+        session["student_name"] = student_name
+        answer = request.form.get("choice", "")
+        answers = session.get("answers", [])
+        answers.append(answer)
+        session["answers"] = answers
+
+        session["q_index"] = session.get("q_index", 0) + 1
+
+        if session["q_index"] >= total:
+            score = 0
+            attempted = sum(1 for a in answers if a)
+            for idx, a in enumerate(answers):
+                if a and a.upper() == Quizzes[idx]["Answer"].upper():
                     score += 1
-        update_leaderboard(name, score)
-        percentage = round(score / len(Quizzes) * 100, 1)
-        return render_template(
-            "quiz_result.html",
-            name=name,
-            score=score,
-            attempted=attempted,
-            total=len(Quizzes),
-            percentage=percentage,
-            leaderboard=leaderboard_entries,
-        )
-    return render_template("Quiz_page.html", quizzes=Quizzes)
+
+            update_leaderboard(student_name, score)
+            percentage = round(score / total * 100, 1)
+            session.pop("q_index", None)
+            session.pop("answers", None)
+            session.pop("student_name", None)
+            return render_template(
+                "quiz_result.html",
+                name=student_name,
+                score=score,
+                attempted=attempted,
+                total=total,
+                percentage=percentage,
+                leaderboard=leaderboard_entries,
+            )
+
+        return redirect(url_for("Quiz_page"))
+
+    idx = session.get("q_index", 0)
+    quiz = Quizzes[idx]
+    return render_template(
+        "Quiz_page.html",
+        quiz=quiz,
+        idx=idx,
+        total=total,
+        student_name=session.get("student_name", ""),
+    )
 
 @app.route("/Information")
 def Study_quiz_hub():
-     return render_template("Study_quiz_hub.html")
+    return render_template("Study_quiz_hub.html")
 
-leaderboard_entries = [
-    {"rank": 1, "name": "Aarti", "score": 5},
-    {"rank": 2, "name": "Kaveri", "score": 4},
-    {"rank": 3, "name": "Divya", "score": 4},
-    {"rank": 4, "name": "Rohini", "score": 3},
-    {"rank": 5, "name": "Sowmya", "score": 2}
-]
+
+@app.route('/student', methods=['GET', 'POST'])
+def student_form():
+    if request.method == 'POST':
+        name = request.form.get('name', '').strip()
+        email = request.form.get('email', '').strip()
+        age = request.form.get('age', '').strip()
+        grade = request.form.get('grade', '').strip()
+        return render_template('student_submitted.html', name=name, email=email, age=age, grade=grade)
+    return render_template('student_form.html')
 
 @app.route("/leaderboard")
 def leaderboard_page():
