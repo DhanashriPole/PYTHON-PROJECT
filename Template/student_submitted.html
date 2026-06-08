@@ -1,14 +1,28 @@
 {% extends "base1.html" %}
 {% block title %}Submission Received{% endblock %}
 {% block content %}
-<div class="page-card p-4">
-    <h2>Thank you, {{ name or 'Student' }}!</h2>
-    <p class="text-muted">We received your information.</p>
-    <ul class="list-unstyled">
-        <li><strong>Email:</strong> {{ email or '—' }}</li>
-        <li><strong>Age:</strong> {{ age or '—' }}</li>
-        <li><strong>Class/Grade:</strong> {{ grade or '—' }}</li>
+<div class="page-card p-4 mx-auto" style="max-width: 520px;">
+    <div class="section-heading justify-content-center">
+        <i class="bi bi-check-circle-fill text-success"></i>
+        <h2 class="m-0">Thank you, {{ name or 'Student' }}!</h2>
+    </div>
+    <p class="text-muted mb-4">We received your registration details successfully.</p>
+    <ul class="list-group list-group-flush mb-4">
+        <li class="list-group-item"><i class="bi bi-envelope-fill text-primary me-2"></i><strong>Email:</strong> {{
+            email or '—' }}</li>
+        <li class="list-group-item"><i class="bi bi-calendar-fill text-primary me-2"></i><strong>Age:</strong> {{ age or
+            '—' }}</li>
+        <li class="list-group-item"><i
+                class="bi bi-mortarboard-fill text-primary me-2"></i><strong>Class/Grade:</strong> {{ grade or '—' }}
+        </li>
+        <li class="list-group-item"><i
+                class="bi bi-journal-bookmark-fill text-primary me-2"></i><strong>Course:</strong> {{ course_name or
+            'None selected' }}</li>
     </ul>
-    <a href="/Quiz_page" class="btn btn-primary">Start Quiz</a>
+    <div class="d-grid">
+        <a href="/Quiz_page" class="btn btn-primary btn-lg">
+            <i class="bi bi-play-fill me-2"></i> Start Quiz
+        </a>
+    </div>
 </div>
 {% endblock %}

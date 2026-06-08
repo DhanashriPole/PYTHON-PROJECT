@@ -1,28 +1,55 @@
 {% extends "base1.html" %}
-{% block title %}Study Quiz Hub{% endblock %}
+{% block title %}Quiz Challenge{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h1 class="mb-4">Study Quiz Hub</h1>
+<div class="page-card p-4">
+    <div class="section-heading">
+        <i class="bi bi-question-circle-fill text-primary"></i>
+        <div>
+            <h1 class="h3 mb-1">Quiz Challenge</h1>
+            <p class="text-muted mb-0">Answer one question at a time and track your score.</p>
+        </div>
+    </div>
     <form method="post" action="/Quiz_page">
         <div class="mb-4">
             <label for="student_name" class="form-label">Your name</label>
-            <input id="student_name" name="student_name" class="form-control" placeholder="Enter your name" required
-                value="{{ student_name }}">
+            <input id="student_name" name="student_name" class="form-control form-control-lg"
+                placeholder="Enter your name" required value="{{ student_name }}">
         </div>
-        <div class="mb-4 p-3 border rounded">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h3>Question {{ idx + 1 }} of {{ total }}</h3>
-                <span class="badge bg-secondary">Progress {{ idx + 1 }}/{{ total }}</span>
+        {% if course_name %}
+        <div class="mb-3">
+            <span class="badge bg-info text-dark"><i class="bi bi-journal-bookmark-fill me-1"></i>{{ course_name
+                }}</span>
+        </div>
+        {% endif %}
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h3 class="h5 mb-1">Question {{ idx + 1 }} of {{ total }}</h3>
+                        <span class="text-muted">Select the best answer below.</span>
+                    </div>
+                    <span class="badge bg-secondary">Progress {{ idx + 1 }}/{{ total }}</span>
+                </div>
+                <p class="fw-semibold fs-5">{{ quiz.questions }}</p>
+                <div class="row">
+                    {% for option in quiz.Option %}
+                    <div class="col-md-6 mb-2">
+                        <label
+                            class="form-check form-check-card d-flex align-items-center p-3 rounded-4 border border-2">
+                            <input class="form-check-input me-3" type="radio" name="choice"
+                                value="{{ option[0]|upper }}">
+                            <span>{{ option }}</span>
+                        </label>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
-            <p class="fw-semibold">{{ quiz.questions }}</p>
-            {% for option in quiz.Option %}
-            <label class="d-block mb-2">
-                <input type="radio" name="choice" value="{{ option[0]|upper }}"> {{ option }}
-            </label>
-            {% endfor %}
         </div>
-        <button type="submit" class="btn btn-primary">{% if idx + 1 == total %}Finish{% else %}Next{% endif %}</button>
+        <button type="submit" class="btn btn-primary btn-lg">
+            <i class="bi bi-arrow-right-circle me-2"></i>
+            {% if idx + 1 == total %}Finish Quiz{% else %}Next Question{% endif %}
+        </button>
     </form>
 </div>
 {% endblock %}

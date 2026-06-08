@@ -1,23 +1,42 @@
 {% extends "base1.html" %}
 {% block title %}Student Form{% endblock %}
 {% block content %}
-<div class="page-card p-4">
-    <h2 class="mb-3"><center><b><u>-:Student Form:-</u></b></center></h2>
-    <form method="post" action="/student" class="d-flex flex-column gap-3 align-items-center">
-        <div class="w-100" style="max-width: 420px;">
-            <input type="text" name="name" class="form-control form-control-lg" placeholder="Full name" required>
+<div class="page-card p-4 mx-auto" style="max-width: 520px;">
+    <div class="section-heading justify-content-center">
+        <i class="bi bi-person-badge-fill text-primary"></i>
+        <h2 class="m-0">Student Registration</h2>
+    </div>
+    <form method="post" action="/student" class="d-flex flex-column gap-3">
+        <div class="form-floating">
+            <input type="text" name="name" class="form-control form-control-lg" id="name" placeholder="Full name"
+                required>
+            <label for="name">Full Name</label>
         </div>
-        <div class="w-100" style="max-width: 420px;">
-            <input type="email" name="email" class="form-control form-control-lg" placeholder="Email">
+        <div class="form-floating">
+            <input type="email" name="email" class="form-control form-control-lg" id="email" placeholder="Email">
+            <label for="email">Email</label>
         </div>
-        <div class="w-100" style="max-width: 420px;">
-            <input type="number" name="age" class="form-control form-control-lg" placeholder="Age" min="1">
+        <div class="form-floating">
+            <input type="number" name="age" class="form-control form-control-lg" id="age" placeholder="Age" min="1">
+            <label for="age">Age</label>
         </div>
-        <div class="w-100" style="max-width: 420px;">
-            <input type="text" name="grade" class="form-control form-control-lg" placeholder="Class/Grade">
+        <div class="form-floating">
+            <input type="text" name="grade" class="form-control form-control-lg" id="grade" placeholder="Class/Grade">
+            <label for="grade">Class / Grade</label>
         </div>
-        <div>
-            <button class="btn btn-primary btn-md w-auto px-4" type="submit">Submit</button>
+        <div class="form-floating">
+            <select name="course_id" class="form-select form-control-lg" id="course_id">
+                <option value="">Select a course (optional)</option>
+                {% for course in courses %}
+                <option value="{{ course['id'] }}">{{ course['course_name'] }}</option>
+                {% endfor %}
+            </select>
+            <label for="course_id">Course</label>
+        </div>
+        <div class="d-grid">
+            <button class="btn btn-primary btn-lg" type="submit">
+                <i class="bi bi-send-fill me-2"></i> Submit
+            </button>
         </div>
     </form>
 </div>

@@ -2,66 +2,125 @@
 {% block title %}Study Quiz Hub{% endblock %}
 {% block content %}
 <div class="page-card p-4">
-    <h1 class="mb-4">Study Quiz Hub</h1>
-    <p class="mb-4 text-muted">Here are some example quiz questions to help you study Python.</p>
+    <div class="section-heading">
+        <i class="bi bi-book-half text-primary"></i>
+        <div>
+            <h1 class="h4 mb-1">Study Quiz Hub</h1>
+            <p class="text-muted mb-0">More course-specific questions to help you learn Python, Web Development, and
+                Data Science.</p>
+        </div>
+    </div>
+    <div class="mb-4">
+        <span class="badge bg-info text-dark me-2"><i class="bi bi-code-slash me-1"></i>Python Basics</span>
+        <span class="badge bg-success me-2"><i class="bi bi-window-stack me-1"></i>Web Development</span>
+        <span class="badge bg-warning text-dark"><i class="bi bi-bar-chart-line me-1"></i>Data Science</span>
+    </div>
     <div class="table-responsive">
-        <table class="table table-bordered table-hover align-middle">
-            <thead class="table-primary">
+        <table class="table table-striped table-hover shadow-sm">
+            <thead class="table-dark">
                 <tr>
-                    <th scope="col">No.</th>
-                    <th scope="col">Question</th>
-                    <th scope="col">Options</th>
-                    <th scope="col">Answer</th>
+                    <th scope="col"><i class="bi bi-hash"></i> No.</th>
+                    <th scope="col"><i class="bi bi-journal-text"></i> Course</th>
+                    <th scope="col"><i class="bi bi-question-circle"></i> Question</th>
+                    <th scope="col"><i class="bi bi-list-ul"></i> Options</th>
+                    <th scope="col"><i class="bi bi-check-circle"></i> Answer</th>
                 </tr>
             </thead>
             <tbody>
+                <tr class="table-primary text-white">
+                    <td colspan="5" class="fw-bold"><i class="bi bi-code-slash me-2"></i>Python Basics</td>
+                </tr>
                 <tr>
                     <td>1</td>
+                    <td>Python Basics</td>
                     <td>Which function is used to take input in Python?</td>
                     <td>A. input(), B. print(), C. len(), D. type()</td>
-                    <td>A</td>
+                    <td><span class="badge bg-success">A</span></td>
                 </tr>
                 <tr>
                     <td>2</td>
+                    <td>Python Basics</td>
                     <td>Which Python data structure stores values in key:value pairs?</td>
                     <td>A. List, B. Dictionary, C. Set, D. Tuple</td>
-                    <td>B</td>
+                    <td><span class="badge bg-success">B</span></td>
                 </tr>
                 <tr>
                     <td>3</td>
+                    <td>Python Basics</td>
                     <td>Which of the following is a mutable data type in Python?</td>
                     <td>A. List, B. Tuple, C. String, D. Integer</td>
-                    <td>A</td>
+                    <td><span class="badge bg-success">A</span></td>
                 </tr>
                 <tr>
                     <td>4</td>
-                    <td>Which of the following is used to define a function in Python?</td>
+                    <td>Python Basics</td>
+                    <td>Which keyword is used to define a function?</td>
                     <td>A. func, B. def, C. function, D. define</td>
-                    <td>B</td>
+                    <td><span class="badge bg-success">B</span></td>
+                </tr>
+                <tr class="table-success text-dark">
+                    <td colspan="5" class="fw-bold"><i class="bi bi-window-stack me-2"></i>Web Development</td>
                 </tr>
                 <tr>
                     <td>5</td>
-                    <td>Which of the following is used to handle exceptions in Python?</td>
-                    <td>A. try-except, B. if-else, C. for loop, D. while loop</td>
-                    <td>A</td>
+                    <td>Web Development</td>
+                    <td>Which Python framework is used for building web applications?</td>
+                    <td>A. Django, B. numpy, C. pandas, D. matplotlib</td>
+                    <td><span class="badge bg-success">A</span></td>
                 </tr>
                 <tr>
                     <td>6</td>
-                    <td>Which of the following is used to create a virtual environment in Python?</td>
-                    <td>A. venv, B. virtualenv, C. env, D. pyenv</td>
-                    <td>A</td>
+                    <td>Web Development</td>
+                    <td>In HTML, which tag is used for the largest heading?</td>
+                    <td>A. &lt;h1&gt;, B. &lt;h2&gt;, C. &lt;head&gt;, D. &lt;title&gt;</td>
+                    <td><span class="badge bg-success">A</span></td>
                 </tr>
                 <tr>
                     <td>7</td>
-                    <td>Which of the following is used to read a file in Python?</td>
-                    <td>A. open(), B. read(), C. write(), D. close()</td>
-                    <td>A</td>
+                    <td>Web Development</td>
+                    <td>What does CSS stand for?</td>
+                    <td>A. Cascading Style Sheets, B. Computer Style Sheets, C. Cool Style Syntax, D. Code Style Sheet
+                    </td>
+                    <td><span class="badge bg-success">A</span></td>
                 </tr>
                 <tr>
                     <td>8</td>
-                    <td>Which of the following is used to create a class in Python?</td>
-                    <td>A. class, B. def, C. object, D. type</td>
-                    <td>A</td>
+                    <td>Web Development</td>
+                    <td>Which method starts a Flask web server?</td>
+                    <td>A. app.run(), B. app.start(), C. app.open(), D. app.launch()</td>
+                    <td><span class="badge bg-success">A</span></td>
+                </tr>
+                <tr class="table-warning text-dark">
+                    <td colspan="5" class="fw-bold"><i class="bi bi-bar-chart-line me-2"></i>Data Science</td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td>Data Science</td>
+                    <td>Which library is commonly used for data analysis in Python?</td>
+                    <td>A. pandas, B. Flask, C. PyGame, D. TensorFlow</td>
+                    <td><span class="badge bg-success">A</span></td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>Data Science</td>
+                    <td>What does CSV stand for?</td>
+                    <td>A. Comma Separated Values, B. Computer Saved Values, C. Call Separate Variables, D. Coded System
+                        Values</td>
+                    <td><span class="badge bg-success">A</span></td>
+                </tr>
+                <tr>
+                    <td>11</td>
+                    <td>Data Science</td>
+                    <td>Which plotting library is used to create charts in Python?</td>
+                    <td>A. matplotlib, B. requests, C. os, D. sys</td>
+                    <td><span class="badge bg-success">A</span></td>
+                </tr>
+                <tr>
+                    <td>12</td>
+                    <td>Data Science</td>
+                    <td>What is the correct data structure for a table of rows and columns?</td>
+                    <td>A. DataFrame, B. String, C. Set, D. Int</td>
+                    <td><span class="badge bg-success">A</span></td>
                 </tr>
             </tbody>
         </table>
