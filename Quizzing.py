@@ -1,19 +1,29 @@
 import os
 import secrets
-from flask import Flask, render_template, request, session, redirect, url_for
-from database import init_db, get_courses, get_students_with_courses, get_course_by_id, insert_student
+from flask import Flask, render_template, request, session, redirect, url_for, flash
+from database import (
+    init_db,
+    get_courses,
+    get_students_with_courses,
+    get_course_by_id,
+    insert_student,
+    delete_student,
+    get_student_by_id,
+    insert_leaderboard,
+    get_top_leaderboard,
+)
 app = Flask(__name__, template_folder='Template')
 app.secret_key = secrets.token_bytes(24)
-
 init_db()
 
-leaderboard_entries = [
-    {"rank": 1, "name": "Aarti", "score": 5},
-    {"rank": 2, "name": "Kaveri", "score": 4},
-    {"rank": 3, "name": "Divya", "score": 4},
-    {"rank": 4, "name": "Rohini", "score": 3},
-    {"rank": 5, "name": "Sowmya", "score": 2}
-]
+
+def get_ranked_leaderboard(limit=5):
+    top_entries = get_top_leaderboard(limit)
+    for idx, entry in enumerate(top_entries, start=1):
+        entry["rank"] = idx
+    return top_entries
+
+leaderboard_entries = get_ranked_leaderboard()
 
 default_quizzes = [
     {
@@ -115,29 +125,29 @@ course_quizzes = {
 def home_page():
     return render_template('home_page.html')
 
-def update_leaderboard(name, score):
-    
-    leaderboard_entries.append({"name": name, "score": score})
-    leaderboard_entries.sort(key=lambda item: item["score"], reverse=True)
-    top_entries = leaderboard_entries[:5]
-    for idx, entry in enumerate(top_entries, start=1):
-        entry["rank"] = idx
+def update_leaderboard(name, score, course_id=None):
+    insert_leaderboard(name, score, course_id)
+    updated_entries = get_ranked_leaderboard()
     leaderboard_entries.clear()
-    leaderboard_entries.extend(top_entries)
+    leaderboard_entries.extend(updated_entries)
+
+
 
 @app.route("/Quiz_page", methods=["GET", "POST"])
 def Quiz_page():
+    student_name = session.get("student_name")
+    if not student_name:
+        flash("Please register first before taking the quiz.", "warning")
+        return redirect(url_for("student_form"))
+    
     course_name = session.get("course_name")
     quizzes = course_quizzes.get(course_name, default_quizzes)
     total = len(quizzes)
     if "q_index" not in session:
         session["q_index"] = 0
         session["answers"] = []
-        session["student_name"] = ""
 
     if request.method == "POST":
-        student_name = request.form.get("student_name", "Guest").strip() or "Guest"
-        session["student_name"] = student_name
         answer = request.form.get("choice", "")
         answers = session.get("answers", [])
         answers.append(answer)
@@ -152,8 +162,9 @@ def Quiz_page():
                 if a and a.upper() == quizzes[idx]["Answer"].upper():
                     score += 1
 
-            update_leaderboard(student_name, score)
+            update_leaderboard(student_name, score, session.get("course_id"))
             percentage = round(score / total * 100, 1)
+            flash(f"Quiz complete! {student_name} scored {score}/{total}.", "success")
             session.pop("q_index", None)
             session.pop("answers", None)
             session.pop("student_name", None)
@@ -164,7 +175,7 @@ def Quiz_page():
                 attempted=attempted,
                 total=total,
                 percentage=percentage,
-                leaderboard=leaderboard_entries,
+                leaderboard=get_ranked_leaderboard()
             )
 
         return redirect(url_for("Quiz_page"))
@@ -187,6 +198,7 @@ def Study_quiz_hub():
 
 @app.route('/student', methods=['GET', 'POST'])
 def student_form():
+    courses = get_courses()
     if request.method == 'POST':
         name = request.form.get('name', '').strip()
         email = request.form.get('email', '').strip()
@@ -195,12 +207,17 @@ def student_form():
         course_id = request.form.get('course_id')
         course_name = None
 
-        if age.isdigit():
-            age_value = int(age)
-        else:
-            age_value = None
+        if not name:
+            flash('Student name is required.', 'danger')
+            return render_template('student_form.html', courses=courses, form_data=request.form)
 
+        if age and not age.isdigit():
+            flash('Please enter a valid age.', 'warning')
+            return render_template('student_form.html', courses=courses, form_data=request.form)
+
+        age_value = int(age) if age.isdigit() else None
         insert_student(name, email, age_value, grade, course_id)
+        session["student_name"] = name
 
         if course_id:
             selected = get_course_by_id(course_id)
@@ -215,6 +232,7 @@ def student_form():
             session.pop("course_id", None)
             session.pop("course_name", None)
 
+        flash('Student registered successfully.', 'success')
         return render_template(
             'student_submitted.html',
             name=name,
@@ -224,7 +242,6 @@ def student_form():
             course_name=course_name,
         )
 
-    courses = get_courses()
     return render_template('student_form.html', courses=courses)
 
 @app.route('/students')
@@ -233,9 +250,39 @@ def student_table():
     students = get_students_with_courses()
     return render_template('student_table.html', students=students)
 
+@app.route('/student/<int:student_id>')
+def view_student(student_id):
+    student = get_student_by_id(student_id)
+    if not student:
+        flash('Student record not found.', 'warning')
+        return redirect(url_for('student_table'))
+
+    flash('Selected student details loaded.', 'info')
+    return render_template(
+        'student_submitted.html',
+        name=student['name'],
+        email=student['email'],
+        age=student['age'],
+        grade=student['grade'],
+        course_name=student['course_name'],
+    )
+
+@app.route('/student/delete/<int:student_id>', methods=['POST'])
+def delete_student_record(student_id):
+    student = get_student_by_id(student_id)
+    if not student:
+        flash('Student record not found.', 'warning')
+    else:
+        delete_student(student_id)
+        flash(f"Student '{student['name']}' deleted successfully.", 'success')
+    return redirect(url_for('student_table'))
+
 @app.route("/leaderboard")
 def leaderboard_page():
-    return render_template("leaderboard.html", leaderboard=leaderboard_entries)
+    top_entries = get_top_leaderboard()
+    for idx, entry in enumerate(top_entries, start=1):
+        entry["rank"] = idx
+    return render_template("leaderboard.html", leaderboard=top_entries)
 
 if __name__ == "__main__":
    app.run(debug=True)
