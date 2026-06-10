@@ -141,3 +141,57 @@ def get_top_leaderboard(limit=5):
     ).fetchall()
     conn.close()
     return [dict(row) for row in rows]
+
+def get_score_history():
+    conn = get_db_connection()
+
+    rows = conn.execute("""
+        SELECT 
+                        id,
+                student_name,
+               score,
+               created_at
+        FROM leaderboard
+        ORDER BY created_at DESC
+    """).fetchall()
+
+    conn.close()
+    return rows
+
+def get_attempt_counts():
+    conn = get_db_connection()
+
+    rows = conn.execute("""
+        SELECT student_name,
+               COUNT(*) AS attempts
+        FROM leaderboard
+        GROUP BY student_name
+        ORDER BY attempts DESC
+    """).fetchall()
+
+    conn.close()
+    return rows
+
+def get_score_history():
+    conn = get_db_connection()
+
+    rows = conn.execute("""
+        SELECT 
+                id,
+                student_name,
+               score,
+               created_at,
+               COUNT(*) OVER (PARTITION BY student_name) AS attempts
+        FROM leaderboard
+        ORDER BY created_at DESC
+    """).fetchall()
+    conn.close()
+    return rows
+def delete_score_record(record_id):
+    conn = get_db_connection()
+    conn.execute(
+        "DELETE FROM leaderboard WHERE id=?",
+        (record_id,)
+    )
+    conn.commit()
+    conn.close()
