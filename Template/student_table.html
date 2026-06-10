@@ -16,6 +16,7 @@
                     <th>Age</th>
                     <th>Grade</th>
                     <th>Course</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -28,6 +29,15 @@
                     <td>{{ student['age'] or '—' }}</td>
                     <td>{{ student['grade'] or '—' }}</td>
                     <td><span class="badge bg-info text-dark">{{ student['course_name'] or 'None selected' }}</span>
+                    </td>
+                    <td>
+                        <a href="{{ url_for('view_student', student_id=student['id']) }}"
+                            class="btn btn-sm btn-outline-primary me-1">View</a>
+                        <form action="{{ url_for('delete_student_record', student_id=student['id']) }}" method="post"
+                            class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-outline-danger"
+                                onclick="return confirm('Delete this student?');">Delete</button>
+                        </form>
                     </td>
                 </tr>
                 {% endfor %}

@@ -9,26 +9,30 @@
     <form method="post" action="/student" class="d-flex flex-column gap-3">
         <div class="form-floating">
             <input type="text" name="name" class="form-control form-control-lg" id="name" placeholder="Full name"
-                required>
+                required value="{{ form_data.get('name') if form_data else '' }}">
             <label for="name">Full Name</label>
         </div>
         <div class="form-floating">
-            <input type="email" name="email" class="form-control form-control-lg" id="email" placeholder="Email">
+            <input type="email" name="email" class="form-control form-control-lg" id="email" placeholder="Email"
+                value="{{ form_data.get('email') if form_data else '' }}">
             <label for="email">Email</label>
         </div>
         <div class="form-floating">
-            <input type="number" name="age" class="form-control form-control-lg" id="age" placeholder="Age" min="1">
+            <input type="number" name="age" class="form-control form-control-lg" id="age" placeholder="Age" min="1"
+                value="{{ form_data.get('age') if form_data else '' }}">
             <label for="age">Age</label>
         </div>
         <div class="form-floating">
-            <input type="text" name="grade" class="form-control form-control-lg" id="grade" placeholder="Class/Grade">
+            <input type="text" name="grade" class="form-control form-control-lg" id="grade" placeholder="Class/Grade"
+                value="{{ form_data.get('grade') if form_data else '' }}">
             <label for="grade">Class / Grade</label>
         </div>
         <div class="form-floating">
             <select name="course_id" class="form-select form-control-lg" id="course_id">
                 <option value="">Select a course (optional)</option>
                 {% for course in courses %}
-                <option value="{{ course['id'] }}">{{ course['course_name'] }}</option>
+                <option value="{{ course['id'] }}" {% if form_data and form_data.get('course_id')==course['id']|string
+                    %}selected{% endif %}>{{ course['course_name'] }}</option>
                 {% endfor %}
             </select>
             <label for="course_id">Course</label>
