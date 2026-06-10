@@ -19,7 +19,7 @@
     <div class="mb-4">
         <h5 class="mb-2">Overall Score</h5>
         <div class="progress" style="height: 28px;">
-            <div class="progress-bar bg-success" role="progressbar" style="width: {{ percentage }}%;"
+            <div class="progress-bar bg-success" role="progressbar" style="width: {{ percentage }}%"
                 aria-valuenow="{{ percentage }}" aria-valuemin="0" aria-valuemax="100">
                 {{ percentage }}%
             </div>
@@ -27,18 +27,25 @@
     </div>
 
     <div class="row g-3 mb-4">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="card shadow-sm rounded-4 border-0 p-3">
                 <h5><i class="bi bi-list-task me-2"></i>Attempted</h5>
                 <p class="mb-0">{{ attempted }} / {{ total }}</p>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="card shadow-sm rounded-4 border-0 p-3">
                 <h5><i class="bi bi-percent me-2"></i>Percentage</h5>
                 <p class="mb-0">{{ percentage }}%</p>
             </div>
         </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm rounded-4 border-0 p-3">
+                <h5><i class="bi bi-mortarboard-fill text-success"></i>grade</h5>
+                <p class="mb-0">{{ grade}}%</p>
+            </div>
+        </div>
+
     </div>
 
     <div class="mb-4">

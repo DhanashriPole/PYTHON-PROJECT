@@ -1,7 +1,7 @@
 {% extends "base1.html" %}
 {% block title %}Home{% endblock %}
 {% block content %}
-<div class="page-card p-5 text-center">
+<div class="page-card p-5 text-center ">
     <div class="section-heading justify-content-center">
         <i class="bi bi-stars text-primary"></i>
         <div>
@@ -15,6 +15,35 @@
             <i class="bi bi-person-fill me-2"></i> Student Login
         </a>
     </div>
+    <div class="row mt-4 g-3 text-center">
+    <div class="col-md-4">
+        <div class="card h=100 border-0 shadow-sm rounded-4">
+            <div class="card-body">
+                <h2 class="text-primary">{{ total_students }}</h2>
+                <p class="mb-0">Students</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card h=100 border-0 shadow-sm rounded-4">
+            <div class="card-body">
+                <h2 class="text-success">{{ total_attempts }}</h2>
+                <p class="mb-0">Quiz Attempts</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card h=100 border-0 shadow-sm rounded-4">
+            <div class="card-body">
+                <h2 class="text-info">{{ total_courses }}</h2>
+                <p class="mb-0">Courses</p>
+            </div>
+        </div>
+    </div>
+
+   
 
     <div class="row mt-4 g-3">
         <div class="col-md-4">
