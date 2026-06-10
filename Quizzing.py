@@ -2,6 +2,7 @@ import os
 import secrets
 from flask import Flask, render_template, request, session, redirect, url_for, flash
 from database import (
+    get_db_connection,
     init_db,
     get_courses,
     get_students_with_courses,
@@ -11,6 +12,10 @@ from database import (
     get_student_by_id,
     insert_leaderboard,
     get_top_leaderboard,
+    get_score_history,
+    get_attempt_counts,
+    get_score_history,
+    delete_score_record
 )
 app = Flask(__name__, template_folder='Template')
 app.secret_key = secrets.token_bytes(24)
@@ -123,7 +128,30 @@ course_quizzes = {
 }
 @app.route("/")
 def home_page():
-    return render_template('home_page.html')
+    conn = get_db_connection()
+
+    total_students = conn.execute(
+        "SELECT COUNT(*) FROM students"
+    ).fetchone()[0]
+
+    total_attempts = conn.execute(
+        "SELECT COUNT(*) FROM leaderboard"
+    ).fetchone()[0]
+
+    total_courses = conn.execute(
+        "SELECT COUNT(*) FROM courses"
+    ).fetchone()[0]
+
+    conn.close()
+
+    return render_template(
+        "home_page.html",
+        total_students=total_students,
+        total_attempts=total_attempts,
+        total_courses=total_courses
+    )
+  
+
 
 def update_leaderboard(name, score, course_id=None):
     insert_leaderboard(name, score, course_id)
@@ -164,6 +192,16 @@ def Quiz_page():
 
             update_leaderboard(student_name, score, session.get("course_id"))
             percentage = round(score / total * 100, 1)
+            if percentage >= 90:
+              grade = "A+"
+            elif percentage >= 75:
+             grade = "A"
+            elif percentage >= 60:
+             grade = "B"
+            elif percentage >= 40:
+              grade = "C"
+            else:
+             grade = "F"
             flash(f"Quiz complete! {student_name} scored {score}/{total}.", "success")
             session.pop("q_index", None)
             session.pop("answers", None)
@@ -175,6 +213,7 @@ def Quiz_page():
                 attempted=attempted,
                 total=total,
                 percentage=percentage,
+                grade=grade,
                 leaderboard=get_ranked_leaderboard()
             )
 
@@ -283,6 +322,22 @@ def leaderboard_page():
     for idx, entry in enumerate(top_entries, start=1):
         entry["rank"] = idx
     return render_template("leaderboard.html", leaderboard=top_entries)
+
+
+@app.route("/score_history")
+def score_history():
+    history = get_score_history()
+    attempts = get_attempt_counts()
+    return render_template(
+        "score_history.html",
+        history=history,
+        attempts=attempts
+    )
+@app.route('/score_history/delete/<int:record_id>', methods=['POST'])
+def delete_score_history(record_id):
+    delete_score_record(record_id)
+    flash("Record deleted successfully.", "success")
+    return redirect(url_for('score_history'))
 
 if __name__ == "__main__":
    app.run(debug=True)
