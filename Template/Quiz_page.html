@@ -2,12 +2,12 @@
 {% block title %}Quiz Challenge{% endblock %}
 
 {% block content %}
-<div class="page-card p-4">
+<div class="page-card p-4 mx-auto" style="background:  #374151;">
     <div class="section-heading">
         <i class="bi bi-question-circle-fill text-primary"></i>
         <div>
-            <h1 class="h3 mb-1">Quiz Challenge</h1>
-            <p class="text-muted mb-0">Answer one question at a time and track your score.</p>
+            <h1 class="h3 mb-1 text-white">Quiz Challenge</h1>
+            <p class=" mb-0 text-white">Answer one question at a time and track your score.</p>
         </div>
     </div>
     <form method="post" action="/Quiz_page">
@@ -18,16 +18,16 @@
         </div>
         {% endif %}
         <div class="card border-0 shadow-sm rounded-4 mb-4">
-            <div class="card-body">
+            <div class="card-body " style="background:  #374151;">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <div>
-                        <h3 class="h5 mb-1">Question {{ idx + 1 }} of {{ total }}</h3>
-                        <span class="text-muted">Select the best answer below.</span>
+                        <h3 class="h5 mb-1 text-white">Question {{ idx + 1 }} of {{ total }}</h3>
+                        <span class=" text-white">Select the best answer below.</span>
                     </div>
-                    <span class="badge bg-secondary">Progress {{ idx + 1 }}/{{ total }}</span>
+                    <span class="badge bg-success text-white">Progress {{ idx + 1 }}/{{ total }}</span>
                 </div>
-                <p class="fw-semibold fs-5">{{ quiz.questions }}</p>
-                <div class="row">
+                <p class="fw-semibold fs-5 text-white">{{ quiz.questions }}</p>
+                <div class="row text-white">
                     {% for option in quiz.Option %}
                     <div class="col-md-6 mb-2">
                         <label

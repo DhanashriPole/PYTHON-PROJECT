@@ -1,12 +1,12 @@
 {% extends "base1.html" %}
 {% block title %}Submission Received{% endblock %}
 {% block content %}
-<div class="page-card p-4 mx-auto" style="max-width: 520px;">
+<div class="page-card p-4 mx-auto" style="max-width: 520px;background: #374151;">
     <div class="section-heading justify-content-center">
         <i class="bi bi-check-circle-fill text-success"></i>
-        <h2 class="m-0">Thank you, {{ name or 'Student' }}!</h2>
+        <h2 class="m-0 text-white">Thank you, {{ name or 'Student' }}!</h2>
     </div>
-    <p class="text-muted mb-4">We received your registration details successfully.</p>
+    <p class=" mb-4 text-white">We received your registration details successfully.</p>
     <ul class="list-group list-group-flush mb-4">
         <li class="list-group-item"><i class="bi bi-envelope-fill text-primary me-2"></i><strong>Email:</strong> {{
             email or '—' }}</li>
@@ -20,7 +20,7 @@
             'None selected' }}</li>
     </ul>
     <div class="d-grid">
-        <a href="/Quiz_page" class="btn btn-primary btn-lg">
+        <a href="/Quiz_page" class="btn btn-success btn-lg">
             <i class="bi bi-play-fill me-2"></i> Start Quiz
         </a>
     </div>

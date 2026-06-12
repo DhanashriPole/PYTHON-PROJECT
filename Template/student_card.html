@@ -1,0 +1,58 @@
+
+{% extends "base1.html" %}
+{% block title %}Submission Received{% endblock %}
+{% block content %}
+<div class="page-card p-4 mx-auto" style="max-width: 520px;">
+    <!-- <div class="section-heading justify-content-center"> -->
+        <div class="card-header text-white text-center py-3"
+         style="background:#374151">
+        <h2 class="mb-0">
+            <i class="bi bi-person-badge-fill me-2"></i>
+            Student Profile
+        </h2>
+        </div>
+        <div class="section-heading justify-content-center">
+        <i class="bi bi-check-circle-fill text-success"></i>
+        <h2 class="m-0"> {{ name or 'Student' }}!</h2>
+    
+    </div>
+    
+
+    <p class="text-muted mb-4">Student details</p>
+    <ul class="list-group list-group-flush mb-4 bg-#dbeafe;">
+        <li class="list-group-item"><i class="bi bi-envelope-fill text-primary me-2"></i><strong>Email:</strong> {{
+            email or '—' }}</li>
+
+        <li class="list-group-item"><i class="bi bi-calendar-fill text-primary me-2"></i><strong>Age:</strong> {{ age or
+            '—' }}</li>
+
+        <li class="list-group-item"><i
+                class="bi bi-mortarboard-fill text-primary me-2"></i><strong>Class/Grade:</strong> {{ grade or '—' }}
+        </li>
+
+        <li class="list-group-item"><i
+                class="bi bi-journal-bookmark-fill text-primary me-2"></i><strong>Course:</strong> {{ course_name or
+            'None selected' }}</li>
+
+        <li class="list-group-item"><i class="bi bi-trophy-fill text-success me-2"></i>
+            <strong>score:</strong> {{ score}}</li>
+
+         <li class="list-group-item">  <i class="bi bi-bar-chart-fill text-warning me-2"></i>
+            <strong>Total Quiz Attempts:</strong>
+                {% for row in attempts %}
+                        {% if row['student_name'] == name %}
+                      {{ row['attempts'] }}
+                    {% endif %}
+              {% endfor %}
+        </li>
+
+    </ul>
+    <div class="d-grid">
+                
+        <a href="{{ url_for('student_table') }}"
+       class="btn btn-primary">
+       <i class="bi bi-arrow-left"></i> Back to Students
+    </a>
+    </div>
+</div>
+{% endblock %}

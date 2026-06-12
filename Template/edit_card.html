@@ -1,0 +1,93 @@
+
+
+{% extends "base1.html" %}
+{% block title %}Edit Student{% endblock %}
+
+{% block content %}
+<div class="page-card p-4 mx-auto" style="max-width: 520px;">
+
+    <div class="card-header text-white text-center py-3"
+         style="background: linear-gradient(135deg, #f59e0b, #ef4444);">
+        <h2 class="mb-0">
+            <i class="bi bi-pencil-square me-2"></i>
+            Edit Student Profile
+        </h2>
+    </div>
+
+    <form method="POST" class="mt-4">
+
+        <div class="mb-3">
+            <label class="form-label">
+                <i class="bi bi-person-fill text-primary"></i>
+                Name
+            </label>
+            <input type="text"
+                   name="name"
+                   class="form-control"
+                   value="{{ student['name'] }}"
+                   required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">
+                <i class="bi bi-envelope-fill text-primary"></i>
+                Email
+            </label>
+            <input type="email"
+                   name="email"
+                   class="form-control"
+                   value="{{ student['email'] }}">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">
+                <i class="bi bi-calendar-fill text-success"></i>
+                Age
+            </label>
+            <input type="number"
+                   name="age"
+                   class="form-control"
+                   value="{{ student['age'] }}">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">
+                <i class="bi bi-mortarboard-fill text-warning"></i>
+                Grade
+            </label>
+            <input type="text"
+                   name="grade"
+                   class="form-control"
+                   value="{{ student['grade'] }}">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">
+                <i class="bi bi-journal-bookmark-fill text-info"></i>
+                Course
+            </label>
+            <input type="text"
+                   class="form-control"
+                   value="{{ student['course_name'] }}"
+                   readonly>
+        </div>
+
+        <div class="d-grid gap-2">
+
+            <button type="submit" class="btn btn-success">
+                <i class="bi bi-check-circle-fill"></i>
+                Update Student
+            </button>
+
+            <a href="{{ url_for('view_student', student_id=student['id']) }}"
+               class="btn btn-secondary">
+                <i class="bi bi-x-circle-fill"></i>
+                Cancel
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+{% endblock %}

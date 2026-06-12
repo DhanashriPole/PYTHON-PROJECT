@@ -1,10 +1,10 @@
 {% extends "base1.html" %}
 {% block title %}Student Form{% endblock %}
 {% block content %}
-<div class="page-card p-4 mx-auto" style="max-width: 520px;">
+<div class="page-card p-4 mx-auto" style="max-width: 520px;background: #374151;">
     <div class="section-heading justify-content-center">
         <i class="bi bi-person-badge-fill text-primary"></i>
-        <h2 class="m-0">Student Registration</h2>
+        <h2 class="m-0 text-white">Student Registration</h2>
     </div>
     <form method="post" action="/student" class="d-flex flex-column gap-3">
         <div class="form-floating">
@@ -38,7 +38,7 @@
             <label for="course_id">Course</label>
         </div>
         <div class="d-grid">
-            <button class="btn btn-primary btn-lg" type="submit">
+            <button class="btn btn-success btn-lg" type="submit">
                 <i class="bi bi-send-fill me-2"></i> Submit
             </button>
         </div>

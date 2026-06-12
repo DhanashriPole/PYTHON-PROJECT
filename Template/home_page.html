@@ -1,7 +1,45 @@
 {% extends "base1.html" %}
 {% block title %}Home{% endblock %}
 {% block content %}
-<div class="page-card p-5 text-center ">
+<head>
+    <style>
+        /* Students icon - floating effect */
+.student-icon{
+    animation: float 2s ease-in-out infinite;
+}
+
+/* Courses icon - rotate effect */
+.course-icon{
+    animation: rotateBook 3s linear infinite;
+}
+
+/* Attempts icon - pulse effect */
+.attempt-icon{
+    animation: pulse 1.2s infinite;
+}
+
+/* Animations */
+
+@keyframes float{
+    0%,100%{
+        transform: translateY(0);
+    }
+    50%{
+        transform: translateY(-10px);
+    }
+}
+.card{
+    transition: all 0.3s ease;
+}
+
+.card:hover{
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.25) !important;
+}
+    </style>
+</head>
+<div class="page-card p-5 text-center text-white"
+     style="background:  #374151;" >
     <div class="section-heading justify-content-center">
         <i class="bi bi-stars text-primary"></i>
         <div>
@@ -17,27 +55,27 @@
     </div>
     <div class="row mt-4 g-3 text-center">
     <div class="col-md-4">
-        <div class="card h=100 border-0 shadow-sm rounded-4">
+        <div class="card h=100 border-0 shadow-sm rounded-4 ">
             <div class="card-body">
-                <h2 class="text-primary">{{ total_students }}</h2>
+                <h2 class="text-primary"><i class="bi bi-people-fill text-primary student-icon"></i>{{ total_students }}</h2>
                 <p class="mb-0">Students</p>
             </div>
         </div>
     </div>
 
     <div class="col-md-4">
-        <div class="card h=100 border-0 shadow-sm rounded-4">
+        <div class="card h=100 border-0 shadow-sm rounded-4 ">
             <div class="card-body">
-                <h2 class="text-success">{{ total_attempts }}</h2>
+                <h2 class="text-success"><i class="bi bi-graph-up-arrow text-success attempt-icon"></i> {{ total_attempts }}</h2>
                 <p class="mb-0">Quiz Attempts</p>
             </div>
         </div>
     </div>
 
     <div class="col-md-4">
-        <div class="card h=100 border-0 shadow-sm rounded-4">
+        <div class="card h=100 border-0 shadow-sm rounded-4 ">
             <div class="card-body">
-                <h2 class="text-info">{{ total_courses }}</h2>
+                <h2 class="text-info"><i class="bi bi-journal-bookmark-fill text-warning course-icon"></i> {{ total_courses }}</h2>
                 <p class="mb-0">Courses</p>
             </div>
         </div>
@@ -47,7 +85,7 @@
 
     <div class="row mt-4 g-3">
         <div class="col-md-4">
-            <div class="card h-100 border-0 shadow-sm rounded-4">
+            <div class="card h-100 border-0 shadow-sm rounded-4 ">
                 <div class="card-body">
                     <h4 class="card-title"><i class="bi bi-lightbulb-fill text-warning me-2"></i>About</h4>
                     <p class="card-text text-muted">Study Quiz Hub offers interactive MCQs for Python, web, and data
