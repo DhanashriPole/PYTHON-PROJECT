@@ -14,8 +14,9 @@ from database import (
     get_top_leaderboard,
     get_score_history,
     get_attempt_counts,
-    get_score_history,
-    delete_score_record
+    delete_score_record,
+    update_student,
+    search_students,
 )
 app = Flask(__name__, template_folder='Template')
 app.secret_key = secrets.token_bytes(24)
@@ -151,7 +152,17 @@ def home_page():
         total_courses=total_courses
     )
   
+@app.route('/search')
+def search_student():
 
+    keyword = request.args.get('q', '')
+
+    students = search_students(keyword)
+
+    return render_template(
+        'student_table.html',
+        students=students
+    )
 
 def update_leaderboard(name, score, course_id=None):
     insert_leaderboard(name, score, course_id)
@@ -292,20 +303,58 @@ def student_table():
 @app.route('/student/<int:student_id>')
 def view_student(student_id):
     student = get_student_by_id(student_id)
+    print(student)
+    score_history = get_score_history()
+    print(score_history)
+    attempts=get_attempt_counts()
+    print(attempts)
+    latest_score = 0
+
+    if score_history:
+        latest_score = score_history[0]['score']
+
     if not student:
         flash('Student record not found.', 'warning')
         return redirect(url_for('student_table'))
 
     flash('Selected student details loaded.', 'info')
     return render_template(
-        'student_submitted.html',
+        'student_card.html',
         name=student['name'],
         email=student['email'],
         age=student['age'],
         grade=student['grade'],
         course_name=student['course_name'],
+        score=latest_score,
+        attempts=attempts
     )
+@app.route('/student/edit/<int:student_id>', methods=['GET', 'POST'])
+def edit_student(student_id):
 
+    student = get_student_by_id(student_id)
+
+    if request.method == 'POST':
+
+        name = request.form['name']
+        email = request.form['email']
+        age = request.form['age']
+        grade = request.form['grade']
+
+        update_student(
+            student_id,
+            name,
+            email,
+            age,
+            grade
+        )
+
+        flash("Student updated successfully!", "success")
+        return redirect(url_for('view_student', student_id=student_id))
+
+    return render_template(
+        'edit_card.html',
+        student=student
+    )
 @app.route('/student/delete/<int:student_id>', methods=['POST'])
 def delete_student_record(student_id):
     student = get_student_by_id(student_id)
@@ -338,6 +387,7 @@ def delete_score_history(record_id):
     delete_score_record(record_id)
     flash("Record deleted successfully.", "success")
     return redirect(url_for('score_history'))
+
 
 if __name__ == "__main__":
    app.run(debug=True)
