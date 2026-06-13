@@ -154,10 +154,45 @@ def home_page():
   
 @app.route('/search')
 def search_student():
-
     keyword = request.args.get('q', '')
 
     students = search_students(keyword)
+
+    return render_template(
+        'student_table.html',
+        students=students
+    )
+
+@app.route('/filter')
+def filter_students():
+
+    course_id = request.args.get('course_id')
+    grade = request.args.get('grade')
+
+    conn = get_db_connection()
+
+    query = """
+        SELECT students.*,
+               courses.course_name
+        FROM students
+        LEFT JOIN courses
+        ON students.course_id = courses.id
+        WHERE 1=1
+    """
+
+    params = []
+
+    if course_id:
+        query += " AND students.course_id = ?"
+        params.append(course_id)
+
+    if grade:
+        query += " AND students.grade = ?"
+        params.append(grade)
+
+    students = conn.execute(query, params).fetchall()
+
+    conn.close()
 
     return render_template(
         'student_table.html',
@@ -298,7 +333,19 @@ def student_form():
 @app.route('/courses')
 def student_table():
     students = get_students_with_courses()
-    return render_template('student_table.html', students=students)
+    courses = get_courses()
+
+    return render_template(
+        'student_table.html',
+        students=students,
+        courses=courses
+    )
+
+# @app.route('/students')
+# @app.route('/courses')
+# def student_table():
+#     students = get_students_with_courses()
+#     return render_template('student_table.html', students=students)
 
 @app.route('/student/<int:student_id>')
 def view_student(student_id):
@@ -308,8 +355,7 @@ def view_student(student_id):
     print(score_history)
     attempts=get_attempt_counts()
     print(attempts)
-    latest_score = 0
-
+    latest_score = 0 
     if score_history:
         latest_score = score_history[0]['score']
 
