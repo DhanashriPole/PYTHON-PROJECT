@@ -71,6 +71,9 @@
                <input class="form-control me-2"
                   type="search"
                    name="q"
+                   
+                   value="{{ request.args.get('q', '') }}"
+
                   placeholder="Search Student"
                   required>
 
