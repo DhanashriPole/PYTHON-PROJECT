@@ -420,7 +420,11 @@ def search_students(keyword):
         FROM students
         LEFT JOIN courses ON students.course_id = courses.id
         WHERE students.name LIKE ?
-    """, (f"%{keyword}%",)).fetchall()
+           OR courses.course_name LIKE ?
+    """, (
+        f"%{keyword}%",
+        f"%{keyword}%"
+    )).fetchall()
 
     conn.close()
     return students
