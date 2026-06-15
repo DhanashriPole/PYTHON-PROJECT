@@ -168,6 +168,7 @@ def filter_students():
 
     course_id = request.args.get('course_id')
     grade = request.args.get('grade')
+    age = request.args.get('age')
 
     conn = get_db_connection()
 
@@ -186,19 +187,57 @@ def filter_students():
         query += " AND students.course_id = ?"
         params.append(course_id)
 
+    if age:
+        query += " AND students.age = ?"
+        params.append(age)
+
     if grade:
         query += " AND students.grade = ?"
         params.append(grade)
 
+        selected_course_name = "All Courses"
+
+    if course_id:
+        course = conn.execute(
+        "SELECT course_name FROM courses WHERE id=?",
+        (course_id,)
+    ).fetchone()
+
+    if course:
+        selected_course_name = course["course_name"]
+
     students = conn.execute(query, params).fetchall()
 
+    total_students = conn.execute(
+    "SELECT COUNT(*) FROM students"
+).fetchone()[0]
+    
+    total_students = conn.execute(
+    "SELECT COUNT(*) FROM students"
+).fetchone()[0]
+
+    filtered_count = len(students)
+
+
+    courses = conn.execute(
+        "SELECT * FROM courses"
+    ).fetchall()
+
     conn.close()
+    
 
     return render_template(
-        'student_table.html',
-        students=students
+        "student_table.html",
+        students=students,
+        courses=courses,
+        selected_course=course_id,
+        selected_age=age,
+        selected_grade=grade,
+        total_students=total_students,
+        filtered_count=filtered_count,
+        selected_course_name=selected_course_name
+        
     )
-
 def update_leaderboard(name, score, course_id=None):
     insert_leaderboard(name, score, course_id)
     updated_entries = get_ranked_leaderboard()
