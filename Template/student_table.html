@@ -1,46 +1,163 @@
 {% extends "base1.html" %}
 {% block title %}Student Courses{% endblock %}
 {% block content %}
-<div class="page-card p-4">
+<head>
+<style>
+    .card{
+    transition: all 0.3s ease;
+}
+
+.card:hover{
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.25) !important;
+}
+.total-card{
+    background-color: #cff4fc;
+    border-left: 6px solid #0dcaf0;
+}
+
+.stat-card{
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+/* Total Students */
+
+.total-card{
+    background: #e7f1ff;
+    border-left: 6px solid #0d6efd;
+}
+
+.total-card h2{
+    color: #0d6efd;
+}
+
+/* Filtered Results */
+
+.filter-card{
+    background: #e8f5e9;
+    border-left: 6px solid #198754;
+}
+
+.filter-card h2{
+    color: #198754;
+}
+
+/* Selected Course */
+
+.course-card{
+    background: #fff4e5;
+    border-left: 6px solid #fd7e14;
+}
+
+.course-card h2{
+    color: #fd7e14;
+}
+
+/* Card Text */
+
+.stat-card p{
+    color: #6c757d;
+    font-weight: 500;
+    margin-bottom: 0;
+}
+
+/* Icons */
+
+.stat-icon{
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+</style>
+</head>
+<div class="page-card p-4 " style="background:lightslategray;">
     <div class="section-heading">
-        <i class="bi bi-people-fill text-primary"></i>
+        <i class="bi bi-people-fill text-dark"></i>
         <h2 class="m-0">Student Course Table</h2>
     </div>
     <form action="{{ url_for('filter_students') }}" method="GET" class="row g-3 mb-4">
 
     <div class="col-md-4">
         <select name="course_id" class="form-select">
-            <option value="">All Courses</option>
+    <option value="">All Courses</option>
 
-            {% for course in courses %}
-            <option value="{{ course.id }}">
-                {{ course.course_name }}
-            </option>
-            {% endfor %}
-        </select>
+    {% for course in courses %}
+    <option value="{{ course.id }}"
+        {% if selected_course == course.id|string %}
+            selected
+        {% endif %}>
+        {{ course.course_name }}
+    </option>
+    {% endfor %}
+</select>
     </div>
 
-    <div class="col-md-3">
-        <input type="number"
-               name="age"
-               class="form-control"
-               placeholder="Age">
+    <div class="col-md-4">
+       <input type="number"
+       name="age"
+       class="form-control"
+       placeholder="Age"
+       value="{{ request.args.get('age', '') }}">
     </div>
 
-    <div class="col-md-3">
-        <input type="text"
-               name="grade"
-               class="form-control"
-               placeholder="Grade">
+    <div class="col-md-4">
+      <input type="text"
+       name="grade"
+       class="form-control"
+       placeholder="Grade"
+       value="{{ request.args.get('grade', '') }}">
     </div>
-
     <div class="col-md-2">
-        <button class="btn btn-primary w-100">
-            Filter
-        </button>
+<button class="btn btn-primary w-100 rounded-3">
+    <i class="bi bi-funnel-fill"></i> Filter
+</button>
+</div>
+        <div class="col-md-2 ">
+    <a href="{{ url_for('student_table') }}"
+   class="btn btn-dark rounded-3">
+   <i class="bi bi-arrow-clockwise"></i> Reset
+</a>
+</div>
+    </form>
+    
+ <div class="row mb-3">
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-body text-center">
+                <h3>        <i class="bi bi-people-fill stat-icon"></i>
+                {{ total_students }}</h3>
+                <small>Total Students</small>
+            </div>
+        </div>
     </div>
 
-</form>
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body text-center">
+                <h2 class="text-success"><i class="bi bi-check2-square"></i>{{ filtered_count }}</h2>
+                <p class="mb-0 text-muted">Filtered Results</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body text-center">
+                
+                <h2 class="text-info"><i class="bi bi-journal-bookmark-fill"></i>{{ selected_course_name }}</h2>
+                <p class="mb-0 text-muted">Selected Course</p>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+    
+    
+
     <div class="table-responsive">
         <table class="table table-striped table-hover shadow-sm">
             <thead class="table-dark">
@@ -80,10 +197,18 @@
                 </tr>
                 {% endfor %}
                 {% else %}
-                <tr>
-                    <td colspan="6" class="text-center">No student records found.</td>
-                </tr>
-                {% endif %}
+                  <tr>
+    <td colspan="7" class="text-center py-4">
+        <i class="bi bi-search fs-1 text-danger"></i>
+        <h5 class="mt-2 text-danger">
+            No Results Found
+        </h5>
+        <small class="text-muted">
+            Try changing your filters
+        </small>
+    </td>
+</tr>
+             {% endif %}
             </tbody>
         </table>
     </div>
