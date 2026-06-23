@@ -265,3 +265,28 @@ for s in students:
 
 conn.commit()
 conn.close()
+
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
+
+class Students(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(50))
+    age = db.Column(db.Integer)
+    grade = db.Column(db.String(10))
+    password = db.Column(db.String(200))
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
+
+class Courses(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    course_name = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.String(200))
+
+class Leaderboard(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    student_name = db.Column(db.String(50), nullable=False)
+    score = db.Column(db.Integer, nullable=False)
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
+    created_at = db.Column(db.String, default="CURRENT_TIMESTAMP")
