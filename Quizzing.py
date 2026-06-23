@@ -1,6 +1,9 @@
 import os
 import secrets
 from flask import Flask, render_template, request, session, redirect, url_for, flash
+
+
+
 from database import (
     get_db_connection,
     init_db,
@@ -17,11 +20,33 @@ from database import (
     delete_score_record,
     update_student,
     search_students,
+    db, Students, Courses, Leaderboard  
 )
 app = Flask(__name__, template_folder='Template')
 app.secret_key = secrets.token_bytes(24)
-init_db()
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///quiz.db'
+db.init_app(app)
 
+init_db()
+with app.app_context():
+    db.create_all()
+
+
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
+from database import db, Students, Courses, Leaderboard
+
+class SecureModelView(ModelView):
+    def is_accessible(self):
+        return "role" in session and session["role"] in ["superadmin", "courseadmin", "leaderadmin"]
+
+admin = Admin(app, name='Study Quiz Hub Admin')
+
+
+admin.add_view(SecureModelView(Students, db.session))
+admin.add_view(SecureModelView(Courses, db.session))
+admin.add_view(SecureModelView(Leaderboard, db.session))
 
 def get_ranked_leaderboard(limit=5):
     top_entries = get_top_leaderboard(limit)
@@ -127,6 +152,28 @@ course_quizzes = {
         }
     ]
 }
+
+@app.route("/admin_login", methods=["GET", "POST"])
+def admin_login():
+    if request.method == "POST":
+        email = request.form["email"]
+        password = request.form["password"]
+
+        admins = {
+            "super@quizhub.com": {"password": "super123", "role": "superadmin"},
+            "course@quizhub.com": {"password": "course123", "role": "courseadmin"},
+            "leader@quizhub.com": {"password": "leader123", "role": "leaderadmin"}
+        }
+        
+        if email in admins and admins[email]["password"] == password:
+          session["role"] = admins[email]["role"]
+          return redirect("/admin")
+        else:
+            flash("Invalid Admin Credentials ❌", "danger")
+            return render_template("admin_login.html")
+
+    return render_template("admin_login.html")
+
 @app.route("/")
 def home_page():
     conn = get_db_connection()
@@ -572,6 +619,14 @@ def score_history():
         history=history,
         attempts=attempts
     )
+
+@app.before_request
+def restrict_admin():
+    if request.path.startswith("/admin") and not request.path.startswith("/admin_login"):
+        if "role" not in session:
+            return redirect("/admin_login")
+
+
 @app.route('/score_history/delete/<int:record_id>', methods=['POST'])
 def delete_score_history(record_id):
     delete_score_record(record_id)
