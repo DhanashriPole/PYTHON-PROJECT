@@ -152,16 +152,25 @@ def home_page():
         total_courses=total_courses
     )
   
-@app.route('/search')
-def search_student():
+from flask import jsonify
+
+@app.route('/search_suggestions')
+def search_suggestions():
+
     keyword = request.args.get('q', '')
 
     students = search_students(keyword)
 
-    return render_template(
-        'student_table.html',
-        students=students
-    )
+    results = []
+
+    for student in students[:5]:
+        results.append({
+            "id": student["id"],
+            "name": student["name"]
+        })
+
+    return jsonify(results)
+
 
 @app.route('/filter')
 def filter_students():
@@ -187,15 +196,18 @@ def filter_students():
         query += " AND students.course_id = ?"
         params.append(course_id)
 
-    if age:
-        query += " AND students.age = ?"
-        params.append(age)
+    if age and age.isdigit():
+       query += " AND students.age = ?"
+       params.append(int(age))
+
 
     if grade:
-        query += " AND students.grade = ?"
-        params.append(grade)
+       query += " AND LOWER(students.grade) = LOWER(?)"
+       params.append(grade.strip())
 
-        selected_course_name = "All Courses"
+    selected_course_name = "All Courses"
+
+    course = None   # initialize first
 
     if course_id:
         course = conn.execute(
@@ -204,7 +216,9 @@ def filter_students():
     ).fetchone()
 
     if course:
-        selected_course_name = course["course_name"]
+     selected_course_name = course["course_name"]
+    else:
+     selected_course_name = "All Courses"
 
     students = conn.execute(query, params).fetchall()
 
@@ -243,7 +257,6 @@ def update_leaderboard(name, score, course_id=None):
     updated_entries = get_ranked_leaderboard()
     leaderboard_entries.clear()
     leaderboard_entries.extend(updated_entries)
-
 
 
 @app.route("/Quiz_page", methods=["GET", "POST"])
@@ -319,18 +332,20 @@ def Quiz_page():
 def Study_quiz_hub():
     return render_template("Study_quiz_hub.html")
 
-
 @app.route('/student', methods=['GET', 'POST'])
 def student_form():
     courses = get_courses()
+
     if request.method == 'POST':
         name = request.form.get('name', '').strip()
         email = request.form.get('email', '').strip()
         age = request.form.get('age', '').strip()
         grade = request.form.get('grade', '').strip()
+        password = request.form.get('password', '').strip()
         course_id = request.form.get('course_id')
         course_name = None
 
+        
         if not name:
             flash('Student name is required.', 'danger')
             return render_template('student_form.html', courses=courses, form_data=request.form)
@@ -340,7 +355,15 @@ def student_form():
             return render_template('student_form.html', courses=courses, form_data=request.form)
 
         age_value = int(age) if age.isdigit() else None
-        insert_student(name, email, age_value, grade, course_id)
+
+    
+        from werkzeug.security import generate_password_hash
+        hashed_password = generate_password_hash(password)
+
+    
+        insert_student(name, email, age_value, grade, hashed_password, course_id)
+
+    
         session["student_name"] = name
 
         if course_id:
@@ -350,11 +373,11 @@ def student_form():
                 session["course_id"] = course_id
                 session["course_name"] = course_name
             else:
-                session.pop("course_id", None)
-                session.pop("course_name", None)
+                session["course_id"] = None
+                session["course_name"] = None
         else:
-            session.pop("course_id", None)
-            session.pop("course_name", None)
+            session["course_id"] = None
+            session["course_name"] = None
 
         flash('Student registered successfully.', 'success')
         return render_template(
@@ -366,25 +389,107 @@ def student_form():
             course_name=course_name,
         )
 
-    return render_template('student_form.html', courses=courses)
+    return render_template("student_form.html", courses=courses)
+
+
+    
+
+
+    
+
+
+from werkzeug.security import check_password_hash
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        email = request.form["email"]
+        password = request.form["password"]
+        conn = get_db_connection()
+        user = conn.execute("SELECT * FROM students WHERE email=?", (email,)).fetchone()
+        conn.close()
+
+        if user and check_password_hash(user["password"], password):        
+            session.clear()
+            session["student_id"] = user["id"]
+            session["student_name"] = user["name"]
+            session["email"] = user["email"]
+            session["age"] = user["age"]
+            session["grade"] = user["grade"]
+            session["course_id"] = user["course_id"]
+            course = get_course_by_id(user["course_id"])
+            session["course_name"] = course["course_name"] if course else None
+            flash(f"Welcome {user['name']} ✅", "success")
+            return redirect(url_for("student_form"))
+
+        flash("Invalid login ❌ (Name/Email/Password mismatch)", "danger")
+        return render_template("login.html", courses=get_courses())
+
+    return render_template("login.html", courses=get_courses())
+
+from werkzeug.security import generate_password_hash
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        password = request.form['password']
+        confirm_password = request.form['confirm_password']
+
+        if password != confirm_password:
+            flash("Passwords do not match ❌", "danger")
+            return render_template('signup.html')
+
+        hashed_password = generate_password_hash(password)
+
+        conn = get_db_connection()
+        conn.execute(
+            "INSERT INTO students(name,email,password) VALUES(?,?,?)",
+            (name, email, hashed_password)
+        )
+        conn.commit()
+        conn.close()
+
+        flash("Account created successfully!", "success")
+        return redirect(url_for('login'))
+
+    return render_template('signup.html')
+
+@app.route('/logout')
+def logout():
+    student_id = session.get("student_id")
+
+    user = None
+    if student_id:
+        
+        user = get_student_by_id(student_id)
+
+    
+    session.clear()
+
+    
+    return render_template("logout.html", data=user)
+
+
+
+
+
+    
+
+
 
 @app.route('/students')
 @app.route('/courses')
 def student_table():
     students = get_students_with_courses()
     courses = get_courses()
-
     return render_template(
         'student_table.html',
         students=students,
         courses=courses
     )
 
-# @app.route('/students')
-# @app.route('/courses')
-# def student_table():
-#     students = get_students_with_courses()
-#     return render_template('student_table.html', students=students)
+
 
 @app.route('/student/<int:student_id>')
 def view_student(student_id):
