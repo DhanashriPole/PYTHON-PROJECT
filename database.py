@@ -49,9 +49,15 @@ def init_db():
     conn.commit()
 
     column_info = conn.execute("PRAGMA table_info(students)").fetchall()
+    if not any(col[1] == 'password' for col in column_info):
+       conn.execute("ALTER TABLE students ADD COLUMN password TEXT")
+    conn.commit()
+
     if not any(col[1] == 'course_id' for col in column_info):
         conn.execute("ALTER TABLE students ADD COLUMN course_id INTEGER")
         conn.commit()
+
+   
 
     if conn.execute("SELECT COUNT(*) FROM courses").fetchone()[0] == 0:
         courses = [
@@ -109,15 +115,19 @@ def get_course_by_id(course_id):
     return course
 
 
-def insert_student(name, email, age_value, grade, course_id=None):
+
+
+from werkzeug.security import generate_password_hash
+
+def insert_student(name, email, age_value, grade, password, course_id=None):
     conn = get_db_connection()
+    hashed_password = generate_password_hash(password)
     conn.execute(
-        "INSERT INTO students (name, email, age, grade, course_id) VALUES (?, ?, ?, ?, ?)",
-        (name, email, age_value, grade, course_id if course_id else None),
+        """INSERT INTO students (name, email, age, grade, password, course_id) VALUES (?, ?, ?, ?, ?, ?)""",
+        (name, email, age_value, grade, hashed_password, course_id if course_id else None),
     )
     conn.commit()
     conn.close()
-
 
 def delete_student(student_id):
     conn = get_db_connection()
@@ -224,11 +234,34 @@ def search_students(keyword):
         FROM students
         LEFT JOIN courses ON students.course_id = courses.id
         WHERE students.name LIKE ?
-           OR courses.course_name LIKE ?
-    """, (
-        f"%{keyword}%",
-        f"%{keyword}%"
-    )).fetchall()
+    """, (f"%{keyword}%",)).fetchall()
 
     conn.close()
     return students
+
+
+
+
+
+from werkzeug.security import generate_password_hash
+
+conn = get_db_connection()
+students = conn.execute("SELECT id, password FROM students").fetchall()
+
+for s in students:
+    pwd = s["password"]
+
+    
+    if not pwd:
+        continue
+
+    
+    if pwd.startswith("pbkdf2:sha256") or pwd.startswith("scrypt:"):
+        continue
+
+    
+    hashed = generate_password_hash(pwd)
+    conn.execute("UPDATE students SET password=? WHERE id=?", (hashed, s["id"]))
+
+conn.commit()
+conn.close()
