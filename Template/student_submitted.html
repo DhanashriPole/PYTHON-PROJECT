@@ -1,29 +1,146 @@
 {% extends "base1.html" %}
 {% block title %}Submission Received{% endblock %}
-{% block content %}
-<div class="page-card p-4 mx-auto" style="max-width: 520px;background:lightslategray;">
 
-    <div class="section-heading justify-content-center">
-        <i class="bi bi-check-circle-fill text-dark"></i>
-        <h2 class="m-0 text-dark">Thank you, {{ name or 'Student' }}!</h2>
+{% block content %}
+
+<style>
+.success-card{
+    max-width:700px;
+    margin:auto;
+    border:none;
+    border-radius:25px;
+    overflow:hidden;
+    box-shadow:0 15px 40px rgba(0,0,0,0.15);
+}
+
+.success-header{
+    background:linear-gradient(135deg,#198754,#20c997);
+    color:white;
+    text-align:center;
+    padding:35px;
+}
+
+.success-icon{
+    font-size:4rem;
+    animation:bounce 2s infinite;
+}
+
+@keyframes bounce{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-10px);}
+}
+
+.info-item{
+    border:none;
+    border-radius:15px;
+    margin-bottom:12px;
+    background:#f8f9fa;
+    transition:0.3s;
+}
+
+.info-item:hover{
+    transform:translateX(5px);
+    background:#eef5ff;
+}
+
+.start-btn{
+    border-radius:15px;
+    padding:14px;
+    font-size:1.1rem;
+    font-weight:600;
+    transition:0.3s;
+}
+
+.start-btn:hover{
+    transform:translateY(-3px);
+}
+
+@media(max-width:768px){
+
+    .success-header{
+        padding:25px;
+    }
+
+    .success-header h2{
+        font-size:1.5rem;
+    }
+
+    .success-icon{
+        font-size:3rem;
+    }
+}
+</style>
+
+<div class="container py-5">
+
+```
+<div class="card success-card">
+
+    <div class="success-header">
+
+        <i class="bi bi-check-circle-fill success-icon"></i>
+
+        <h2 class="mt-3">
+            Registration Successful!
+        </h2>
+
+        <p class="mb-0">
+            Welcome, {{ name or 'Student' }}
+        </p>
+
     </div>
-    <p class=" mb-4 text-white">We received your registration details successfully.</p>
-    <ul class="list-group list-group-flush mb-4">
-        <li class="list-group-item"><i class="bi bi-envelope-fill text-primary me-2"></i><strong>Email:</strong> {{
-            email or '—' }}</li>
-        <li class="list-group-item"><i class="bi bi-calendar-fill text-primary me-2"></i><strong>Age:</strong> {{ age or
-            '—' }}</li>
-        <li class="list-group-item"><i
-                class="bi bi-mortarboard-fill text-primary me-2"></i><strong>Class/Grade:</strong> {{ grade or '—' }}
-        </li>
-        <li class="list-group-item"><i
-                class="bi bi-journal-bookmark-fill text-primary me-2"></i><strong>Course:</strong> {{ course_name or
-            'None selected' }}</li>
-    </ul>
-    <div class="d-grid">
-        <a href="/Quiz_page" class="btn btn-success btn-lg">
-            <i class="bi bi-play-fill me-2"></i> Start Quiz
-        </a>
+
+    <div class="card-body p-4">
+
+        <div class="alert alert-success text-center">
+            <strong>Your registration details have been submitted successfully.</strong>
+        </div>
+
+        <div class="list-group">
+
+            <div class="list-group-item info-item">
+                <i class="bi bi-envelope-fill text-primary me-2"></i>
+                <strong>Email:</strong>
+                {{ email or '—' }}
+            </div>
+
+            <div class="list-group-item info-item">
+                <i class="bi bi-calendar-fill text-primary me-2"></i>
+                <strong>Age:</strong>
+                {{ age or '—' }}
+            </div>
+
+            <div class="list-group-item info-item">
+                <i class="bi bi-mortarboard-fill text-primary me-2"></i>
+                <strong>Class / Grade:</strong>
+                {{ grade or '—' }}
+            </div>
+
+            <div class="list-group-item info-item">
+                <i class="bi bi-journal-bookmark-fill text-primary me-2"></i>
+                <strong>Course:</strong>
+                {{ course_name or 'None Selected' }}
+            </div>
+
+        </div>
+
+        <div class="d-grid mt-4">
+
+            <a href="/Quiz_page"
+               class="btn btn-success start-btn">
+
+                <i class="bi bi-play-circle-fill me-2"></i>
+                Start Quiz
+
+            </a>
+
+        </div>
+
     </div>
+
 </div>
+```
+
+</div>
+
 {% endblock %}

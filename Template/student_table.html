@@ -1,168 +1,245 @@
 {% extends "base1.html" %}
 {% block title %}Student Courses{% endblock %}
+
 {% block content %}
-<head>
+
 <style>
-    .card{
-    transition: all 0.3s ease;
+
+.page-card{
+    background: linear-gradient(135deg,#64748b,#475569);
+    border-radius:25px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.25);
+}
+
+.card{
+    border:none;
+    border-radius:20px;
+    transition:all .3s ease;
 }
 
 .card:hover{
-    transform: translateY(-8px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.25) !important;
-}
-.total-card{
-    background-color: #cff4fc;
-    border-left: 6px solid #0dcaf0;
+    transform:translateY(-8px);
+    box-shadow:0 15px 30px rgba(0,0,0,.25);
 }
 
-.stat-card{
-    border: none;
-    border-radius: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-    transition: all 0.3s ease;
-    overflow: hidden;
+.stats-card{
+    color:white;
 }
-/* Total Students */
 
 .total-card{
-    background: #e7f1ff;
-    border-left: 6px solid #0d6efd;
+    background:linear-gradient(135deg,#0d6efd,#4dabf7);
 }
-
-.total-card h2{
-    color: #0d6efd;
-}
-
-/* Filtered Results */
 
 .filter-card{
-    background: #e8f5e9;
-    border-left: 6px solid #198754;
+    background:linear-gradient(135deg,#198754,#20c997);
 }
-
-.filter-card h2{
-    color: #198754;
-}
-
-/* Selected Course */
 
 .course-card{
-    background: #fff4e5;
-    border-left: 6px solid #fd7e14;
+    background:linear-gradient(135deg,#fd7e14,#ffc107);
+    color:black;
 }
-
-.course-card h2{
-    color: #fd7e14;
-}
-
-/* Card Text */
-
-.stat-card p{
-    color: #6c757d;
-    font-weight: 500;
-    margin-bottom: 0;
-}
-
-/* Icons */
 
 .stat-icon{
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
+    font-size:2.5rem;
 }
+
+.filter-box{
+    background:white;
+    padding:20px;
+    border-radius:20px;
+    box-shadow:0 4px 15px rgba(0,0,0,.08);
+}
+
+.table{
+    border-radius:15px;
+    overflow:hidden;
+}
+
+.table tbody tr:hover{
+    background:#f8fafc;
+}
+
+.action-btn{
+    min-width:75px;
+}
+
+.badge-course{
+    font-size:14px;
+    padding:8px 12px;
+}
+
+@media(max-width:768px){
+
+    .page-card{
+        padding:20px !important;
+    }
+
+    .section-heading h2{
+        font-size:1.4rem;
+    }
+
+    .action-btn{
+        width:100%;
+        margin-bottom:5px;
+    }
+
+    .stat-icon{
+        font-size:2rem;
+    }
+
+}
+
 </style>
-</head>
-<div class="page-card p-4 " style="background:lightslategray;">
-    <div class="section-heading">
-        <i class="bi bi-people-fill text-dark"></i>
-        <h2 class="m-0">Student Course Table</h2>
-    </div>
-    <form action="{{ url_for('filter_students') }}" method="GET" class="row g-3 mb-4">
 
-    <div class="col-md-4">
-        <select name="course_id" class="form-select">
-    <option value="">All Courses</option>
+<div class="page-card p-4">
 
-    {% for course in courses %}
-    <option value="{{ course.id }}"
-        {% if selected_course == course.id|string %}
-            selected
-        {% endif %}>
-        {{ course.course_name }}
-    </option>
-    {% endfor %}
-</select>
-    </div>
+    <!-- Heading -->
 
-    <div class="col-md-4">
-       <input type="number"
-       name="age"
-       class="form-control"
-       placeholder="Age"
-       value="{{ request.args.get('age', '') }}">
-    </div>
+    <div class="section-heading mb-4">
+        <i class="bi bi-mortarboard-fill fs-1 text-warning"></i>
 
-    <div class="col-md-4">
-      <input type="text"
-       name="grade"
-       class="form-control"
-       placeholder="Grade"
-       value="{{ request.args.get('grade', '') }}">
-    </div>
-    <div class="col-md-2">
-<button class="btn btn-primary w-100 rounded-3">
-    <i class="bi bi-funnel-fill"></i> Filter
-</button>
-</div>
-        <div class="col-md-2 ">
-    <a href="{{ url_for('student_table') }}"
-   class="btn btn-dark rounded-3">
-   <i class="bi bi-arrow-clockwise"></i> Reset
-</a>
-</div>
-    </form>
-    
- <div class="row mb-3">
-    <div class="col-md-4">
-        <div class="card shadow-sm border-0 rounded-4">
-            <div class="card-body text-center">
-                <h3>        <i class="bi bi-people-fill stat-icon"></i>
-                {{ total_students }}</h3>
-                <small>Total Students</small>
-            </div>
+        <div>
+            <h2 class="m-0 text-white fw-bold">
+                Student Management Dashboard
+            </h2>
+
+            <small class="text-light">
+                View, Filter and Manage Students Easily
+            </small>
         </div>
     </div>
 
-    <div class="col-md-4">
-        <div class="card border-0 shadow-sm rounded-4">
-            <div class="card-body text-center">
-                <h2 class="text-success"><i class="bi bi-check2-square"></i>{{ filtered_count }}</h2>
-                <p class="mb-0 text-muted">Filtered Results</p>
+    <!-- Filter Section -->
+
+    <div class="filter-box mb-4">
+
+        <form action="{{ url_for('filter_students') }}"
+              method="GET"
+              class="row g-3">
+
+            <div class="col-lg-4 col-md-6">
+                <select name="course_id" class="form-select">
+
+                    <option value="">
+                        All Courses
+                    </option>
+
+                    {% for course in courses %}
+                    <option value="{{ course.id }}"
+                    {% if selected_course == course.id|string %}
+                    selected
+                    {% endif %}>
+                        {{ course.course_name }}
+                    </option>
+                    {% endfor %}
+
+                </select>
             </div>
-        </div>
+
+            <div class="col-lg-3 col-md-6">
+                <input type="number"
+                       name="age"
+                       class="form-control"
+                       placeholder="Age"
+                       value="{{ request.args.get('age','') }}">
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <input type="text"
+                       name="grade"
+                       class="form-control"
+                       placeholder="Grade"
+                       value="{{ request.args.get('grade','') }}">
+            </div>
+
+            <div class="col-lg-2 col-md-6 d-grid">
+                <button class="btn btn-primary">
+                    <i class="bi bi-funnel-fill"></i>
+                    Filter
+                </button>
+            </div>
+
+            <div class="col-lg-2 col-md-6 d-grid">
+                <a href="{{ url_for('student_table') }}"
+                   class="btn btn-dark">
+                    <i class="bi bi-arrow-clockwise"></i>
+                    Reset
+                </a>
+            </div>
+
+        </form>
+
     </div>
 
-    <div class="col-md-4">
-        <div class="card border-0 shadow-sm rounded-4">
-            <div class="card-body text-center">
-                
-                <h2 class="text-info"><i class="bi bi-journal-bookmark-fill"></i>{{ selected_course_name }}</h2>
-                <p class="mb-0 text-muted">Selected Course</p>
+    <!-- Statistics -->
+
+    <div class="row g-4 mb-4">
+
+        <div class="col-lg-4 col-md-6">
+            <div class="card stats-card total-card h-100">
+                <div class="card-body text-center">
+
+                    <i class="bi bi-people-fill stat-icon"></i>
+
+                    <h2 class="fw-bold">
+                        {{ total_students }}
+                    </h2>
+
+                    <p class="mb-0">
+                        Total Students
+                    </p>
+
+                </div>
             </div>
         </div>
+
+        <div class="col-lg-4 col-md-6">
+            <div class="card stats-card filter-card h-100">
+                <div class="card-body text-center">
+
+                    <i class="bi bi-check2-square stat-icon"></i>
+
+                    <h2 class="fw-bold">
+                        {{ filtered_count }}
+                    </h2>
+
+                    <p class="mb-0">
+                        Filtered Results
+                    </p>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card course-card h-100">
+                <div class="card-body text-center">
+
+                    <i class="bi bi-journal-bookmark-fill stat-icon"></i>
+
+                    <h4 class="fw-bold">
+                        {{ selected_course_name }}
+                    </h4>
+
+                    <p class="mb-0">
+                        Selected Course
+                    </p>
+
+                </div>
+            </div>
+        </div>
+
     </div>
 
+    <!-- Student Table -->
 
-</div>
+    <div class="table-responsive bg-white rounded-4 shadow">
 
-    
-    
+        <table class="table table-hover align-middle mb-0">
 
-    <div class="table-responsive">
-        <table class="table table-striped table-hover shadow-sm">
             <thead class="table-dark">
                 <tr>
-                    <th>no</th>
+                    <th>#</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Age</th>
@@ -171,46 +248,104 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
-                {% if students %}
-                {% for student in students %}
-                <tr>
-                    <td>{{ loop.index }}</td>
-                    <td>{{ student['name'] }}</td>
-                    <td>{{ student['email'] or '—' }}</td>
-                    <td>{{ student['age'] or '—' }}</td>
-                    <td>{{ student['grade'] or '—' }}</td>
-                    <td><span class="badge bg-info text-dark">{{ student['course_name'] or 'None selected' }}</span>
-                    </td>
-                    <td>
-                        <a href="{{ url_for('view_student', student_id=student['id']) }}"
-                            class="btn btn-sm btn-outline-primary me-1">View</a>
-                            <a href="{{ url_for('edit_student', student_id=student['id']) }}"
-                            class="btn btn-sm btn-outline-warning me-1">Edit</a>
 
-                        <form action="{{ url_for('delete_student_record', student_id=student['id']) }}" method="post"
-                            class="d-inline">
-                            <button type="submit" class="btn btn-sm btn-outline-danger"
-                                onclick="return confirm('Delete this student?');">Delete</button>
-                        </form>
+            <tbody>
+
+            {% if students %}
+
+                {% for student in students %}
+
+                <tr>
+
+                    <td>{{ loop.index }}</td>
+
+                    <td>
+                        <strong>
+                            {{ student['name'] }}
+                        </strong>
                     </td>
+
+                    <td>
+                        {{ student['email'] or '—' }}
+                    </td>
+
+                    <td>
+                        {{ student['age'] or '—' }}
+                    </td>
+
+                    <td>
+                        <span class="badge bg-secondary">
+                            {{ student['grade'] or '—' }}
+                        </span>
+                    </td>
+
+                    <td>
+                        <span class="badge bg-info text-dark badge-course">
+                            {{ student['course_name'] or 'None Selected' }}
+                        </span>
+                    </td>
+
+                    <td>
+
+                        <a href="{{ url_for('view_student', student_id=student['id']) }}"
+                           class="btn btn-sm btn-primary action-btn">
+                            <i class="bi bi-eye-fill"></i>
+                        </a>
+
+                        <a href="{{ url_for('edit_student', student_id=student['id']) }}"
+                           class="btn btn-sm btn-warning action-btn">
+                            <i class="bi bi-pencil-fill"></i>
+                        </a>
+
+                        <form action="{{ url_for('delete_student_record', student_id=student['id']) }}"
+                              method="post"
+                              class="d-inline">
+
+                            <button type="submit"
+                                    class="btn btn-sm btn-danger action-btn"
+                                    onclick="return confirm('Delete this student?');">
+
+                                <i class="bi bi-trash-fill"></i>
+
+                            </button>
+
+                        </form>
+
+                    </td>
+
                 </tr>
+
                 {% endfor %}
-                {% else %}
-                  <tr>
-    <td colspan="7" class="text-center py-4">
-        <i class="bi bi-search fs-1 text-danger"></i>
-        <h5 class="mt-2 text-danger">
-            No Results Found
-        </h5>
-        <small class="text-muted">
-            Try changing your filters
-        </small>
-    </td>
-</tr>
-             {% endif %}
+
+            {% else %}
+
+                <tr>
+
+                    <td colspan="7" class="text-center py-5">
+
+                        <i class="bi bi-search text-danger"
+                           style="font-size:70px;"></i>
+
+                        <h4 class="text-danger mt-3">
+                            No Results Found
+                        </h4>
+
+                        <p class="text-muted">
+                            Try changing your filters
+                        </p>
+
+                    </td>
+
+                </tr>
+
+            {% endif %}
+
             </tbody>
+
         </table>
+
     </div>
+
 </div>
+
 {% endblock %}

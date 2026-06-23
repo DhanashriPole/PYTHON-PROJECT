@@ -1,0 +1,103 @@
+{% extends "base1.html" %}
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+
+        <div class="col-lg-5 col-md-7 col-sm-10">
+
+            <div class="card border-0 shadow-lg rounded-4">
+
+                <div class="card-header text-center bg-primary text-white rounded-top-4 py-4">
+                    <i class="bi bi-person-plus-fill fs-1"></i>
+                    <h2 class="mt-2 mb-0">Create Account</h2>
+                    <small>Join Study Quiz Hub</small>
+                </div>
+
+                <div class="card-body p-4">
+
+                    <form method="POST" action="/signup">
+
+                        <div class="form-floating mb-3">
+                            <input type="text"
+                                   name="name"
+                                   class="form-control"
+                                   id="name"
+                                   placeholder="Full Name"
+                                   required>
+                            <label for="name">
+                                <i class="bi bi-person-fill me-2"></i>
+                                Full Name
+                            </label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input type="email"
+                                   name="email"
+                                   class="form-control"
+                                   id="email"
+                                   placeholder="Email"
+                                   required>
+                            <label for="email">
+                                <i class="bi bi-envelope-fill me-2"></i>
+                                Email Address
+                            </label>
+                        </div>
+
+                        <div class="form-floating mb-4">
+    <input type="password"
+           name="password"
+           class="form-control"
+           id="password"
+           placeholder="Password"
+           required>
+    <label for="password">
+        <i class="bi bi-lock-fill me-2"></i>
+        Password
+    </label>
+</div>
+
+<div class="form-floating mb-4">
+    <input type="password"
+           name="confirm_password"
+           class="form-control"
+           id="confirm_password"
+           placeholder="Confirm Password"
+           required>
+    <label for="confirm_password">
+        <i class="bi bi-shield-lock-fill me-2"></i>
+        Confirm Password
+    </label>
+</div>
+
+                        <button type="submit"
+                                class="btn btn-success w-100 py-3 fw-bold rounded-3">
+                            <i class="bi bi-person-check-fill me-2"></i>
+                            Sign Up
+                        </button>
+
+                    </form>
+
+                    <hr>
+
+                    <div class="text-center">
+                        <p class="mb-0">
+                            Already have an account?
+                            <a href="/login" class="text-decoration-none fw-bold">
+                                Login
+                            </a>
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

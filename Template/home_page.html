@@ -1,127 +1,207 @@
 {% extends "base1.html" %}
 {% block title %}Home{% endblock %}
+
 {% block content %}
-<head>
-    <style>
-        /* Students icon - floating effect */
-.student-icon{
-    animation: float 2s ease-in-out infinite;
+
+<style>
+.hero-section{
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    border-radius: 25px;
+    padding: 4rem 2rem;
+    color: white;
+    overflow: hidden;
 }
 
-/* Courses icon - rotate effect */
-.course-icon{
-    animation: rotateBook 3s linear infinite;
+.hero-title{
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
 }
 
-/* Attempts icon - pulse effect */
-.attempt-icon{
-    animation: pulse 1.2s infinite;
+.hero-subtitle{
+    font-size: 1.1rem;
+    opacity: 0.95;
 }
 
-/* Animations */
-
-@keyframes float{
-    0%,100%{
-        transform: translateY(0);
-    }
-    50%{
-        transform: translateY(-10px);
-    }
-}
-.card{
+.custom-btn{
+    padding: 12px 35px;
+    border-radius: 50px;
+    font-weight: 600;
     transition: all 0.3s ease;
 }
 
-.card:hover{
-    transform: translateY(-8px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.25) !important;
+.custom-btn:hover{
+    transform: translateY(-3px);
 }
-hero-title{
-    font-weight: 900;
-    letter-spacing: 1px;
-    text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
-}
-h1{
-    font-width: inherit;
-    font-weight: bolder;
-    font-size: large;
-    font-display:fallback;
-}
-    </style>
-</head>
-<div class="page-card p-5 text-center text-white"
-     style="background-color:lightslategray;">
 
-    <div class="section-heading justify-content-center">
-        <i class="bi bi-stars text-white"></i>
-        <div>
-            <h1 class="display-3 mb-2 hero-title text-white">Welcome to Study Quiz Hub</h1>
-            <p class="text-dark mb-0">Practice quizzes and improve your skills with course-based study questions.
-            </p>
-        </div>
-    </div>
-    <div class="d-flex justify-content-center mb-4">
-        <a href="/student" class="btn btn-primary btn-lg px-5">
-            <i class="bi bi-person-fill me-2"></i> Student Login
+/* ALL CARDS SAME STYLE */
+.stat-card,
+.feature-card{
+    border: none;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    background: rgba(255,255,255,0.95);
+}
+
+.stat-card:hover,
+.feature-card:hover{
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+}
+
+/* ICON ANIMATIONS */
+.student-icon{ animation: float 2s ease-in-out infinite; }
+.attempt-icon{ animation: pulse 1.5s infinite; }
+.course-icon{ animation: rotateBook 4s linear infinite; }
+
+@keyframes float{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-10px);}
+}
+
+@keyframes pulse{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.1);}
+    100%{transform:scale(1);}
+}
+
+@keyframes rotateBook{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
+}
+
+/* MOBILE */
+@media(max-width:768px){
+    .hero-title{
+        font-size:2rem;
+    }
+
+    .custom-btn{
+        width:100%;
+        margin-bottom:10px;
+    }
+}
+</style>
+
+<!-- HERO WRAPPER -->
+<div class="hero-section text-center shadow-lg">
+
+    <i class="bi bi-stars fs-1"></i>
+
+    <h1 class="display-4 hero-title mt-3">
+        Welcome to Study Quiz Hub
+    </h1>
+
+    <p class="hero-subtitle">
+        Practice quizzes, track progress and improve your skills.
+    </p>
+
+    <!-- BUTTONS -->
+    <div class="mt-4">
+        <a href="/login" class="btn btn-light custom-btn me-md-3">
+            <i class="bi bi-box-arrow-in-right me-2"></i>
+            Login
+        </a>
+
+        <a href="/signup" class="btn btn-warning custom-btn">
+            <i class="bi bi-person-plus-fill me-2"></i>
+            Sign Up
         </a>
     </div>
-    <div class="row mt-4 g-3 text-center">
-    <div class="col-md-4">
-        <div class="card h=100 border-0 shadow-sm rounded-4 ">
-            <div class="card-body">
-                <h2 class="text-primary"><i class="bi bi-people-fill text-primary student-icon"></i>{{ total_students }}</h2>
-                <p class="mb-0">Students</p>
-            </div>
-        </div>
-    </div>
 
-    <div class="col-md-4">
-        <div class="card h=100 border-0 shadow-sm rounded-4 ">
-            <div class="card-body">
-                <h2 class="text-success"><i class="bi bi-graph-up-arrow text-success attempt-icon"></i> {{ total_attempts }}</h2>
-                <p class="mb-0">Quiz Attempts</p>
-            </div>
-        </div>
-    </div>
+    <!-- 🔥 ALL CARDS INSIDE SAME HERO -->
 
-    <div class="col-md-4">
-        <div class="card h=100 border-0 shadow-sm rounded-4 ">
-            <div class="card-body">
-                <h2 class="text-info"><i class="bi bi-journal-bookmark-fill text-warning course-icon"></i> {{ total_courses }}</h2>
-                <p class="mb-0">Courses</p>
-            </div>
-        </div>
-    </div>
+    <div class="row mt-5 g-4 justify-content-center">
 
-   
-
-    <div class="row mt-4 g-3 text-center">
-        <div class="col-md-4">
-            <div class="card h-100 border-0 shadow-sm rounded-4 ">
-                <div class="card-body">
-                    <h4 class="card-title"><i class="bi bi-lightbulb-fill text-warning me-2"></i>About</h4>
-                    <p class="card-text text-muted">Study Quiz Hub offers interactive MCQs for Python, web, and data
-                        science topics.</p>
+        <!-- Students -->
+        <div class="col-md-3">
+            <div class="card stat-card shadow-sm h-100">
+                <div class="card-body text-dark">
+                    <h3 class="text-primary">
+                        <i class="bi bi-people-fill student-icon"></i>
+                    </h3>
+                    <h4>{{ total_students }}</h4>
+                    <p class="mb-0">Students</p>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card h-100 border-0 shadow-sm rounded-4">
-                <div class="card-body">
-                    <h4 class="card-title"><i class="bi bi-book-half text-info me-2"></i>Learn</h4>
-                    <p class="card-text text-muted">Answer smartly designed questions one-by-one and review your
-                        progress.</p>
+
+        <!-- Attempts -->
+        <div class="col-md-3">
+            <div class="card stat-card shadow-sm h-100">
+                <div class="card-body text-dark">
+                    <h3 class="text-success">
+                        <i class="bi bi-graph-up-arrow attempt-icon"></i>
+                    </h3>
+                    <h4>{{ total_attempts }}</h4>
+                    <p class="mb-0">Quiz Attempts</p>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card h-100 border-0 shadow-sm rounded-4">
-                <div class="card-body">
-                    <h4 class="card-title"><i class="bi bi-trophy-fill text-primary me-2"></i>Leaderboard</h4>
-                    <p class="card-text text-muted">See the top quiz scorers and compete to reach the leaderboard.</p>
+
+        <!-- Courses -->
+        <div class="col-md-3">
+            <div class="card stat-card shadow-sm h-100">
+                <div class="card-body text-dark">
+                    <h3 class="text-warning">
+                        <i class="bi bi-journal-bookmark-fill course-icon"></i>
+                    </h3>
+                    <h4>{{ total_courses }}</h4>
+                    <p class="mb-0">Courses</p>
                 </div>
             </div>
         </div>
+
     </div>
+
+    <!-- FEATURES CARDS (INSIDE SAME HERO) -->
+
+    <div class="row mt-5 g-4">
+
+        <div class="col-md-4">
+            <div class="card feature-card shadow-sm h-100">
+                <div class="card-body text-center p-4">
+
+                    <i class="bi bi-lightbulb-fill text-warning fs-1"></i>
+                    <h4 class="mt-3">About</h4>
+                    <p class="text-muted">
+                        Structured MCQ quizzes for better learning experience.
+                    </p>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card feature-card shadow-sm h-100">
+                <div class="card-body text-center p-4">
+
+                    <i class="bi bi-book-half text-info fs-1"></i>
+                    <h4 class="mt-3">Learn</h4>
+                    <p class="text-muted">
+                        Practice and improve with instant feedback system.
+                    </p>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card feature-card shadow-sm h-100">
+                <div class="card-body text-center p-4">
+
+                    <i class="bi bi-trophy-fill text-primary fs-1"></i>
+                    <h4 class="mt-3">Leaderboard</h4>
+                    <p class="text-muted">
+                        Compete and track your ranking live.
+                    </p>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
 </div>
+
 {% endblock %}

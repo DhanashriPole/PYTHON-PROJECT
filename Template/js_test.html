@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1 id="myHeading">Hello World</h1>
+        <button id="Mybutton">Click</button>
+        <script>
+            const Heading = document.getElementById("myHeading"); 
+            const button = document.getElementById("Mybutton");
+            button.addEventListener("click", function() {
+                Heading.textContent = "Goodbye World";
+            });
+        </script>
+    </body>
+</html>

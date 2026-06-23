@@ -1,0 +1,99 @@
+{% extends "base1.html" %}
+{% block title %}Logout Summary{% endblock %}
+
+{% block content %}
+<style>
+.logout-card {
+    max-width: 500px;
+    margin: auto;
+    border: none;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+.logout-header {
+    background: linear-gradient(135deg, #dc3545, #ff4d6d);
+    color: white;
+    text-align: center;
+    padding: 25px;
+}
+
+.logout-header i {
+    font-size: 2.5rem;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.info-label {
+    font-weight: 600;
+    color: #555;
+}
+
+.info-value {
+    color: #222;
+    font-weight: 500;
+}
+
+.success-box {
+    background: #d1e7dd;
+    color: #0f5132;
+    padding: 12px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: 600;
+    margin-top: 15px;
+}
+
+.btn-home {
+    margin-top: 20px;
+    width: 100%;
+    border-radius: 12px;
+    font-weight: 600;
+    padding: 12px;
+    transition: 0.3s;
+}
+
+.btn-home:hover {
+    transform: translateY(-3px);
+}
+
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(20px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+</style>
+
+<div class="container py-5">
+    <div class="card logout-card">
+        <div class="logout-header">
+            <i class="bi bi-box-arrow-right"></i>
+            <h2 class="mt-2">Logout Summary</h2>
+            <p class="mb-0">Your account details before logout</p>
+        </div>
+
+        <div class="card-body p-4">
+            
+            <div class="info-row">
+                <span class="info-label">📧 Email</span>
+                <span class="info-value">{{ data.email or 'Not available' }}</span>
+            </div>
+          
+
+            <div class="success-box">
+                ✅ You have been successfully logged out!
+            </div>
+
+            <a href="/" class="btn btn-primary btn-home">
+                🔙 Go to Home
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

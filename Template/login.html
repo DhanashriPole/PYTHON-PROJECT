@@ -1,0 +1,101 @@
+{% extends "base1.html" %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<style>
+.login-card {
+    max-width: 400px;
+    margin: auto;
+    border: none;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.login-header {
+    background: linear-gradient(135deg, #0d6efd, #6610f2);
+    color: white;
+    text-align: center;
+    padding: 25px;
+}
+
+.login-header i {
+    font-size: 2.5rem;
+}
+
+.form-control {
+    border-radius: 12px;
+}
+
+.btn-login {
+    border-radius: 12px;
+    font-weight: 600;
+    padding: 12px;
+    transition: 0.3s;
+}
+
+.btn-login:hover {
+    transform: translateY(-3px);
+}
+
+.password-wrapper {
+    position: relative;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 10;
+}
+</style>
+
+<div class="container py-5">
+    <div class="card login-card">
+        <div class="login-header">
+            <i class="bi bi-box-arrow-in-right"></i>
+            <h2 class="mt-2">Student Login</h2>
+            <p class="mb-0">Access your Study Quiz Hub account</p>
+        </div>
+
+        <div class="card-body p-4">
+            <form method="POST" action="/login">
+              
+
+                <div class="form-floating mb-3">
+                    <input type="email" name="email" class="form-control" id="email" placeholder="Email" required>
+                    <label for="email">
+                        <i class="bi bi-envelope-fill me-2"></i>
+                        Email Address
+                    </label>
+                </div>
+
+                <div class="password-wrapper mb-3">
+                    <div class="form-floating">
+                        <input type="password" name="password" class="form-control" id="password" placeholder="Password" required>
+                        <label for="password">
+                            <i class="bi bi-lock-fill me-2"></i>
+                            Password
+                        </label>
+                    </div>
+                    <i class="bi bi-eye-fill password-toggle" onclick="togglePassword('password')"></i>
+                </div>
+
+                <button class="btn btn-success btn-login w-100">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>
+                    Login Now
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function togglePassword(id){
+    let field = document.getElementById(id);
+    field.type = (field.type === "password") ? "text" : "password";
+}
+</script>
+{% endblock %}

@@ -1,48 +1,205 @@
 {% extends "base1.html" %}
-{% block title %}Student Form{% endblock %}
-{% block content %}
-<div class="page-card p-4 mx-auto" style="max-width: 520px;background:lightslategray">
+{% block title %}Student Registration{% endblock %}
 
-    <div class="section-heading justify-content-center">
-        <i class="bi bi-person-badge-fill text-dark"></i>
-        <h2 class="m-0 text-dark">Student Registration</h2>
+{% block content %}
+
+<style>
+.register-card{
+    max-width:600px;
+    margin:auto;
+    border:none;
+    border-radius:25px;
+    overflow:hidden;
+    box-shadow:0 15px 35px rgba(0,0,0,0.15);
+}
+
+.register-header{
+    background:linear-gradient(135deg,#0d6efd,#6610f2);
+    color:white;
+    text-align:center;
+    padding:30px;
+}
+
+.register-header i{
+    font-size:3rem;
+}
+
+.form-control,
+.form-select{
+    border-radius:12px;
+}
+
+.btn-register{
+    border-radius:12px;
+    font-weight:600;
+    padding:12px;
+    transition:0.3s;
+}
+
+.btn-register:hover{
+    transform:translateY(-3px);
+}
+
+.form-floating label{
+    color:#6c757d;
+}
+
+.password-wrapper{
+    position:relative;
+}
+
+.password-toggle{
+    position:absolute;
+    right:15px;
+    top:50%;
+    transform:translateY(-50%);
+    cursor:pointer;
+    z-index:10;
+}
+
+@media(max-width:768px){
+    .register-header{
+        padding:20px;
+    }
+
+    .register-header h2{
+        font-size:1.5rem;
+    }
+}
+</style>
+
+<div class="container py-5">
+
+    <div class="card register-card">
+
+        <div class="register-header">
+            <i class="bi bi-person-plus-fill"></i>
+            <h2 class="mt-2">Student Registration</h2>
+            <p class="mb-0">Register your account with Study Quiz Hub</p>
+        </div>
+
+        <div class="card-body p-4">
+
+            <form method="POST" action="/student">
+
+                <div class="form-floating mb-3">
+                    <input type="text"
+                           name="name"
+                           class="form-control"
+                           id="name"
+                           placeholder="Full Name"
+                           required
+                           value="{{ form_data.get('name') if form_data else '' }}">
+                    <label for="name">
+                        <i class="bi bi-person-fill me-2"></i>
+                        Full Name
+                    </label>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input type="email"
+                           name="email"
+                           class="form-control"
+                           id="email"
+                           placeholder="Email"
+                           value="{{ form_data.get('email') if form_data else '' }}">
+                    <label for="email">
+                        <i class="bi bi-envelope-fill me-2"></i>
+                        Email Address
+                    </label>
+                </div>
+
+                <div class="password-wrapper mb-3">
+                    <div class="form-floating">
+                        <input type="password"
+                               name="password"
+                               class="form-control"
+                               id="password"
+                               placeholder="Password"
+                               required>
+                        <label for="password">
+                            <i class="bi bi-lock-fill me-2"></i>
+                            Password
+                        </label>
+                    </div>
+
+                    <i class="bi bi-eye-fill password-toggle"
+                       onclick="togglePassword('password')"></i>
+                </div>
+
+               
+                <div class="form-floating mb-3">
+                    <input type="number"
+                           name="age"
+                           class="form-control"
+                           id="age"
+                           placeholder="Age"
+                           min="1"
+                           value="{{ form_data.get('age') if form_data else '' }}">
+                    <label for="age">
+                        <i class="bi bi-calendar-event-fill me-2"></i>
+                        Age
+                    </label>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input type="text"
+                           name="grade"
+                           class="form-control"
+                           id="grade"
+                           placeholder="Grade"
+                           value="{{ form_data.get('grade') if form_data else '' }}">
+                    <label for="grade">
+                        <i class="bi bi-mortarboard-fill me-2"></i>
+                        Class / Grade
+                    </label>
+                </div>
+
+                <div class="form-floating mb-4">
+                    <select name="course_id"
+                            class="form-select"
+                            id="course_id">
+
+                        <option value="">Select a course</option>
+
+                        {% for course in courses %}
+                        <option value="{{ course['id'] }}">
+                            {{ course['course_name'] }}
+                        </option>
+                        {% endfor %}
+
+                    </select>
+
+                    <label for="course_id">
+                        <i class="bi bi-book-fill me-2"></i>
+                        Course
+                    </label>
+                </div>
+
+                <button class="btn btn-success btn-register w-100">
+                    <i class="bi bi-person-check-fill me-2"></i>
+                    Register Now
+                </button>
+
+            </form>
+
+        </div>
+
     </div>
-    <form method="post" action="/student" class="d-flex flex-column gap-3">
-        <div class="form-floating">
-            <input type="text" name="name" class="form-control form-control-lg" id="name" placeholder="Full name"
-                required value="{{ form_data.get('name') if form_data else '' }}">
-            <label for="name">Full Name</label>
-        </div>
-        <div class="form-floating">
-            <input type="email" name="email" class="form-control form-control-lg" id="email" placeholder="Email"
-                value="{{ form_data.get('email') if form_data else '' }}">
-            <label for="email">Email</label>
-        </div>
-        <div class="form-floating">
-            <input type="number" name="age" class="form-control form-control-lg" id="age" placeholder="Age" min="1"
-                value="{{ form_data.get('age') if form_data else '' }}">
-            <label for="age">Age</label>
-        </div>
-        <div class="form-floating">
-            <input type="text" name="grade" class="form-control form-control-lg" id="grade" placeholder="Class/Grade"
-                value="{{ form_data.get('grade') if form_data else '' }}">
-            <label for="grade">Class / Grade</label>
-        </div>
-        <div class="form-floating">
-            <select name="course_id" class="form-select form-control-lg" id="course_id">
-                <option value="">Select a course (optional)</option>
-                {% for course in courses %}
-                <option value="{{ course['id'] }}" {% if form_data and form_data.get('course_id')==course['id']|string
-                    %}selected{% endif %}>{{ course['course_name'] }}</option>
-                {% endfor %}
-            </select>
-            <label for="course_id">Course</label>
-        </div>
-        <div class="d-grid">
-            <button class="btn btn-success btn-lg" type="submit">
-                <i class="bi bi-send-fill me-2"></i> Submit
-            </button>
-        </div>
-    </form>
+
 </div>
+
+<script>
+function togglePassword(id){
+
+    let field = document.getElementById(id);
+
+    if(field.type === "password"){
+        field.type = "text";
+    }else{
+        field.type = "password";
+    }
+}
+</script>
+
 {% endblock %}
