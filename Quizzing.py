@@ -24,29 +24,75 @@ from database import (
 )
 app = Flask(__name__, template_folder='Template')
 app.secret_key = secrets.token_bytes(24)
+
+
+# Absolute path for quiz.db
+db_path = os.path.join(os.path.dirname(__file__), "quiz.db")
+
+app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{db_path}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///quiz.db'
+
+database_file = db_path   # raw sqlite queries भी यही use करेंगे
+
 db.init_app(app)
 
 init_db()
 with app.app_context():
     db.create_all()
+    with app.app_context():
+     if not Courses.query.first():
+        default_courses = [
+            Courses(course_name='Python Basics', description='Learn Python syntax and simple programs.'),
+            Courses(course_name='Web Development', description='Create a basic website with Flask.'),
+            Courses(course_name='Data Science', description='Analyze simple data and charts.')
+        ]
+        db.session.add_all(default_courses)
+        db.session.commit()
+
 
 
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from database import db, Students, Courses, Leaderboard
 
-class SecureModelView(ModelView):
-    def is_accessible(self):
-        return "role" in session and session["role"] in ["superadmin", "courseadmin", "leaderadmin"]
+class StudentModelView(ModelView):
+    column_list = ['name', 'email', 'age', 'grade', 'password', 'course_id']
+    form_columns = ['name', 'email', 'age', 'grade', 'password', 'course_id']
+
+    def on_model_change(self, form, model, is_created):
+        from werkzeug.security import generate_password_hash
+
+        # Password hashing
+        if not model.password:
+            model.password = generate_password_hash("default123")
+        else:
+            if not model.password.startswith("pbkdf2:sha256") and not model.password.startswith("scrypt:"):
+                model.password = generate_password_hash(model.password)
+
+        # Default course assign
+        if not model.course_id:
+            model.course_id = 1
+
+        # ✅ Always initialize existing
+        existing = Students.query.filter_by(email=model.email).first()
+
+        # Duplicate email check
+        if existing is not None and existing.id != model.id:
+            raise ValueError("Email already exists ❌")
+
+class CourseModelView(ModelView):
+    column_list = ['course_name', 'description']
+    form_columns = ['course_name', 'description']
+
+class LeaderboardModelView(ModelView):
+    column_list = ['student_name', 'score', 'course_id', 'created_at']
+    form_columns = ['student_name', 'score', 'course_id']
+
 
 admin = Admin(app, name='Study Quiz Hub Admin')
-
-
-admin.add_view(SecureModelView(Students, db.session))
-admin.add_view(SecureModelView(Courses, db.session))
-admin.add_view(SecureModelView(Leaderboard, db.session))
+admin.add_view(StudentModelView(Students, db.session))
+admin.add_view(CourseModelView(Courses, db.session))
+admin.add_view(LeaderboardModelView(Leaderboard, db.session))
 
 def get_ranked_leaderboard(limit=5):
     top_entries = get_top_leaderboard(limit)
@@ -455,26 +501,27 @@ def login():
         conn = get_db_connection()
         user = conn.execute("SELECT * FROM students WHERE email=?", (email,)).fetchone()
         conn.close()
-
-        if user and check_password_hash(user["password"], password):        
-            session.clear()
-            session["student_id"] = user["id"]
-            session["student_name"] = user["name"]
-            session["email"] = user["email"]
-            session["age"] = user["age"]
-            session["grade"] = user["grade"]
-            session["course_id"] = user["course_id"]
-            course = get_course_by_id(user["course_id"])
-            session["course_name"] = course["course_name"] if course else None
-            flash(f"Welcome {user['name']} ✅", "success")
-            return redirect(url_for("student_form"))
-
+        if user and user["password"] and check_password_hash(user["password"], password):
+         session.clear()
+         session["student_id"] = user["id"]
+         session["student_name"] = user["name"]
+         session["email"] = user["email"]
+         session["age"] = user["age"]
+         session["grade"] = user["grade"]
+         session["course_id"] = user["course_id"]
+         course = get_course_by_id(user["course_id"])
+         session["course_name"] = course["course_name"] if course else None
+         flash(f"Welcome {user['name']} ✅", "success")
+         return redirect(url_for("student_form"))
+ 
         flash("Invalid login ❌ (Name/Email/Password mismatch)", "danger")
-        return render_template("login.html", courses=get_courses())
+    return render_template("login.html", courses=get_courses())
 
     return render_template("login.html", courses=get_courses())
 
+
 from werkzeug.security import generate_password_hash
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
@@ -483,13 +530,22 @@ def signup():
         password = request.form['password']
         confirm_password = request.form['confirm_password']
 
+        # ✅ Password match check
         if password != confirm_password:
             flash("Passwords do not match ❌", "danger")
             return render_template('signup.html')
 
-        hashed_password = generate_password_hash(password)
-
         conn = get_db_connection()
+        existing = conn.execute("SELECT * FROM students WHERE email=?", (email,)).fetchone()
+
+        # ✅ Duplicate email check
+        if existing:
+            flash("Email already registered ❌ Please login instead.", "warning")
+            conn.close()
+            return redirect(url_for("login"))
+
+        # ✅ Insert new student only if email not found
+        hashed_password = generate_password_hash(password)
         conn.execute(
             "INSERT INTO students(name,email,password) VALUES(?,?,?)",
             (name, email, hashed_password)
