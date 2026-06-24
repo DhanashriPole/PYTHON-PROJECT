@@ -2,10 +2,13 @@
 import os
 import sqlite3
 
+
 database_file = os.environ.get(
     "DATABASE_FILE",
     os.path.join(os.path.dirname(__file__), "quiz.db"),
 )
+
+
 
 
 def get_db_connection():
@@ -267,6 +270,7 @@ conn.commit()
 conn.close()
 
 from flask_sqlalchemy import SQLAlchemy
+
 
 db = SQLAlchemy()
 
