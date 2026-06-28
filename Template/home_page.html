@@ -1,5 +1,5 @@
 {% extends "base1.html" %}
-{% block title %}Home{% endblock %}
+{% block title %}🏠 Home{% endblock %}
 
 {% block content %}
 
@@ -19,7 +19,7 @@
 }
 
 .hero-subtitle{
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     opacity: 0.95;
 }
 
@@ -34,13 +34,32 @@
     transform: translateY(-3px);
 }
 
-/* ALL CARDS SAME STYLE */
+/* Equal Card Height */
+.row.equal-height {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+}
+
+.equal-height .col-md-3,
+.equal-height .col-md-4 {
+    display: flex;
+}
+
 .stat-card,
 .feature-card{
     border: none;
     border-radius: 20px;
-    transition: all 0.3s ease;
     background: rgba(255,255,255,0.95);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+    width: 100%;
+    height: 100%;   /* ✅ Equal height for all 6 cards */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .stat-card:hover,
@@ -49,33 +68,17 @@
     box-shadow: 0 20px 40px rgba(0,0,0,0.25);
 }
 
-/* ICON ANIMATIONS */
-.student-icon{ animation: float 2s ease-in-out infinite; }
-.attempt-icon{ animation: pulse 1.5s infinite; }
-.course-icon{ animation: rotateBook 4s linear infinite; }
-
-@keyframes float{
-    0%,100%{transform:translateY(0);}
-    50%{transform:translateY(-10px);}
+/* Emoji Styling */
+.emoji-big-large {
+    font-size: 3rem;   /* बड़ा size */
+    display: block;
+    margin-bottom: 10px;
 }
 
-@keyframes pulse{
-    0%{transform:scale(1);}
-    50%{transform:scale(1.1);}
-    100%{transform:scale(1);}
-}
-
-@keyframes rotateBook{
-    from{transform:rotate(0deg);}
-    to{transform:rotate(360deg);}
-}
-
-/* MOBILE */
 @media(max-width:768px){
     .hero-title{
         font-size:2rem;
     }
-
     .custom-btn{
         width:100%;
         margin-bottom:10px;
@@ -83,120 +86,80 @@
 }
 </style>
 
-<!-- HERO WRAPPER -->
 <div class="hero-section text-center shadow-lg">
 
-    <i class="bi bi-stars fs-1"></i>
+    <span class="emoji-big">🌟</span>
 
     <h1 class="display-4 hero-title mt-3">
-        Welcome to Study Quiz Hub
+        Welcome to Study Quiz Hub 🎓
     </h1>
 
     <p class="hero-subtitle">
-        Practice quizzes, track progress and improve your skills.
+        📚 Practice quizzes, <i class="bi bi-bar-chart-fill"></i> track progress and 🚀 improve your skills.
     </p>
 
-    <!-- BUTTONS -->
     <div class="mt-4">
         <a href="/login" class="btn btn-light custom-btn me-md-3">
-            <i class="bi bi-box-arrow-in-right me-2"></i>
-            Login
+            🔑 Login
         </a>
-
-        <a href="/signup" class="btn btn-warning custom-btn">
-            <i class="bi bi-person-plus-fill me-2"></i>
-            Sign Up
+        <a href="/student" class="btn btn-warning custom-btn">
+            📝 Register
         </a>
     </div>
 
-    <!-- 🔥 ALL CARDS INSIDE SAME HERO -->
+    <!-- Stats Cards -->
+    <div class="row equal-height mt-4 g-3 ">
 
-    <div class="row mt-5 g-4 justify-content-center">
-
-        <!-- Students -->
         <div class="col-md-3">
-            <div class="card stat-card shadow-sm h-100">
-                <div class="card-body text-dark">
-                    <h3 class="text-primary">
-                        <i class="bi bi-people-fill student-icon"></i>
-                    </h3>
-                    <h4>{{ total_students }}</h4>
-                    <p class="mb-0">Students</p>
-                </div>
+            <div class="card stat-card text-center p-2">
+                <span class="emoji-big-large">👨‍🎓</span>
+                <h4>{{ total_students }}</h4>
+                <p class="mb-0">Students</p>
             </div>
         </div>
 
-        <!-- Attempts -->
         <div class="col-md-3">
-            <div class="card stat-card shadow-sm h-100">
-                <div class="card-body text-dark">
-                    <h3 class="text-success">
-                        <i class="bi bi-graph-up-arrow attempt-icon"></i>
-                    </h3>
-                    <h4>{{ total_attempts }}</h4>
-                    <p class="mb-0">Quiz Attempts</p>
-                </div>
+            <div class="card stat-card text-center p-2">
+                <span class="emoji-big-large">📊</span>
+                <h4>{{ total_attempts }}</h4>
+                <p class="mb-0">Quiz Attempts</p>
             </div>
         </div>
 
-        <!-- Courses -->
         <div class="col-md-3">
-            <div class="card stat-card shadow-sm h-100">
-                <div class="card-body text-dark">
-                    <h3 class="text-warning">
-                        <i class="bi bi-journal-bookmark-fill course-icon"></i>
-                    </h3>
-                    <h4>{{ total_courses }}</h4>
-                    <p class="mb-0">Courses</p>
-                </div>
+            <div class="card stat-card text-center p-2">
+                <span class="emoji-big-large">📘</span>
+                <h4>{{ total_courses }}</h4>
+                <p class="mb-0">Courses</p>
             </div>
         </div>
 
     </div>
 
-    <!-- FEATURES CARDS (INSIDE SAME HERO) -->
-
-    <div class="row mt-5 g-4">
+    <!-- Feature Cards -->
+    <div class="row equal-height mt-4 g-3">
 
         <div class="col-md-4">
-            <div class="card feature-card shadow-sm h-100">
-                <div class="card-body text-center p-4">
-
-                    <i class="bi bi-lightbulb-fill text-warning fs-1"></i>
-                    <h4 class="mt-3">About</h4>
-                    <p class="text-muted">
-                        Structured MCQ quizzes for better learning experience.
-                    </p>
-
-                </div>
+            <div class="card feature-card text-center p-3">
+                <span class="emoji-big-large">💡</span>
+                <h3 class="mt-3">About</h3>
+                <p class="text-muted">📖 Structured MCQ quizzes for better learning experience.</p>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card feature-card shadow-sm h-100">
-                <div class="card-body text-center p-4">
-
-                    <i class="bi bi-book-half text-info fs-1"></i>
-                    <h4 class="mt-3">Learn</h4>
-                    <p class="text-muted">
-                        Practice and improve with instant feedback system.
-                    </p>
-
-                </div>
+            <div class="card feature-card text-center p-3">
+                <span class="emoji-big-large">📚</span>
+                <h3 class="mt-3">Learn</h3>
+                <p class="text-muted">🧠 Practice and improve with instant feedback system.</p>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card feature-card shadow-sm h-100">
-                <div class="card-body text-center p-4">
-
-                    <i class="bi bi-trophy-fill text-primary fs-1"></i>
-                    <h4 class="mt-3">Leaderboard</h4>
-                    <p class="text-muted">
-                        Compete and track your ranking live.
-                    </p>
-
-                </div>
+            <div class="card feature-card text-center p-3">
+                <span class="emoji-big-large">🏆</span>
+                <h3 class="mt-3">Leaderboard</h3>
+                <p class="text-muted">⚡ Compete and track your ranking live.</p>
             </div>
         </div>
 

@@ -1,0 +1,166 @@
+{% extends "base1.html" %}
+{% block content %}
+<div class="chat-container">
+  <div class="chat-card">
+    <div class="chat-header">
+      <div class="bot-info">
+        <img src="https://cdn-icons-png.flaticon.com/512/4712/4712100.png" alt="AskHub Bot">
+        <div>
+          <strong>AskHub Bot</strong><br>
+          <span class="status">🟢 Online</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-body">
+      {% if reply %}
+        <div class="user-message">{{ request.form.get('message') }}</div>
+        <div class="bot-message">{{ reply }}</div>
+      {% else %}
+        <div class="bot-message">Hi there 👋 I'm AskHub! Ask me anything about Study Quiz Hub 📚</div>
+        <div class="quick-replies">
+          <button>Available courses</button>
+          <button>How to register</button>
+          <button>Leaderboard</button>
+        </div>
+      {% endif %}
+    </div>
+
+    <form method="POST" class="chat-footer">
+      <input type="text" name="message" placeholder="Type your question..." required>
+      <button type="submit">➤</button>
+    </form>
+  </div>
+</div>
+
+<style>
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #f5f6fa;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;   /* ✅ navbar + card vertically stack */
+  align-items: center;      /* ✅ center horizontally */
+}
+
+/* ✅ Container to center card below navbar */
+.chat-container {
+  margin-top: 10px;         /* ✅ gap below navbar */
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+/* ✅ Card design */
+.chat-card {
+  width: 380px;
+  height: 500px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+
+/* ✅ Chatbot card */
+
+/* Header */
+.chat-header {
+  background: #007bff;
+  color: #fff;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chat-header img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+/* Body */
+.chat-body {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  background: #fafafa;
+}
+
+.bot-message, .user-message {
+  max-width: 80%;
+  padding: 8px 12px;
+  border-radius: 10px;
+  margin: 6px 0;
+  font-size: 0.95em;
+}
+
+.bot-message {
+  background: #e9f3ff;
+  color: #222;
+  align-self: flex-start;
+}
+
+.user-message {
+  background: #007bff;
+  color: #fff;
+  align-self: flex-end;
+}
+
+/* Footer */
+.chat-footer {
+  background: #007bff;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.chat-footer input {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  font-size: 0.9em;
+}
+
+.chat-footer button {
+  margin-left: 8px;
+  background: #fff;
+  color: #007bff;
+  border: none;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  font-size: 1.1em;
+  cursor: pointer;
+}
+
+/* Quick replies */
+.quick-replies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.quick-replies button {
+  background: #f1f1f1;
+  border: none;
+  border-radius: 18px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 0.85em;
+}
+
+.quick-replies button:hover {
+  background: #007bff;
+  color: #fff;
+}
+</style>
+{% endblock %}

@@ -1,129 +1,155 @@
 {% extends "base1.html" %}
-{% block title %}Study Quiz Hub{% endblock %}
+{% block title %}📚 Study Quiz Hub Notes{%endblock%}
 {% block content %}
-<div class="page-card p-4">
-    <div class="section-heading">
-        <i class="bi bi-book-half text-primary"></i>
-        <div>
-            <h1 class="h4 mb-1">Study Quiz Hub</h1>
-            <p class="text-muted mb-0">More course-specific questions to help you learn Python, Web Development, and
-                Data Science.</p>
-        </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Study Quiz Hub - Foundation Notes</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background: #f8f9fa; }
+    .notes-card {
+      background: #fffbea;
+      border-left: 5px solid #ff9800;
+      font-family: "Courier New", monospace;
+      white-space: pre-line;
+      line-height: 1.6;
+      padding: 15px;
+    }
+    .notes-card h6 {
+      font-weight: bold;
+      color: #d35400;
+      margin-bottom: 10px;
+    }
+    .btn-notes {
+      font-weight: bold;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container py-4">
+  <h1 class="mb-4">📚 Study Quiz Hub - Foundation Notes</h1>
+  <p class="text-muted">Click on each subject to open detailed notes. These notes are written in a simple, handwritten style so every student can understand and build a strong foundation.</p>
+
+  <!-- Python Basics -->
+  <div class="mb-3">
+    <button class="btn btn-info w-100 text-start btn-notes" data-bs-toggle="collapse" data-bs-target="#pythonNotes">
+      🐍 Python Basics
+    </button>
+    <div class="collapse mt-2" id="pythonNotes">
+      <div class="card card-body notes-card">
+        <h6>Python Basics</h6>
+        Python is a beginner-friendly programming language known for its simplicity and readability.  
+        Variables in Python do not need explicit type declarations; the interpreter assigns types dynamically.  
+        Common data types include integers, floats, strings, lists, tuples, dictionaries, and sets. Lists are mutable, meaning you can change their contents, while tuples are immutable.  
+        Functions are defined using the <code>def</code> keyword, and indentation is mandatory to define code blocks.  
+        Control flow is managed using <code>if</code>, <code>elif</code>, and <code>else</code> statements, along with loops like <code>for</code> and <code>while</code>.  
+        Python supports Object-Oriented Programming (OOP) with classes and objects, enabling concepts like inheritance and polymorphism.  
+        Error handling is done using <code>try</code> and <code>except</code> blocks.  
+        Popular libraries include NumPy for numerical operations, Pandas for data analysis, and Matplotlib for visualization.  
+        Python is widely used in web development, data science, machine learning, and automation.  
+      </div>
     </div>
-    <div class="mb-4">
-        <span class="badge bg-info text-dark me-2"><i class="bi bi-code-slash me-1"></i>Python Basics</span>
-        <span class="badge bg-success me-2"><i class="bi bi-window-stack me-1"></i>Web Development</span>
-        <span class="badge bg-warning text-dark"><i class="bi bi-bar-chart-line me-1"></i>Data Science</span>
+  </div>
+
+  <!-- Web Development -->
+  <div class="mb-3">
+    <button class="btn btn-success w-100 text-start btn-notes" data-bs-toggle="collapse" data-bs-target="#webNotes">
+      🌐 Web Development
+    </button>
+    <div class="collapse mt-2" id="webNotes">
+      <div class="card card-body notes-card">
+        <h6>Web Development</h6>
+        Web development is the process of building websites and web applications.  
+        HTML (HyperText Markup Language) provides the structure of a webpage. Tags like <code>&lt;h1&gt;</code> define headings, <code>&lt;p&gt;</code> defines paragraphs, <code>&lt;a&gt;</code> creates links, and <code>&lt;img&gt;</code> displays images.  
+        Forms allow user input using <code>&lt;form&gt;</code>, <code>&lt;input&gt;</code>, and <code>&lt;button&gt;</code>.  
+        CSS (Cascading Style Sheets) adds design and styling. The box model explains how margin, border, padding, and content interact. Flexbox and Grid are modern layout systems.  
+        Responsive design ensures webpages look good on all devices using media queries.  
+        JavaScript adds interactivity, handling events like clicks and manipulating the DOM (Document Object Model).  
+        Backend frameworks like Flask and Django (Python) handle server-side logic, routes, and templates.  
+        REST APIs allow communication between frontend and backend using HTTP methods (GET, POST, PUT, DELETE).  
+        Security practices include CSRF protection, XSS prevention, and HTTPS.  
+        Deployment involves servers like Gunicorn, reverse proxies like Nginx, and cloud hosting platforms such as AWS or Heroku.  
+      </div>
     </div>
-    <div class="table-responsive">
-        <table class="table table-striped table-hover shadow-sm">
-            <thead class="table-dark">
-                <tr>
-                    <th scope="col"><i class="bi bi-hash"></i> No.</th>
-                    <th scope="col"><i class="bi bi-journal-text"></i> Course</th>
-                    <th scope="col"><i class="bi bi-question-circle"></i> Question</th>
-                    <th scope="col"><i class="bi bi-list-ul"></i> Options</th>
-                    <th scope="col"><i class="bi bi-check-circle"></i> Answer</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="table-primary text-white">
-                    <td colspan="5" class="fw-bold"><i class="bi bi-code-slash me-2"></i>Python Basics</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>Python Basics</td>
-                    <td>Which function is used to take input in Python?</td>
-                    <td>A. input(), B. print(), C. len(), D. type()</td>
-                    <td><span class="badge bg-success">A</span></td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Python Basics</td>
-                    <td>Which Python data structure stores values in key:value pairs?</td>
-                    <td>A. List, B. Dictionary, C. Set, D. Tuple</td>
-                    <td><span class="badge bg-success">B</span></td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>Python Basics</td>
-                    <td>Which of the following is a mutable data type in Python?</td>
-                    <td>A. List, B. Tuple, C. String, D. Integer</td>
-                    <td><span class="badge bg-success">A</span></td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>Python Basics</td>
-                    <td>Which keyword is used to define a function?</td>
-                    <td>A. func, B. def, C. function, D. define</td>
-                    <td><span class="badge bg-success">B</span></td>
-                </tr>
-                <tr class="table-success text-dark">
-                    <td colspan="5" class="fw-bold"><i class="bi bi-window-stack me-2"></i>Web Development</td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td>Web Development</td>
-                    <td>Which Python framework is used for building web applications?</td>
-                    <td>A. Django, B. numpy, C. pandas, D. matplotlib</td>
-                    <td><span class="badge bg-success">A</span></td>
-                </tr>
-                <tr>
-                    <td>6</td>
-                    <td>Web Development</td>
-                    <td>In HTML, which tag is used for the largest heading?</td>
-                    <td>A. &lt;h1&gt;, B. &lt;h2&gt;, C. &lt;head&gt;, D. &lt;title&gt;</td>
-                    <td><span class="badge bg-success">A</span></td>
-                </tr>
-                <tr>
-                    <td>7</td>
-                    <td>Web Development</td>
-                    <td>What does CSS stand for?</td>
-                    <td>A. Cascading Style Sheets, B. Computer Style Sheets, C. Cool Style Syntax, D. Code Style Sheet
-                    </td>
-                    <td><span class="badge bg-success">A</span></td>
-                </tr>
-                <tr>
-                    <td>8</td>
-                    <td>Web Development</td>
-                    <td>Which method starts a Flask web server?</td>
-                    <td>A. app.run(), B. app.start(), C. app.open(), D. app.launch()</td>
-                    <td><span class="badge bg-success">A</span></td>
-                </tr>
-                <tr class="table-warning text-dark">
-                    <td colspan="5" class="fw-bold"><i class="bi bi-bar-chart-line me-2"></i>Data Science</td>
-                </tr>
-                <tr>
-                    <td>9</td>
-                    <td>Data Science</td>
-                    <td>Which library is commonly used for data analysis in Python?</td>
-                    <td>A. pandas, B. Flask, C. PyGame, D. TensorFlow</td>
-                    <td><span class="badge bg-success">A</span></td>
-                </tr>
-                <tr>
-                    <td>10</td>
-                    <td>Data Science</td>
-                    <td>What does CSV stand for?</td>
-                    <td>A. Comma Separated Values, B. Computer Saved Values, C. Call Separate Variables, D. Coded System
-                        Values</td>
-                    <td><span class="badge bg-success">A</span></td>
-                </tr>
-                <tr>
-                    <td>11</td>
-                    <td>Data Science</td>
-                    <td>Which plotting library is used to create charts in Python?</td>
-                    <td>A. matplotlib, B. requests, C. os, D. sys</td>
-                    <td><span class="badge bg-success">A</span></td>
-                </tr>
-                <tr>
-                    <td>12</td>
-                    <td>Data Science</td>
-                    <td>What is the correct data structure for a table of rows and columns?</td>
-                    <td>A. DataFrame, B. String, C. Set, D. Int</td>
-                    <td><span class="badge bg-success">A</span></td>
-                </tr>
-            </tbody>
-        </table>
+  </div>
+
+  <!-- Data Science -->
+  <div class="mb-3">
+    <button class="btn btn-warning w-100 text-start btn-notes" data-bs-toggle="collapse" data-bs-target="#dsNotes">
+      📊 Data Science
+    </button>
+    <div class="collapse mt-2" id="dsNotes">
+      <div class="card card-body notes-card">
+        <h6>Data Science</h6>
+        Data Science is the field of extracting insights and knowledge from data.  
+        Pandas provides DataFrames and Series for handling tabular data.  
+        NumPy offers powerful array operations and mathematical functions.  
+        Visualization libraries like Matplotlib and Seaborn help create charts and plots for data analysis.  
+        Machine Learning (ML) is a core part of data science. Supervised learning includes regression (predicting numbers) and classification (predicting categories). Unsupervised learning includes clustering (grouping similar data).  
+        Models are evaluated using metrics such as accuracy, precision, recall, and F1 score. Confusion matrices and ROC curves provide deeper insights.  
+        Deep learning uses neural networks, with frameworks like TensorFlow and PyTorch.  
+        Applications of data science include Natural Language Processing (NLP), computer vision, recommendation systems, and predictive analytics.  
+      </div>
     </div>
+  </div>
+
+  <!-- Database -->
+  <div class="mb-3">
+    <button class="btn btn-primary w-100 text-start btn-notes" data-bs-toggle="collapse" data-bs-target="#dbNotes">
+      🗄️ Database
+    </button>
+    <div class="collapse mt-2" id="dbNotes">
+      <div class="card card-body notes-card">
+        <h6>Database</h6>
+        A database is an organized collection of data.  
+        SQL (Structured Query Language) is used to interact with relational databases.  
+        Basic commands include SELECT (retrieve data), INSERT (add data), UPDATE (modify data), and DELETE (remove data).  
+        Primary keys uniquely identify records, while foreign keys establish relationships between tables.  
+        Joins (INNER, LEFT, RIGHT, FULL) combine data from multiple tables.  
+        Constraints like NOT NULL and UNIQUE enforce data integrity.  
+        Indexes speed up queries by optimizing data access.  
+        Transactions ensure reliability with COMMIT and ROLLBACK, following ACID properties.  
+        NoSQL databases like MongoDB store data in flexible formats.  
+        Database design involves ER diagrams and normalization to reduce redundancy.  
+      </div>
+    </div>
+  </div>
+
+  <!-- CSS -->
+  <div class="mb-3">
+    <button class="btn btn-secondary w-100 text-start btn-notes" data-bs-toggle="collapse" data-bs-target="#cssNotes">
+      🎨 CSS
+    </button>
+    <div class="collapse mt-2" id="cssNotes">
+      <div class="card card-body notes-card">
+        <h6>CSS</h6>
+        CSS (Cascading Style Sheets) controls the look and feel of webpages.  
+        Selectors target elements: element selectors, class selectors (<code>.classname</code>), and ID selectors (<code>#idname</code>).  
+        The box model explains spacing: margin, border, padding, and content.  
+        Display properties include block, inline, flex, and grid.  
+        Positioning options include static, relative, absolute, and fixed.  
+        Flexbox aligns items horizontally and vertically, while Grid organizes layouts in rows and columns.  
+        Responsive design uses media queries to adapt layouts for different devices.  
+        CSS animations and transitions create dynamic effects.  
+        Transform properties allow rotation, scaling, and translation.  
+        Shadows (<code>text-shadow</code>, <code>box-shadow</code>) add depth.  
+        CSS variables (<code>:root { --main-color: red; }</code>) enable reusable styles.  
+        Best practices include DRY (Don’t Repeat Yourself) and modular CSS for maintainability.  
+      </div>
+    </div>
+  </div>
+
 </div>
-{% endblock %}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+``
+
+   
+    {%endblock%}

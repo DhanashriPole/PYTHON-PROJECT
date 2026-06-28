@@ -180,11 +180,10 @@
                 <div class="card-body text-center">
 
                     <i class="bi bi-people-fill stat-icon"></i>
-
                     <h2 class="fw-bold">
-                        {{ total_students }}
+                         👨‍🎓 {{ total_students }}
                     </h2>
-
+                     
                     <p class="mb-0">
                         Total Students
                     </p>
@@ -196,11 +195,11 @@
         <div class="col-lg-4 col-md-6">
             <div class="card stats-card filter-card h-100">
                 <div class="card-body text-center">
-
+                 
                     <i class="bi bi-check2-square stat-icon"></i>
-
-                    <h2 class="fw-bold">
-                        {{ filtered_count }}
+                     <h2 class="fw-bold">
+                       
+  🔍 {{ filtered_count }}
                     </h2>
 
                     <p class="mb-0">
@@ -215,10 +214,10 @@
             <div class="card course-card h-100">
                 <div class="card-body text-center">
 
-                    <i class="bi bi-journal-bookmark-fill stat-icon"></i>
+                    <i class="bi bi-mortarboard-fill stat-icon"></i>
 
                     <h4 class="fw-bold">
-                        {{ selected_course_name }}
+                    📚  {{ selected_course_name }}
                     </h4>
 
                     <p class="mb-0">
@@ -281,20 +280,22 @@
 
                     <td>
                         <span class="badge bg-info text-dark badge-course">
-                            {{ student['course_name'] or 'None Selected' }}
+                            📚{{ student['course_name'] or 'None Selected' }}
                         </span>
                     </td>
 
                     <td>
-
+                    
+                    <div class="d-flex justify-content-center gap-2">
                         <a href="{{ url_for('view_student', student_id=student['id']) }}"
                            class="btn btn-sm btn-primary action-btn">
-                            <i class="bi bi-eye-fill"></i>
+                            <i class="bi bi-eye-fill"></i>  👀 View
                         </a>
+                        {% if session.role == 'admin' %}
 
                         <a href="{{ url_for('edit_student', student_id=student['id']) }}"
                            class="btn btn-sm btn-warning action-btn">
-                            <i class="bi bi-pencil-fill"></i>
+                            <i class="bi bi-pencil-fill"></i>✏️ Edit
                         </a>
 
                         <form action="{{ url_for('delete_student_record', student_id=student['id']) }}"
@@ -305,11 +306,15 @@
                                     class="btn btn-sm btn-danger action-btn"
                                     onclick="return confirm('Delete this student?');">
 
-                                <i class="bi bi-trash-fill"></i>
+                                <i class="bi bi-trash-fill"></i>❌ Delete
 
                             </button>
 
                         </form>
+                        
+                        {% endif %}
+
+                    </div>
 
                     </td>
 

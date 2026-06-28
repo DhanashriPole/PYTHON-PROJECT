@@ -104,64 +104,8 @@
 
     <!-- Stats Cards -->
 
-    <div class="row g-4 mb-4">
 
-        <div class="col-lg-4 col-md-6">
-            <div class="card stat-card history-card h-100">
-                <div class="card-body text-center">
-
-                    <i class="bi bi-file-earmark-bar-graph-fill stat-icon"></i>
-
-                    <h2 class="fw-bold">
-                        {{ history|length }}
-                    </h2>
-
-                    <p class="mb-0">
-                        Total Records
-                    </p>
-
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6">
-            <div class="card stat-card score-card h-100">
-                <div class="card-body text-center">
-
-                    <i class="bi bi-trophy-fill stat-icon"></i>
-
-                    <h2 class="fw-bold">
-                        Quiz Scores
-                    </h2>
-
-                    <p class="mb-0">
-                        Student Performance
-                    </p>
-
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-4">
-            <div class="card attempt-card h-100">
-                <div class="card-body text-center">
-
-                    <i class="bi bi-graph-up-arrow stat-icon"></i>
-
-                    <h2 class="fw-bold">
-                        Attempts
-                    </h2>
-
-                    <p class="mb-0">
-                        Quiz Activity
-                    </p>
-
-                </div>
-            </div>
-        </div>
-
-    </div>
-
+    
     <!-- Table -->
 
     <div class="table-container">
@@ -177,7 +121,9 @@
                         <th>Score</th>
                         <th>Total Attempts</th>
                         <th>Date</th>
+                        {%if session. role == 'admin'%}
                         <th>Action</th>
+                        {%endif%}
                     </tr>
                 </thead>
 
@@ -200,22 +146,25 @@
                         </td>
 
                         <td>
-                            <span class="badge bg-success fs-6">
-                                {{ row['score'] }}
-                            </span>
+                         <span class="badge bg-success fs-6">
+                             {{ row['score'] }}
+                             </span>
                         </td>
 
-                        <td>
-                            <span class="badge bg-info text-dark fs-6">
-                                {{ row['attempts'] }}
-                            </span>
+                       <td>
+                      <span class="badge bg-info text-dark fs-6">
+                        {{ row['attempts'] }}
+                       </span>
                         </td>
+
 
                         <td>
                             {{ row['created_at'][:10] }}
                         </td>
 
                         <td>
+                          
+                            {%if session. role == 'admin'%}
 
                             <form action="{{ url_for('delete_score_history', record_id=row['id']) }}"
                                   method="post"
@@ -229,6 +178,7 @@
                                     Delete
 
                                 </button>
+                                {%endif%}
 
                             </form>
 

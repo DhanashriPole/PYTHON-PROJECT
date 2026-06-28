@@ -126,6 +126,23 @@
                     <i class="bi bi-eye-fill password-toggle"
                        onclick="togglePassword('password')"></i>
                 </div>
+                <div class="password-wrapper mb-3">
+    <div class="form-floating">
+        <input type="password"
+               name="confirm_password"
+               class="form-control"
+               id="confirm_password"
+               placeholder="Confirm Password">
+        <label for="confirm_password">
+            <i class="bi bi-lock-fill me-2"></i>
+            Confirm Password
+        </label>
+    </div>
+
+    <i class="bi bi-eye-fill password-toggle"
+       onclick="togglePassword('confirm_password')"></i>
+</div>
+
 
                
                 <div class="form-floating mb-3">
@@ -155,26 +172,7 @@
                     </label>
                 </div>
 
-                <div class="form-floating mb-4">
-                    <select name="course_id"
-                            class="form-select"
-                            id="course_id">
-
-                        <option value="">Select a course</option>
-
-                        {% for course in courses %}
-                        <option value="{{ course['id'] }}">
-                            {{ course['course_name'] }}
-                        </option>
-                        {% endfor %}
-
-                    </select>
-
-                    <label for="course_id">
-                        <i class="bi bi-book-fill me-2"></i>
-                        Course
-                    </label>
-                </div>
+                
 
                 <button class="btn btn-success btn-register w-100">
                     <i class="bi bi-person-check-fill me-2"></i>

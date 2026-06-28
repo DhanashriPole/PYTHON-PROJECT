@@ -1,0 +1,63 @@
+{% extends "base1.html" %}
+{% block title %}🎓 Choose Course{% endblock %}
+
+{% block content %}
+<style>
+.course-card {
+    border-radius: 20px;
+    overflow: hidden;
+    transition: 0.3s;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+.course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+}
+.course-icon {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    color: #0d6efd;
+}
+.btn-quiz {
+    border-radius: 12px;
+    font-weight: 600;
+    padding: 12px;
+    transition: 0.3s;
+}
+.btn-quiz:hover {
+    transform: scale(1.05);
+}
+</style>
+
+<div class="container py-5">
+    <h2 class="mb-4 text-center">📚 Select Your Course</h2>
+
+    <div class="row">
+        {% for course in courses %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm course-card text-center p-3">
+                <div class="course-icon">
+                    {% if course['course_name'] == 'Python Basics' %}
+                        🐍
+                    {% elif course['course_name'] == 'Web Development' %}
+                        🌐
+                    {% elif course['course_name'] == 'Data Science' %}
+                        📊
+                    {% else %}
+                        📘
+                    {% endif %}
+                </div>
+                <h5 class="card-title">{{ course['course_name'] }}</h5>
+                <p class="card-text">{{ course['description'] }}</p>
+                <form method="POST" action="/choose_course">
+                    <input type="hidden" name="course_id" value="{{ course['id'] }}">
+                    <button class="btn btn-success w-100 btn-quiz">
+                        🚀 Start Quiz
+                    </button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
