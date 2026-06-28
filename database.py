@@ -31,7 +31,7 @@ def init_db():
     CREATE TABLE IF NOT EXISTS students (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
-        email TEXT,
+        email TEXT UNIQUE,
         age INTEGER,
         grade TEXT,
         course_id INTEGER,
@@ -202,6 +202,9 @@ def get_score_history():
     """).fetchall()
     conn.close()
     return rows
+   
+
+
 def delete_score_record(record_id):
     conn = get_db_connection()
     conn.execute(
@@ -294,3 +297,10 @@ class Leaderboard(db.Model):
     score = db.Column(db.Integer, nullable=False)
     course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
     created_at = db.Column(db.String, default="CURRENT_TIMESTAMP")
+
+class AskHub(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    question = db.Column(db.String(200), nullable=False)
+    answer = db.Column(db.String(500), nullable=False)
+
+
