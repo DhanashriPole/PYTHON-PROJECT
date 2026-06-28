@@ -43,13 +43,6 @@ init_db()
 
     
       
-#      conn = get_db_connection()
-# try:
-#         conn.execute("ALTER TABLE students ADD COLUMN role TEXT DEFAULT 'student'")
-#         conn.commit()
-# except Exception as e:
-#         print("Role column already exists:", e)
-# conn.close()
 
 
 
@@ -675,19 +668,18 @@ def student_form():
         course_id = request.form.get('course_id')
         course_name = None
 
-        # ✅ Name check
         if not name:
             flash('Student name is required.', 'danger')
             return render_template('student_form.html', courses=courses, form_data=request.form)
 
-        # ✅ Age validation
+        
         if age and not age.isdigit():
             flash('Please enter a valid age.', 'warning')
             return render_template('student_form.html', courses=courses, form_data=request.form)
 
         age_value = int(age) if age.isdigit() else None
 
-        # ✅ Password match check
+        
        
         conn = get_db_connection()
         existing = conn.execute("SELECT * FROM students WHERE email=?", (email,)).fetchone()
@@ -700,7 +692,7 @@ def student_form():
         from werkzeug.security import generate_password_hash
         hashed_password = generate_password_hash(password)
 
-        # ✅ Insert into database with role
+        
         conn.execute(
             "INSERT INTO students (name, email, age, grade, password, course_id, role) VALUES (?, ?, ?, ?, ?, ?, ?)",
             (name, email, age_value, grade, hashed_password, course_id, "student")
@@ -708,7 +700,7 @@ def student_form():
         conn.commit()
         conn.close()
 
-        # ✅ Session set
+        
         session["student_name"] = name
         session["email"] = email
         session["role"] = "student"
@@ -727,7 +719,7 @@ def student_form():
             session["course_name"] = None
 
         flash('Student registered successfully ✅', 'success')
-        # ✅ अब सीधे student_submitted.html पर redirect
+        
         return render_template(
             'student_submitted.html',
             name=name,
@@ -893,7 +885,7 @@ def edit_student(student_id):
 @app.route('/student/delete/<int:student_id>', methods=['POST'])
 def delete_student_record(student_id):
     if session.get("role") != "admin":
-        flash("❌ केवल admin को delete करने की अनुमति है", "danger")
+        flash("❌ only admin can delete", "danger")
         return redirect(url_for('student_table'))
 
     student = get_student_by_id(student_id)
