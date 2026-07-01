@@ -45,6 +45,7 @@ def init_db():
         student_name TEXT NOT NULL,
         score INTEGER NOT NULL,
         course_id INTEGER,
+        time_taken INTEGER DEFAULT 0,
         created_at TEXT DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY(course_id) REFERENCES courses(id) ON DELETE SET NULL
     )
@@ -58,6 +59,11 @@ def init_db():
 
     if not any(col[1] == 'course_id' for col in column_info):
         conn.execute("ALTER TABLE students ADD COLUMN course_id INTEGER")
+        conn.commit()
+
+    leaderboard_info = conn.execute("PRAGMA table_info(leaderboard)").fetchall()
+    if not any(col[1] == 'time_taken' for col in leaderboard_info):
+        conn.execute("ALTER TABLE leaderboard ADD COLUMN time_taken INTEGER DEFAULT 0")
         conn.commit()
 
    
@@ -139,11 +145,11 @@ def delete_student(student_id):
     conn.close()
 
 
-def insert_leaderboard( student_name, score, course_id=None):
+def insert_leaderboard(student_name, score, course_id=None, time_taken=0):
     conn = get_db_connection()
     conn.execute(
-        "INSERT INTO leaderboard (student_name, score, course_id) VALUES (?, ?, ?)",
-        ( student_name, score, course_id if course_id else None),
+        "INSERT INTO leaderboard (student_name, score, course_id, time_taken) VALUES (?, ?, ?, ?)",
+        (student_name, score, course_id if course_id else None, time_taken),
     )
     conn.commit()
     conn.close()
@@ -152,7 +158,7 @@ def insert_leaderboard( student_name, score, course_id=None):
 def get_top_leaderboard(limit=5):
     conn = get_db_connection()
     rows = conn.execute(
-        "SELECT student_name AS name, score FROM leaderboard ORDER BY score DESC, created_at DESC LIMIT ?", (limit,)
+        "SELECT student_name AS name, score, time_taken FROM leaderboard ORDER BY score DESC, time_taken ASC, created_at ASC LIMIT ?", (limit,)
     ).fetchall()
     conn.close()
     return [dict(row) for row in rows]
@@ -193,10 +199,11 @@ def get_score_history():
     rows = conn.execute("""
         SELECT 
             id,
-                student_name,
-               score,
-               created_at,
-               COUNT(*) OVER (PARTITION BY student_name) AS attempts
+            student_name,
+            score,
+            time_taken,
+            created_at,
+            COUNT(*) OVER (PARTITION BY student_name) AS attempts
         FROM leaderboard
         ORDER BY created_at DESC
     """).fetchall()
@@ -296,6 +303,7 @@ class Leaderboard(db.Model):
     student_name = db.Column(db.String(50), nullable=False)
     score = db.Column(db.Integer, nullable=False)
     course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
+    time_taken = db.Column(db.Integer, default=0)
     created_at = db.Column(db.String, default="CURRENT_TIMESTAMP")
 
 class AskHub(db.Model):

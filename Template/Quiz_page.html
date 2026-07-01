@@ -4,65 +4,65 @@
 {% block content %}
 
 <style>
-.quiz-container{
-    background:#374151;
-    border-radius:25px;
-    box-shadow:0 15px 35px rgba(0,0,0,0.25);
-}
-
-.option-card{
-    background:#4b5563;
-    color:white;
-    cursor:pointer;
-    transition:all 0.3s ease;
-}
-
-.option-card:hover{
-    background:#2563eb;
-    transform:translateY(-3px);
-    border-color:#2563eb !important;
-}
-
-.option-card input{
-    transform:scale(1.2);
-}
-
-.quiz-btn{
-    border-radius:15px;
-    padding:12px 30px;
-    font-size:1.1rem;
-    font-weight:600;
-}
-
-.progress{
-    height:12px;
-    border-radius:20px;
-}
-
-.timer-box{
-    background:#fff3cd;
-    color:#664d03;
-    border-radius:15px;
-    padding:12px;
-    font-weight:bold;
-    text-align:center;
-    font-size:1.2rem;
-}
-
-@media(max-width:768px){
-
-    .quiz-container{
-        padding:20px !important;
+    .quiz-container {
+        background: #374151;
+        border-radius: 25px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
     }
 
-    .quiz-btn{
-        width:100%;
+    .option-card {
+        background: #4b5563;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
     }
 
-    .timer-box{
-        font-size:1rem;
+    .option-card:hover {
+        background: #2563eb;
+        transform: translateY(-3px);
+        border-color: #2563eb !important;
     }
-}
+
+    .option-card input {
+        transform: scale(1.2);
+    }
+
+    .quiz-btn {
+        border-radius: 15px;
+        padding: 12px 30px;
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    .progress {
+        height: 12px;
+        border-radius: 20px;
+    }
+
+    .timer-box {
+        background: #fff3cd;
+        color: #664d03;
+        border-radius: 15px;
+        padding: 12px;
+        font-weight: bold;
+        text-align: center;
+        font-size: 1.2rem;
+    }
+
+    @media(max-width:768px) {
+
+        .quiz-container {
+            padding: 20px !important;
+        }
+
+        .quiz-btn {
+            width: 100%;
+        }
+
+        .timer-box {
+            font-size: 1rem;
+        }
+    }
 </style>
 
 <div class="page-card quiz-container p-4">
@@ -89,6 +89,22 @@
     </div>
 
     <form method="post" action="/Quiz_page" id="quizForm">
+
+        {% if feedback %}
+        <div class="alert alert-{{ 'success' if feedback.correct else 'danger' }} shadow-sm">
+            <strong>
+                {% if feedback.correct %}
+                Correct answer!
+                {% else %}
+                Incorrect answer.
+                {% endif %}
+            </strong>
+            {% if not feedback.correct %}
+            You selected {{ feedback.selected }}.
+            {% endif %}
+            Correct answer: {{ feedback.correct_option }}.
+        </div>
+        {% endif %}
 
         {% if course_name %}
         <div class="mb-3">
@@ -125,8 +141,7 @@
 
                 <div class="progress mb-4">
 
-                    <div class="progress-bar bg-success"
-                         style="width: {{ ((idx)/total)*100 }}%">
+                    <div class="progress-bar bg-success" style="width: {{ ((idx)/total)*100 }}%">
                     </div>
 
                 </div>
@@ -143,11 +158,8 @@
 
                         <label class="form-check option-card p-3 rounded-4 border border-2 d-flex align-items-center">
 
-                            <input class="form-check-input me-3"
-                                   type="radio"
-                                   name="choice"
-                                   value="{{ option[0]|upper }}"
-                                   required>
+                            <input class="form-check-input me-3" type="radio" name="choice"
+                                value="{{ option[0]|upper }}" required>
 
                             <span>{{ option }}</span>
 
@@ -163,15 +175,14 @@
 
         </div>
 
-        <button type="submit"
-                class="btn btn-primary btn-lg quiz-btn shadow">
+        <button type="submit" class="btn btn-primary btn-lg quiz-btn shadow">
 
             <i class="bi bi-arrow-right-circle-fill me-2"></i>
 
             {% if idx + 1 == total %}
-                Finish Quiz
+            Finish Quiz
             {% else %}
-                Next Question
+            Next Question
             {% endif %}
 
         </button>
@@ -182,30 +193,30 @@
 
 <script>
 
-let timeLeft = 30;
+    let timeLeft = 30;
 
-const timer = document.getElementById("timer");
+    const timer = document.getElementById("timer");
 
-const countdown = setInterval(function(){
+    const countdown = setInterval(function () {
 
-    timeLeft--;
+        timeLeft--;
 
-    timer.innerText = timeLeft;
+        timer.innerText = timeLeft;
 
-    if(timeLeft <= 10){
-        timer.style.color = "red";
-    }
+        if (timeLeft <= 10) {
+            timer.style.color = "red";
+        }
 
-    if(timeLeft <= 0){
+        if (timeLeft <= 0) {
 
-        clearInterval(countdown);
+            clearInterval(countdown);
 
-        alert("⏰ Time is up!");
+            alert("⏰ Time is up!");
 
-        document.getElementById("quizForm").submit();
-    }
+            document.getElementById("quizForm").submit();
+        }
 
-},1000);
+    }, 1000);
 
 </script>
 
