@@ -811,7 +811,7 @@ def logout():
     session.clear()
 
     
-    return render_template("logout.html", data=user)
+    return render_template("Logout.html", data=user)
 
 
 
