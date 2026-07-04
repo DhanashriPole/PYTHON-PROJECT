@@ -4,85 +4,87 @@
 {% block content %}
 
 <style>
-
-.leaderboard-card{
-    background:linear-gradient(135deg,#64748b,#475569);
-    border-radius:25px;
-    box-shadow:0 15px 35px rgba(0,0,0,0.2);
-}
-
-.leaderboard-title{
-    font-weight:700;
-}
-
-.table{
-    border-radius:20px;
-    overflow:hidden;
-}
-
-.table tbody tr{
-    transition:all 0.3s ease;
-}
-
-.table tbody tr:hover{
-    background:#f8fafc;
-    transform:scale(1.01);
-}
-
-.rank-badge{
-    font-size:0.95rem;
-    padding:8px 12px;
-    border-radius:12px;
-}
-
-.gold{
-    background:#FFD700;
-    color:#000;
-}
-
-.silver{
-    background:#C0C0C0;
-    color:#000;
-}
-
-.bronze{
-    background:#CD7F32;
-    color:#fff;
-}
-
-.normal{
-    background:#0d6efd;
-    color:white;
-}
-
-.winner-icon{
-    font-size:4rem;
-    animation:bounce 2s infinite;
-}
-
-@keyframes bounce{
-    0%,100%{
-        transform:translateY(0);
-    }
-    50%{
-        transform:translateY(-10px);
-    }
-}
-
-@media(max-width:768px){
-
-    .winner-icon{
-        font-size:3rem;
+    .leaderboard-card {
+        background: linear-gradient(135deg, #64748b, #475569);
+        border-radius: 25px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
     }
 
-    .table{
-        font-size:14px;
+    .leaderboard-title {
+        font-weight: 700;
     }
 
-    .leaderboard-title{
-        font-size:1.5rem;
+    .table {
+        border-radius: 20px;
+        overflow: hidden;
     }
-}
+
+    .table tbody tr {
+        transition: all 0.3s ease;
+    }
+
+    .table tbody tr:hover {
+        background: #f8fafc;
+        transform: scale(1.01);
+    }
+
+    .rank-badge {
+        font-size: 0.95rem;
+        padding: 8px 12px;
+        border-radius: 12px;
+    }
+
+    .gold {
+        background: #FFD700;
+        color: #000;
+    }
+
+    .silver {
+        background: #C0C0C0;
+        color: #000;
+    }
+
+    .bronze {
+        background: #CD7F32;
+        color: #fff;
+    }
+
+    .normal {
+        background: #0d6efd;
+        color: white;
+    }
+
+    .winner-icon {
+        font-size: 4rem;
+        animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+
+    @media(max-width:768px) {
+
+        .winner-icon {
+            font-size: 3rem;
+        }
+
+        .table {
+            font-size: 14px;
+        }
+
+        .leaderboard-title {
+            font-size: 1.5rem;
+        }
+    }
 </style>
 
 <div class="page-card leaderboard-card p-4">
@@ -139,6 +141,11 @@
                             <i class="bi bi-star-fill"></i>
                             Score
                         </th>
+
+                        <th>
+                            <i class="bi bi-clock-fill"></i>
+                            Time Taken
+                        </th>
                     </tr>
 
                 </thead>
@@ -181,6 +188,12 @@
                         <td>
                             <span class="badge bg-success fs-6">
                                 {{ student.score }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="badge bg-secondary text-white fs-6">
+                                {{ student.time_taken if student.time_taken else 40 }}s
                             </span>
                         </td>
 

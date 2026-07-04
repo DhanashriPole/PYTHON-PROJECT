@@ -589,6 +589,12 @@ def Quiz_page():
         flash("Please register first before taking the quiz.", "warning")
         return redirect(url_for("student_form"))
     
+    if request.args.get("again") == "1":
+        session.pop("quiz_last_completed", None)
+    elif request.method == "GET" and session.get("quiz_last_completed"):
+        flash("Please choose a course before starting a new quiz.", "info")
+        return redirect(url_for("choose_course"))
+
     course_name = session.get("course_name")
     if not course_name:
         flash("Please choose a course before starting the quiz.", "warning")
@@ -638,6 +644,7 @@ def Quiz_page():
                 time_taken = max(0, int(time.time() - start_time))
 
             update_leaderboard(student_name, score, session.get("course_id"), time_taken)
+            session["quiz_last_completed"] = True
             percentage = round(score / total * 100, 1)
             if percentage >= 90:
               grade = "A+"
@@ -775,6 +782,11 @@ def choose_course():
         if selected:
             session['course_id'] = course_id
             session['course_name'] = selected['course_name']
+            session.pop('quiz_last_completed', None)
+            session.pop('q_index', None)
+            session.pop('answers', None)
+            session.pop('quiz_start_time', None)
+            session.pop('last_feedback', None)
 
             # ✅ Database update
             email = session.get('email')
