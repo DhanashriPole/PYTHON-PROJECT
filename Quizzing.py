@@ -1,4 +1,5 @@
 import os
+import time
 import secrets
 from flask import Flask, render_template, request, session, redirect, url_for, flash
 
@@ -87,8 +88,8 @@ class CourseModelView(ModelView):
     form_columns = ['course_name', 'description']
 
 class LeaderboardModelView(ModelView):
-    column_list = ['student_name', 'score', 'course_id', 'created_at']
-    form_columns = ['student_name', 'score', 'course_id']
+    column_list = ['student_name', 'score', 'time_taken', 'course_id', 'created_at']
+    form_columns = ['student_name', 'score', 'time_taken', 'course_id']
 
 
 admin = Admin(app, name='Study Quiz Hub Admin')
@@ -574,8 +575,8 @@ def filter_students():
         selected_course_name=selected_course_name
         
     )
-def update_leaderboard(name, score, course_id=None):
-    insert_leaderboard(name, score, course_id)
+def update_leaderboard(name, score, course_id=None, time_taken=0):
+    insert_leaderboard(name, score, course_id, time_taken)
     updated_entries = get_ranked_leaderboard()
     leaderboard_entries.clear()
     leaderboard_entries.extend(updated_entries)
@@ -589,11 +590,20 @@ def Quiz_page():
         return redirect(url_for("student_form"))
     
     course_name = session.get("course_name")
+    if not course_name:
+        flash("Please choose a course before starting the quiz.", "warning")
+        return redirect(url_for("choose_course"))
+
     quizzes = course_quizzes.get(course_name, [])
     total = len(quizzes)
+    if total == 0:
+        flash("Please choose a valid course before starting the quiz.", "warning")
+        return redirect(url_for("choose_course"))
+
     if "q_index" not in session:
         session["q_index"] = 0
         session["answers"] = []
+        session["quiz_start_time"] = int(time.time())
 
     if request.method == "POST":
         answer = request.form.get("choice", "")
@@ -601,16 +611,33 @@ def Quiz_page():
         answers.append(answer)
         session["answers"] = answers
 
-        session["q_index"] = session.get("q_index", 0) + 1
+        idx = session.get("q_index", 0)
+        current_quiz = quizzes[idx]
+        correct_letter = current_quiz["Answer"].upper()
+        correct_option = next((opt for opt in current_quiz["Option"] if opt[0].upper() == correct_letter), correct_letter)
+        selected_option = next((opt for opt in current_quiz["Option"] if opt[0].upper() == answer.upper()), answer)
+
+        session["last_feedback"] = {
+            "correct": answer.upper() == correct_letter,
+            "selected": selected_option,
+            "correct_option": correct_option
+        }
+
+        session["q_index"] = idx + 1
 
         if session["q_index"] >= total:
             score = 0
             attempted = sum(1 for a in answers if a)
-            for idx, a in enumerate(answers):
-                if a and a.upper() == quizzes[idx]["Answer"].upper():
+            for idx2, a in enumerate(answers):
+                if a and a.upper() == quizzes[idx2]["Answer"].upper():
                     score += 1
 
-            update_leaderboard(student_name, score, session.get("course_id"))
+            start_time = session.get("quiz_start_time")
+            time_taken = 0
+            if start_time is not None:
+                time_taken = max(0, int(time.time() - start_time))
+
+            update_leaderboard(student_name, score, session.get("course_id"), time_taken)
             percentage = round(score / total * 100, 1)
             if percentage >= 90:
               grade = "A+"
@@ -625,6 +652,8 @@ def Quiz_page():
             flash(f"Quiz complete! {student_name} scored {score}/{total}.", "success")
             session.pop("q_index", None)
             session.pop("answers", None)
+            session.pop("quiz_start_time", None)
+            session.pop("last_feedback", None)
             
             return render_template(
                 "quiz_result.html",
@@ -634,6 +663,7 @@ def Quiz_page():
                 total=total,
                 percentage=percentage,
                 grade=grade,
+                duration=time_taken,
                 leaderboard=get_ranked_leaderboard()
             )
 
@@ -641,6 +671,7 @@ def Quiz_page():
 
     idx = session.get("q_index", 0)
     quiz = quizzes[idx]
+    feedback = session.pop("last_feedback", None)
     return render_template(
         "Quiz_page.html",
         quiz=quiz,
@@ -648,6 +679,7 @@ def Quiz_page():
         total=total,
         student_name=session.get("student_name", ""),
         course_name=course_name,
+        feedback=feedback,
     )
 
 @app.route("/Information")

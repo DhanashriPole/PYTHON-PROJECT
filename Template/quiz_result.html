@@ -4,73 +4,76 @@
 {% block content %}
 
 <style>
-.result-card{
-    background:linear-gradient(135deg,#64748b,#475569);
-    border-radius:25px;
-    box-shadow:0 15px 35px rgba(0,0,0,0.2);
-}
-
-.stat-card{
-    border:none;
-    border-radius:20px;
-    transition:all 0.3s ease;
-    overflow:hidden;
-}
-
-.stat-card:hover{
-    transform:translateY(-8px);
-    box-shadow:0 12px 25px rgba(0,0,0,0.2);
-}
-
-.score-icon{
-    font-size:4rem;
-    animation:bounce 2s infinite;
-}
-
-@keyframes bounce{
-    0%,100%{
-        transform:translateY(0);
-    }
-    50%{
-        transform:translateY(-10px);
-    }
-}
-
-.result-btn{
-    border-radius:15px;
-    padding:12px 24px;
-    font-weight:600;
-}
-
-.progress{
-    height:32px;
-    border-radius:25px;
-}
-
-.progress-bar{
-    font-size:1rem;
-    font-weight:600;
-}
-
-.rank-badge{
-    font-size:1rem;
-}
-
-@media(max-width:768px){
-
-    .score-icon{
-        font-size:3rem;
+    .result-card {
+        background: linear-gradient(135deg, #64748b, #475569);
+        border-radius: 25px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
     }
 
-    .result-btn{
-        width:100%;
-        margin-bottom:10px;
+    .stat-card {
+        border: none;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+        overflow: hidden;
     }
 
-    .table{
-        font-size:14px;
+    .stat-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
     }
-}
+
+    .score-icon {
+        font-size: 4rem;
+        animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+
+    .result-btn {
+        border-radius: 15px;
+        padding: 12px 24px;
+        font-weight: 600;
+    }
+
+    .progress {
+        height: 32px;
+        border-radius: 25px;
+    }
+
+    .progress-bar {
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    .rank-badge {
+        font-size: 1rem;
+    }
+
+    @media(max-width:768px) {
+
+        .score-icon {
+            font-size: 3rem;
+        }
+
+        .result-btn {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .table {
+            font-size: 14px;
+        }
+    }
 </style>
 
 <div class="page-card result-card p-4">
@@ -116,9 +119,7 @@
 
         <div class="progress">
 
-            <div class="progress-bar bg-success"
-                 role="progressbar"
-                 style="width: {{ percentage }}%">
+            <div class="progress-bar bg-success" role="progressbar" style="width: {{ percentage }}%">
 
                 {{ percentage }}%
 
@@ -130,9 +131,9 @@
 
     <!-- Stats Cards -->
 
-    <div class="row g-3 mb-4">
+    <div class="row row-cols-1 row-cols-md-4 g-3 mb-4">
 
-        <div class="col-md-4">
+        <div class="col">
 
             <div class="card stat-card bg-primary text-white">
 
@@ -154,7 +155,7 @@
 
         </div>
 
-        <div class="col-md-4">
+        <div class="col">
 
             <div class="card stat-card bg-success text-white">
 
@@ -176,7 +177,7 @@
 
         </div>
 
-        <div class="col-md-4">
+        <div class="col">
 
             <div class="card stat-card bg-warning text-dark">
 
@@ -198,22 +199,42 @@
 
         </div>
 
+        <div class="col">
+
+            <div class="card stat-card bg-info text-white">
+
+                <div class="card-body text-center">
+
+                    <i class="bi bi-clock-history fs-1"></i>
+
+                    <h4 class="mt-2">
+                        {{ duration }}s
+                    </h4>
+
+                    <p class="mb-0">
+                        Time Taken
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
 
     <!-- Buttons -->
 
     <div class="text-center mb-4">
 
-        <a href="/leaderboard"
-           class="btn btn-success result-btn me-2">
+        <a href="/leaderboard" class="btn btn-success result-btn me-2">
 
             <i class="bi bi-trophy-fill me-2"></i>
             Leaderboard
 
         </a>
 
-        <a href="/Quiz_page"
-           class="btn btn-primary result-btn">
+        <a href="/Quiz_page" class="btn btn-primary result-btn">
 
             <i class="bi bi-arrow-repeat me-2"></i>
             Try Again
