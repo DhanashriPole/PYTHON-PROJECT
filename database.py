@@ -158,7 +158,13 @@ def insert_leaderboard(student_name, score, course_id=None, time_taken=0):
 def get_top_leaderboard(limit=5):
     conn = get_db_connection()
     rows = conn.execute(
-        "SELECT student_name AS name, score, time_taken FROM leaderboard ORDER BY score DESC, time_taken ASC, created_at ASC LIMIT ?", (limit,)
+        "SELECT l.student_name AS name, l.score, l.time_taken "
+        "FROM leaderboard l "
+        "JOIN (SELECT student_name, MAX(created_at) AS latest_created "
+        "FROM leaderboard GROUP BY student_name) m "
+        "ON l.student_name = m.student_name AND l.created_at = m.latest_created "
+        "ORDER BY l.score DESC, l.time_taken ASC LIMIT ?",
+        (limit,)
     ).fetchall()
     conn.close()
     return [dict(row) for row in rows]

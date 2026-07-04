@@ -234,7 +234,7 @@
 
         </a>
 
-        <a href="/Quiz_page" class="btn btn-primary result-btn">
+        <a href="/Quiz_page?again=1" class="btn btn-primary result-btn">
 
             <i class="bi bi-arrow-repeat me-2"></i>
             Try Again
@@ -266,6 +266,7 @@
                         <th>Rank</th>
                         <th>Name</th>
                         <th>Score</th>
+                        <th>Time Taken</th>
                     </tr>
 
                 </thead>
@@ -286,6 +287,12 @@
 
                         <td>
                             <strong>{{ student.score }}</strong>
+                        </td>
+
+                        <td>
+                            <span class="badge bg-secondary text-white fs-6">
+                                {{ student.time_taken }}s
+                            </span>
                         </td>
 
                     </tr>
