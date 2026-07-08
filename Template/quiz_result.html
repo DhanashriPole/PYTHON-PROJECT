@@ -1,5 +1,5 @@
 {% extends "base1.html" %}
-{% block title %}Quiz Result{% endblock %}
+{% block title %}🏆 Quiz Result{% endblock %}
 
 {% block content %}
 
@@ -28,15 +28,8 @@
     }
 
     @keyframes bounce {
-
-        0%,
-        100% {
-            transform: translateY(0);
-        }
-
-        50% {
-            transform: translateY(-10px);
-        }
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
     }
 
     .result-btn {
@@ -60,251 +53,139 @@
     }
 
     @media(max-width:768px) {
-
-        .score-icon {
-            font-size: 3rem;
-        }
-
-        .result-btn {
-            width: 100%;
-            margin-bottom: 10px;
-        }
-
-        .table {
-            font-size: 14px;
-        }
+        .score-icon { font-size: 3rem; }
+        .result-btn { width: 100%; margin-bottom: 10px; }
+        .table { font-size: 14px; }
     }
 </style>
 
 <div class="page-card result-card p-4">
 
     <!-- Header -->
-
     <div class="text-center mb-4">
-
         <i class="bi bi-trophy-fill text-warning score-icon"></i>
-
         <h1 class="display-6 text-white fw-bold mt-2">
-            Quiz Completed!
+            🎉 Quiz Completed!
         </h1>
-
         <p class="text-light">
-            Great Job, {{ name }} 🎉
+            Great Job, {{ name }} 🏆✨
         </p>
-
     </div>
 
     <!-- Score Alert -->
-
     <div class="alert alert-success shadow-sm text-center">
-
         <h4 class="mb-1">
-            <i class="bi bi-check-circle-fill me-2"></i>
-            You Scored {{ score }} / {{ total }}
+            ✅ You Scored {{ score }} / {{ total }}
         </h4>
-
         <small>
-            Keep practicing to improve your rank.
+            💡 Keep practicing to improve your rank.
         </small>
-
     </div>
 
     <!-- Progress -->
-
     <div class="mb-4">
-
         <h5 class="text-white mb-2">
-            Overall Score
+            📊 Overall Score
         </h5>
-
         <div class="progress">
-
             <div class="progress-bar bg-success" role="progressbar" style="width: {{ percentage }}%">
-
                 {{ percentage }}%
-
             </div>
-
         </div>
-
     </div>
 
     <!-- Stats Cards -->
-
     <div class="row row-cols-1 row-cols-md-4 g-3 mb-4">
 
         <div class="col">
-
             <div class="card stat-card bg-primary text-white">
-
                 <div class="card-body text-center">
-
                     <i class="bi bi-list-task fs-1"></i>
-
-                    <h4 class="mt-2">
-                        {{ attempted }}/{{ total }}
-                    </h4>
-
-                    <p class="mb-0">
-                        Attempted
-                    </p>
-
+                    <h4 class="mt-2">{{ attempted }}/{{ total }}</h4>
+                    <p class="mb-0">📝 Attempted</p>
                 </div>
-
             </div>
-
         </div>
 
         <div class="col">
-
             <div class="card stat-card bg-success text-white">
-
                 <div class="card-body text-center">
-
                     <i class="bi bi-percent fs-1"></i>
-
-                    <h4 class="mt-2">
-                        {{ percentage }}%
-                    </h4>
-
-                    <p class="mb-0">
-                        Percentage
-                    </p>
-
+                    <h4 class="mt-2">{{ percentage }}%</h4>
+                    <p class="mb-0">📈 Percentage</p>
                 </div>
-
             </div>
-
         </div>
 
         <div class="col">
-
             <div class="card stat-card bg-warning text-dark">
-
                 <div class="card-body text-center">
-
                     <i class="bi bi-mortarboard-fill fs-1"></i>
-
-                    <h4 class="mt-2">
-                        {{ grade }}
-                    </h4>
-
-                    <p class="mb-0">
-                        Grade
-                    </p>
-
+                    <h4 class="mt-2">{{ grade }}</h4>
+                    <p class="mb-0">🎓 Grade</p>
                 </div>
-
             </div>
-
         </div>
 
         <div class="col">
-
             <div class="card stat-card bg-info text-white">
-
                 <div class="card-body text-center">
-
                     <i class="bi bi-clock-history fs-1"></i>
-
-                    <h4 class="mt-2">
-                        {{ duration }}s
-                    </h4>
-
-                    <p class="mb-0">
-                        Time Taken
-                    </p>
-
+                    <h4 class="mt-2">{{ duration }}s</h4>
+                    <p class="mb-0">⏱️ Time Taken</p>
                 </div>
-
             </div>
-
         </div>
 
     </div>
 
     <!-- Buttons -->
-
     <div class="text-center mb-4">
-
         <a href="/leaderboard" class="btn btn-success result-btn me-2">
-
-            <i class="bi bi-trophy-fill me-2"></i>
-            Leaderboard
-
+            🏆 Leaderboard
         </a>
-
         <a href="/Quiz_page?again=1" class="btn btn-primary result-btn">
-
-            <i class="bi bi-arrow-repeat me-2"></i>
-            Try Again
-
+            🔄 Try Again
         </a>
-
     </div>
 
     <!-- Leaderboard -->
-
     <div class="card border-0 shadow-lg rounded-4">
-
         <div class="card-header bg-dark text-white">
-
             <h4 class="mb-0">
-                <i class="bi bi-award-fill text-warning me-2"></i>
-                Top 5 Leaderboard
+                🥇 Top 5 Leaderboard
             </h4>
-
         </div>
-
         <div class="table-responsive">
-
             <table class="table table-hover mb-0">
-
                 <thead class="table-dark">
-
                     <tr>
-                        <th>Rank</th>
-                        <th>Name</th>
-                        <th>Score</th>
-                        <th>Time Taken</th>
+                        <th>🏅 Rank</th>
+                        <th>👤 Name</th>
+                        <th>📊 Score</th>
+                        <th>⏱️ Time Taken</th>
                     </tr>
-
                 </thead>
-
                 <tbody>
-
                     {% for student in leaderboard %}
-
                     <tr>
-
                         <td>
                             <span class="badge bg-warning text-dark rank-badge">
                                 #{{ student.rank }}
                             </span>
                         </td>
-
-                        <td>{{ student.name }}</td>
-
-                        <td>
-                            <strong>{{ student.score }}</strong>
-                        </td>
-
+                        <td>👨‍🎓 {{ student.name }}</td>
+                        <td><strong>{{ student.score }}</strong></td>
                         <td>
                             <span class="badge bg-secondary text-white fs-6">
                                 {{ student.time_taken }}s
                             </span>
                         </td>
-
                     </tr>
-
                     {% endfor %}
-
                 </tbody>
-
             </table>
-
         </div>
-
     </div>
 
 </div>
