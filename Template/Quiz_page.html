@@ -129,6 +129,12 @@
                         <small class="text-light">
                             Select the correct answer
                         </small>
+                        {% set concept_name = quiz.concept if quiz is mapping and quiz.concept else 'General' %}
+                        <div class="mt-2">
+                            <span class="badge bg-secondary">
+                                Concept: {{ concept_name }}
+                            </span>
+                        </div>
                     </div>
 
                     <span class="badge bg-success mt-2 mt-md-0">

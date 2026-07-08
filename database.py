@@ -317,4 +317,38 @@ class AskHub(db.Model):
     question = db.Column(db.String(200), nullable=False)
     answer = db.Column(db.String(500), nullable=False)
 
+class QuizQuestion(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    course_name = db.Column(db.String(100), nullable=False)
+    concept = db.Column(db.String(100), nullable=True)
+    question = db.Column(db.String(500), nullable=False)
+    option_a = db.Column(db.String(200), nullable=False)
+    option_b = db.Column(db.String(200), nullable=False)
+    option_c = db.Column(db.String(200), nullable=False)
+    option_d = db.Column(db.String(200), nullable=False)
+    correct_option = db.Column(db.String(10), nullable=False)
+
+
+def add_quiz_question(course_name, question, options, correct_option, concept=None):
+    if len(options) != 4:
+        raise ValueError("Quiz question must have exactly 4 options")
+
+    new_question = QuizQuestion(
+        course_name=course_name.strip(),
+        concept=concept.strip() if concept else None,
+        question=question.strip(),
+        option_a=options[0].strip(),
+        option_b=options[1].strip(),
+        option_c=options[2].strip(),
+        option_d=options[3].strip(),
+        correct_option=correct_option.strip().upper(),
+    )
+    db.session.add(new_question)
+    db.session.commit()
+    return new_question
+
+
+def get_quiz_questions_by_course(course_name):
+    return QuizQuestion.query.filter_by(course_name=course_name).order_by(QuizQuestion.id).all()
+
 

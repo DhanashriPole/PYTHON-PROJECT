@@ -1,7 +1,7 @@
 import os
 import time
 import secrets
-from flask import Flask, render_template, request, session, redirect, url_for, flash
+from flask import Flask, render_template, request,session, redirect, url_for, flash
 
 
 
@@ -21,7 +21,9 @@ from database import (
     delete_score_record,
     update_student,
     search_students,
-    db, Students, Courses, Leaderboard  , AskHub
+    add_quiz_question,
+    get_quiz_questions_by_course,
+    db, Students, Courses, Leaderboard, AskHub, QuizQuestion
 )
 app = Flask(__name__, template_folder='Template')
 app.secret_key = secrets.token_bytes(24)
@@ -38,17 +40,6 @@ database_file = db_path
 db.init_app(app)
 
 init_db()
-
-
-
-
-    
-      
-
-
-
-
-
 
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
@@ -91,12 +82,17 @@ class LeaderboardModelView(ModelView):
     column_list = ['student_name', 'score', 'time_taken', 'course_id', 'created_at']
     form_columns = ['student_name', 'score', 'time_taken', 'course_id']
 
+class QuizQuestionModelView(ModelView):
+    column_list = ['course_name', 'concept', 'question', 'option_a', 'option_b', 'option_c', 'option_d', 'correct_option']
+    form_columns = ['course_name', 'concept', 'question', 'option_a', 'option_b', 'option_c', 'option_d', 'correct_option']
+
 
 admin = Admin(app, name='Study Quiz Hub Admin')
 admin.add_view(StudentModelView(Students, db.session))
 admin.add_view(CourseModelView(Courses, db.session))
 admin.add_view(LeaderboardModelView(Leaderboard, db.session))
 admin.add_view(AskHubModelView(AskHub, db.session))
+admin.add_view(QuizQuestionModelView(QuizQuestion, db.session))
 
 def add_askhub_data(question, answer):
     new_entry = AskHub(question=question.strip().lower(), answer=answer.strip())
@@ -429,6 +425,44 @@ course_quizzes = {
     ]
 }
 
+
+def normalize_option_text(option):
+    if option.startswith(("A.", "B.", "C.", "D.")):
+        return option.split(".", 1)[1].strip()
+    return option.strip()
+
+
+def load_quizzes_for_course(course_name):
+    db_quizzes = get_quiz_questions_by_course(course_name)
+    if db_quizzes:
+        return [
+            {
+                "questions": quiz.question,
+                "Option": [f"A.{quiz.option_a}", f"B.{quiz.option_b}", f"C.{quiz.option_c}", f"D.{quiz.option_d}"],
+                "Answer": quiz.correct_option,
+                "concept": quiz.concept or "General",
+            }
+            for quiz in db_quizzes
+        ]
+    return course_quizzes.get(course_name, [])
+
+
+def seed_quiz_questions():
+    if QuizQuestion.query.first():
+        return
+
+    for course_name, quizzes in course_quizzes.items():
+        for quiz in quizzes:
+            options = [normalize_option_text(opt) for opt in quiz["Option"]]
+            add_quiz_question(
+                course_name=course_name,
+                question=quiz["questions"],
+                options=options,
+                correct_option=quiz["Answer"],
+                concept=quiz.get("concept", "General"),
+            )
+
+
 @app.route("/admin_login", methods=["GET", "POST"])
 def admin_login():
     if request.method == "POST":
@@ -449,6 +483,12 @@ def admin_login():
             return render_template("admin_login.html")
 
     return render_template("admin_login.html")
+
+
+@app.route("/About_us")
+def about_us():
+    return render_template("About_us.html")
+
 
 @app.route("/")
 def home_page():
@@ -582,6 +622,37 @@ def update_leaderboard(name, score, course_id=None, time_taken=0):
     leaderboard_entries.extend(updated_entries)
 
 
+@app.route("/add_quiz_question", methods=["GET", "POST"])
+def add_quiz_question_page():
+    courses = get_courses()
+
+    if request.method == "POST":
+        course_name = request.form.get("course_name", "").strip()
+        concept = request.form.get("concept", "").strip()
+        question = request.form.get("question", "").strip()
+        option_a = request.form.get("option_a", "").strip()
+        option_b = request.form.get("option_b", "").strip()
+        option_c = request.form.get("option_c", "").strip()
+        option_d = request.form.get("option_d", "").strip()
+        correct_option = request.form.get("correct_option", "").strip().upper()
+
+        if not all([course_name, question, option_a, option_b, option_c, option_d]) or correct_option not in {"A", "B", "C", "D"}:
+            flash("Please fill all fields and choose a valid correct option.", "danger")
+            return render_template("add_quiz_question.html", courses=courses, form_data=request.form)
+
+        add_quiz_question(
+            course_name=course_name,
+            question=question,
+            options=[option_a, option_b, option_c, option_d],
+            correct_option=correct_option,
+            concept=concept,
+        )
+        flash("Quiz question added successfully ✅", "success")
+        return redirect(url_for("add_quiz_question_page"))
+
+    return render_template("add_quiz_question.html", courses=courses, form_data=None)
+
+
 @app.route("/Quiz_page", methods=["GET", "POST"])
 def Quiz_page():
     student_name = session.get("student_name")
@@ -600,7 +671,7 @@ def Quiz_page():
         flash("Please choose a course before starting the quiz.", "warning")
         return redirect(url_for("choose_course"))
 
-    quizzes = course_quizzes.get(course_name, [])
+    quizzes = load_quizzes_for_course(course_name)
     total = len(quizzes)
     if total == 0:
         flash("Please choose a valid course before starting the quiz.", "warning")
@@ -691,7 +762,11 @@ def Quiz_page():
 
 @app.route("/Information")
 def Study_quiz_hub():
+    
     return render_template("Study_quiz_hub.html")
+
+
+
 
 @app.route('/student', methods=['GET', 'POST'])
 def student_form():
@@ -1044,6 +1119,8 @@ if __name__ == "__main__":
             ]
             db.session.add_all(default_courses)
             db.session.commit()
+
+        seed_quiz_questions()
 
     app.run(debug=True)
 

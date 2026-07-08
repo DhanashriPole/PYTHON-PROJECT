@@ -4,60 +4,108 @@
 {% block content %}
 <style>
 .course-card {
-    border-radius: 20px;
-    overflow: hidden;
-    transition: 0.3s;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  border-radius: 16px;
+  padding: 18px;
+  color: white;
+  text-align: center;
+  transition: 0.3s ease;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
+
 .course-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
 }
+
 .course-icon {
-    font-size: 2.5rem;
-    margin-bottom: 10px;
-    color: #0d6efd;
+  font-size: 2rem;
+  margin-bottom: 8px;
 }
+
+.course-image {
+  width: 90%;
+  border-radius: 10px;
+  margin: 10px auto;
+  display: block;
+}
+
 .btn-quiz {
-    border-radius: 12px;
-    font-weight: 600;
-    padding: 12px;
-    transition: 0.3s;
+  background: white;
+  color: #000;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 8px 16px;
+  transition: 0.3s;
 }
+
 .btn-quiz:hover {
-    transform: scale(1.05);
+  background: #f8f9fa;
+  transform: scale(1.05);
 }
+
+/* Softer, modern color palette */
+.web-bg { background: linear-gradient(135deg, #7b2ff7, #f107a3); }
+.Dbms-bg { background: linear-gradient(135deg, #ff416c, #ff4b2b); }
+.data-bg { background: linear-gradient(135deg, #00c6ff, #0072ff); }
+.jsrp-bg { background: linear-gradient(135deg, #43cea2, #185a9d); }
+.css-bg { background: linear-gradient(135deg, #264de4, #2965f1); }
+.python-bg { background: linear-gradient(135deg, #4B8BBE, #306998); }
+.Cpp-bg { background: linear-gradient(135deg, #f7971e, #ffd200); }
+.clang-bg { background: linear-gradient(135deg, #ff6a00, #ee0979); }
+.jvp-bg { background: linear-gradient(135deg, #f7971e, #ffd200); }
+.datacom-bg { background: linear-gradient(135deg, #00c6ff, #0072ff); }
+
 </style>
+<div class="container py-4">
+  <h3 class="text-center mb-4">✨ Choose Your Favorite Course ✨</h3>
 
-<div class="container py-5">
-    <h2 class="mb-4 text-center">📚 Select Your Course</h2>
-
-    <div class="row">
-        {% for course in courses %}
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm course-card text-center p-3">
-                <div class="course-icon">
-                    {% if course['course_name'] == 'Python Basics' %}
-                        🐍
-                    {% elif course['course_name'] == 'Web Development' %}
-                        🌐
-                    {% elif course['course_name'] == 'Data Science' %}
-                        📊
-                    {% else %}
-                        📘
-                    {% endif %}
-                </div>
-                <h5 class="card-title">{{ course['course_name'] }}</h5>
-                <p class="card-text">{{ course['description'] }}</p>
-                <form method="POST" action="/choose_course">
-                    <input type="hidden" name="course_id" value="{{ course['id'] }}">
-                    <button class="btn btn-success w-100 btn-quiz">
-                        🚀 Start Quiz
-                    </button>
-                </form>
-            </div>
+  <div class="row">
+    {% for course in courses %}
+    <div class="col-md-4 col-sm-6 mb-3">
+      <div class="course-card
+        {% if course['course_name'] == 'Web Development' %} web-bg
+        {% elif course['course_name'] == 'Database' %} Dbms-bg
+        {% elif course['course_name'] == 'Data Science' %} data-bg
+        {% elif course['course_name'] == 'Javascript' %} jsrp-bg
+        {% elif course['course_name'] == 'C++ PROGRAMING' %} Cpp-bg
+        {% elif course['course_name'] == 'CSS' %} css-bg
+        {% elif course['course_name'] == 'Python Basics' %} python-bg
+        {% elif course['course_name'] == 'C programing' %} clang-bg
+        {% elif course['course_name'] == 'Java programing' %} jvp-bg
+        {% elif course['course_name'] == 'Data communication & Networking' %} datacom-bg
+        {% endif %}">
+        
+        <div class="course-icon">
+          {% if course['course_name'] == 'Web Development' %} 🌐
+          {% elif course['course_name'] == 'Database' %} 🗃️
+          {% elif course['course_name'] == 'Data Science' %} 📊
+          {% elif course['course_name'] == 'C++ PROGRAMING' %} �
+          {% elif course['course_name'] == 'CSS' %} 🎨
+          {% elif course['course_name'] == 'Python Basics' %} 🐍
+          {% elif course['course_name'] == 'C programing' %} 🎯
+          {% elif course['course_name'] == 'Javascript' %} ⚡
+          {% elif course['course_name'] == 'Java programing' %} ☕
+          {% elif course['course_name'] == 'Data communication & Networking' %}📡
+           
+          
+          {% endif %}
         </div>
-        {% endfor %}
+
+        <h5>{{ course['course_name'] }}</h5>
+        <p style="font-size: 0.9rem;">{{ course['description'] }}</p>
+
+        {% if course['logo'] %}
+          <img src="{{ course['logo'] }}" alt="{{ course['course_name'] }} image" class="course-image">
+        {% endif %}
+
+        <form method="POST" action="/choose_course">
+          <input type="hidden" name="course_id" value="{{ course['id'] }}">
+          <button class="btn btn-quiz">🚀 Start Quiz</button>
+        </form>
+      </div>
     </div>
+    {% endfor %}
+  </div>
 </div>
+
 {% endblock %}
