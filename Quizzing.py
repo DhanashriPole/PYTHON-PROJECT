@@ -2,7 +2,9 @@ import os
 import time
 import secrets
 from flask import Flask, render_template, request,session, redirect, url_for, flash
-
+from groq import Groq
+from flask.cli import load_dotenv
+load_dotenv()
 
 
 from database import (
@@ -728,6 +730,27 @@ def Quiz_page():
             else:
              grade = "F"
             flash(f"Quiz complete! {student_name} scored {score}/{total}.", "success")
+            client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+            prompt = f"""
+                    Student: {student_name}
+                    Course: {course_name}
+                    Score: {score}/{total}
+                    Percentage: {percentage}%
+
+                    plz provide study tip for student and short summary of student performance,it should not be more than 3 lines.
+                 """
+
+            response = client.chat.completions.create(
+                model="llama-3.1-8b-instant",
+            messages=[
+           
+               {
+                   "role": "user",
+                   "content": prompt
+               }
+             ]
+          )
+            ai_tip = response.choices[0].message.content
             session.pop("q_index", None)
             session.pop("answers", None)
             session.pop("quiz_start_time", None)
@@ -742,8 +765,10 @@ def Quiz_page():
                 percentage=percentage,
                 grade=grade,
                 duration=time_taken,
-                leaderboard=get_ranked_leaderboard()
+                leaderboard=get_ranked_leaderboard(),
+                ai_tip=ai_tip
             )
+            
 
         return redirect(url_for("Quiz_page"))
 
@@ -759,6 +784,7 @@ def Quiz_page():
         course_name=course_name,
         feedback=feedback,
     )
+
 
 @app.route("/Information")
 def Study_quiz_hub():

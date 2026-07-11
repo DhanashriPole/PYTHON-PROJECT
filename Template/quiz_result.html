@@ -57,6 +57,31 @@
         .result-btn { width: 100%; margin-bottom: 10px; }
         .table { font-size: 14px; }
     }
+    .ai-tip-card .card-header h4{
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+
+
+.ai-tip-card .card-body p{
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+
+.ai-tip-card .card-body li{
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+.ai-tip-card .card-body{
+    font-size:15px;
+    line-height:1.7;
+}
+
+.ai-tip-card{
+    max-width:1100px;
+    margin:auto;
+}
 </style>
 
 <div class="page-card result-card p-4">
@@ -138,6 +163,38 @@
         </div>
 
     </div>
+       <!-- AI Study Tip Horizontal Card -->
+        <div class="card border-0 shadow rounded-4 mt-4">
+
+              <div class="card-header bg-primary text-white py-1">
+                 <h4 class="mb-0">
+                      🤖 AI Study Tip
+                 </h4>
+          </div>
+
+        <div class="card-body bg-light">
+
+             <div class="d-flex align-items-start">
+
+                 <i class="bi bi-robot display-5 text-primary me-3"></i>
+
+                <div>
+                      <p class="fs-6 mb-0" style="white-space: pre-wrap;">
+                           {{ ai_tip }}
+                      </p>
+                </div>
+
+             </div>
+
+        </div>
+
+    </div>
+    <br>
+
+
+
+
+
 
     <!-- Buttons -->
     <div class="text-center mb-4">
