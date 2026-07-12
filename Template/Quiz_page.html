@@ -88,7 +88,7 @@
         <span id="timer">30</span> Seconds
     </div>
 
-    <form method="post" action="/Quiz_page" id="quizForm">
+    <form method="post" action="{{ request.path }}" id="quizForm">
 
         {% if feedback %}
         <div class="alert alert-{{ 'success' if feedback.correct else 'danger' }} shadow-sm">

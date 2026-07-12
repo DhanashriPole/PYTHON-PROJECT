@@ -102,6 +102,13 @@
           <input type="hidden" name="course_id" value="{{ course['id'] }}">
           <button class="btn btn-quiz">🚀 Start Quiz</button>
         </form>
+         <form action="{{ url_for('ai_quiz_page') }}" method="post">
+  <input type="hidden" name="course_id" value="{{ course['id'] }}">
+  <button type="submit" class="btn btn-primary mt-2">Start AI Quiz</button>
+</form>
+
+
+
       </div>
     </div>
     {% endfor %}
