@@ -1055,7 +1055,7 @@ def ai_quiz_page():
 
     
     if "ai_quizzes" not in session:
-        quizzes = generate_quiz(course_name, num_questions=5)
+        quizzes = generate_quiz(course_name, num_questions=10)
         if not quizzes:
             flash("AI quiz could not be generated ❌ Try again later.", "danger")
             return redirect(url_for("choose_course"))
