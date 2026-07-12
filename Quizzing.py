@@ -1,9 +1,12 @@
 import os
+import json
 import time
+import re
 import secrets
-from flask import Flask, render_template, request,session, redirect, url_for, flash
+from flask import Flask, render_template, request,session, redirect, url_for, flash,jsonify
 from groq import Groq
-from flask.cli import load_dotenv
+
+from dotenv import load_dotenv   
 load_dotenv()
 
 
@@ -889,7 +892,7 @@ def choose_course():
             session.pop('quiz_start_time', None)
             session.pop('last_feedback', None)
 
-            # ✅ Database update
+            
             email = session.get('email')
             if email:
                 conn = get_db_connection()
@@ -904,6 +907,285 @@ def choose_course():
 
     return render_template('choose_course.html', courses=courses)
 
+
+def generate_quiz(course_name, num_questions=10):
+
+    client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+
+    prompt = f"""
+Generate exactly {num_questions} multiple choice questions for the course "{course_name}".
+
+Return ONLY valid JSON.
+
+Format:
+
+[
+  {{
+    "Question":"What is Python?",
+    "Option":[
+      "A) Programming Language",
+      "B) Database",
+      "C) Browser",
+      "D) Operating System"
+    ],
+    "Answer":"A"
+  }}
+]
+
+Do not return markdown.
+Do not return explanation.
+Do not return code block.
+ Return EXACTLY {num_questions} questions.
+ Do NOT return fewer than {num_questions}.
+
+"""
+
+    try:
+
+        response = client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=[
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ]
+        )
+
+        text = response.choices[0].message.content.strip()
+
+        print("\n================ RAW RESPONSE ================\n")
+        print(text)
+
+        # Remove markdown
+        text = text.replace("```json", "")
+        text = text.replace("```", "").strip()
+
+        # Extract JSON array
+        start = text.find("[")
+        end = text.rfind("]")
+
+        if start == -1 or end == -1:
+            raise Exception("JSON array not found")
+
+        text = text[start:end+1]
+
+        # Remove trailing commas
+        text = re.sub(r",\s*}", "}", text)
+        text = re.sub(r",\s*]", "]", text)
+
+        quizzes = json.loads(text)
+
+        result = []
+
+        for q in quizzes:
+
+            result.append({
+
+                "questions": q.get("Question", ""),
+
+                "Option": q.get("Option", []),
+
+                "Answer": q.get("Answer", "A").upper(),
+
+                "concept": "AI Generated"
+
+            })
+
+        print("\n================ PARSED QUIZ ================\n")
+        print(result)
+
+        return result
+
+    except Exception as e:
+
+        print("AI ERROR:", e)
+
+        flash("AI quiz generation failed due to format error.", "danger")
+
+        return [
+
+            {
+                "questions": "What is HTML?",
+                "Option": [
+                    "A) Language",
+                    "B) Protocol",
+                    "C) Database",
+                    "D) OS"
+                ],
+                "Answer": "A",
+                "concept": "General"
+            },
+
+            {
+                "questions": "CSS stands for?",
+                "Option": [
+                    "A) Cascading Style Sheets",
+                    "B) Computer Style System",
+                    "C) Code Syntax Sheet",
+                    "D) Color Style Source"
+                ],
+                "Answer": "A",
+                "concept": "General"
+            }
+
+        ]
+
+
+@app.route("/ai_quiz_page", methods=["GET", "POST"])
+def ai_quiz_page():
+    
+    if request.method == "POST" and request.form.get("course_id"):
+        course_id = request.form.get("course_id")
+        selected = get_course_by_id(course_id)
+        if selected:
+            session["course_id"] = course_id
+            session["course_name"] = selected["course_name"]
+
+
+    student_name = session.get("student_name")
+    if not student_name:
+        flash("Please register first before taking the quiz.", "warning")
+        return redirect(url_for("student_form"))
+
+    course_name = session.get("course_name")
+    if not course_name:
+        flash("Please choose a course before starting the quiz.", "warning")
+        return redirect(url_for("choose_course"))
+
+    
+    if "ai_quizzes" not in session:
+        quizzes = generate_quiz(course_name, num_questions=5)
+        if not quizzes:
+            flash("AI quiz could not be generated ❌ Try again later.", "danger")
+            return redirect(url_for("choose_course"))
+        session["ai_quizzes"] = quizzes
+        session["q_index"] = 0
+        session["answers"] = []
+        session["quiz_start_time"] = int(time.time())
+    else:
+        quizzes = session["ai_quizzes"]
+
+    total = len(quizzes)
+
+    
+    if request.method == "POST":
+        answer = request.form.get("choice", "")
+        if not answer:
+            flash("Please select an answer before proceeding.", "warning")
+            return redirect(url_for("ai_quiz_page"))
+
+        answers = session.get("answers", [])
+        answers.append(answer)
+        session["answers"] = answers
+
+        idx = session.get("q_index", 0)
+        current_quiz = quizzes[idx]
+        correct_letter = current_quiz["Answer"].upper()
+        correct_option = next((opt for opt in current_quiz["Option"] if opt[0].upper() == correct_letter), correct_letter)
+        selected_option = next((opt for opt in current_quiz["Option"] if opt[0].upper() == answer.upper()), answer)
+
+        session["last_feedback"] = {
+            "correct": answer.upper() == correct_letter,
+            "selected": selected_option,
+            "correct_option": correct_option
+        }
+
+        session["q_index"] = idx + 1
+
+        
+        if session["q_index"] >= total:
+            score = 0
+            attempted = sum(1 for a in answers if a)
+            for idx2, a in enumerate(answers):
+                if a and a.upper() == quizzes[idx2]["Answer"].upper():
+                    score += 1
+
+            start_time = session.get("quiz_start_time")
+            time_taken = 0
+            if start_time is not None:
+                time_taken = max(0, int(time.time() - start_time))
+
+            update_leaderboard(student_name, score, session.get("course_id"), time_taken)
+            session["quiz_last_completed"] = True
+            percentage = round(score / total * 100, 1)
+
+            if percentage >= 90:
+                grade = "A+"
+            elif percentage >= 75:
+                grade = "A"
+            elif percentage >= 60:
+                grade = "B"
+            elif percentage >= 40:
+                grade = "C"
+            else:
+                grade = "F"
+
+            flash(f"AI Quiz complete! {student_name} scored {score}/{total}.", "success")
+
+            
+            client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+            prompt = f"""
+                Student: {student_name}
+                Course: {course_name}
+                Score: {score}/{total}
+                Percentage: {percentage}%
+
+                plz provide study tip for student and short summary of student performance,it should not be more than 3 lines.
+            """
+            response = client.chat.completions.create(
+                model="llama-3.1-8b-instant",
+                messages=[{"role": "user", "content": prompt}]
+            )
+            ai_tip = response.choices[0].message.content
+
+            
+            session.pop("ai_quizzes", None)
+            session.pop("q_index", None)
+            session.pop("answers", None)
+            session.pop("quiz_start_time", None)
+            session.pop("last_feedback", None)
+
+            return render_template(
+                "quiz_result.html",
+                name=student_name,
+                score=score,
+                attempted=attempted,
+                total=total,
+                percentage=percentage,
+                grade=grade,
+                duration=time_taken,
+                leaderboard=get_ranked_leaderboard(),
+                ai_tip=ai_tip
+            )
+
+        return redirect(url_for("ai_quiz_page"))
+
+    
+    idx = session.get("q_index", 0)
+
+    quizzes = session.get("ai_quizzes", [])
+
+    if not quizzes:
+       flash("No quiz found.", "warning")
+       return redirect(url_for("choose_course"))
+
+    if idx >= len(quizzes):
+       idx = 0
+       session["q_index"] = 0
+    quiz = quizzes[idx]
+    feedback = session.pop("last_feedback", None)
+
+    return render_template(
+    "Quiz_page.html",
+    quiz=quiz,
+    idx=idx,
+    total=len(quizzes),
+    student_name=student_name,
+    course_name=course_name,
+    feedback=feedback
+)
+    
 
 
 
@@ -1072,40 +1354,89 @@ def delete_score_history(record_id):
     return redirect(url_for('score_history'))
 
 
+
 @app.route("/askhub", methods=["GET", "POST"])
 def askhub():
+
     if request.method == "POST":
-        user_message = request.form.get("message", "").strip().lower()
 
-        # 1. Exact match
-        result = AskHub.query.filter(AskHub.question.ilike(user_message)).first()
+        user_message = request.form.get("message", "").strip()
+
+        if not user_message:
+            return jsonify({"reply": "Please enter a question."})
+
+        # ----------------------------
+        # Exact Match
+        # ----------------------------
+        result = AskHub.query.filter(
+            AskHub.question.ilike(user_message)
+        ).first()
+
         if result:
-            bot_reply = result.answer
-            return render_template("askhub.html", reply=bot_reply)
+            return jsonify({
+                "reply": result.answer
+            })
 
-        # 2. Partial match (contains full phrase)
-        matches = AskHub.query.filter(AskHub.question.ilike(f"%{user_message}%")).all()
+        # ----------------------------
+        # Partial Match
+        # ----------------------------
+        matches = AskHub.query.filter(
+            AskHub.question.ilike(f"%{user_message}%")
+        ).all()
+
         if matches:
-            # choose the longest question (closest to full match)
-            best = max(matches, key=lambda m: len(m.question))
-            bot_reply = best.answer
-            return render_template("askhub.html", reply=bot_reply)
+            best = max(matches, key=lambda x: len(x.question))
 
-        # 3. Keyword match (split words and count overlap)
-        keywords = user_message.split()
-        keyword_matches = []
-        for kw in keywords:
-            keyword_matches += AskHub.query.filter(AskHub.question.ilike(f"%{kw}%")).all()
+            return jsonify({
+                "reply": best.answer
+            })
 
-        if keyword_matches:
-            # choose the question with most keyword overlap
-            best = max(keyword_matches, key=lambda m: sum(kw in m.question.lower() for kw in keywords))
-            bot_reply = best.answer
-            return render_template("askhub.html", reply=bot_reply)
+        # ----------------------------
+        # AI Answer
+        # ----------------------------
+        try:
 
-        # 4. Fallback
-        bot_reply = "Sorry, I don’t know this yet ❌. Please ask the admin to add it."
-        return render_template("askhub.html", reply=bot_reply)
+            client = Groq(
+                api_key=os.environ.get("GROQ_API_KEY")
+            )
+
+            response = client.chat.completions.create(
+
+                model="llama-3.1-8b-instant",
+
+                messages=[
+                    {
+                        "role":"system",
+                        "content":"""
+You are Study Quiz Hub AI Tutor.
+
+Answer in simple English.
+
+Keep answers within 8 lines.
+
+Explain programming questions with examples.
+"""
+                    },
+                    {
+                        "role":"user",
+                        "content":user_message
+                    }
+                ]
+            )
+
+            ai_reply = response.choices[0].message.content
+
+            return jsonify({
+                "reply": ai_reply
+            })
+
+        except Exception as e:
+
+            print(e)
+
+            return jsonify({
+                "reply":"Sorry, AI is currently unavailable."
+            })
 
     return render_template("askhub.html")
 
