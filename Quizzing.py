@@ -957,11 +957,11 @@ Do not return code block.
         print("\n================ RAW RESPONSE ================\n")
         print(text)
 
-        # Remove markdown
+        
         text = text.replace("```json", "")
         text = text.replace("```", "").strip()
 
-        # Extract JSON array
+    
         start = text.find("[")
         end = text.rfind("]")
 
@@ -1365,9 +1365,7 @@ def askhub():
         if not user_message:
             return jsonify({"reply": "Please enter a question."})
 
-        # ----------------------------
-        # Exact Match
-        # ----------------------------
+       
         result = AskHub.query.filter(
             AskHub.question.ilike(user_message)
         ).first()
@@ -1377,9 +1375,6 @@ def askhub():
                 "reply": result.answer
             })
 
-        # ----------------------------
-        # Partial Match
-        # ----------------------------
         matches = AskHub.query.filter(
             AskHub.question.ilike(f"%{user_message}%")
         ).all()
@@ -1391,9 +1386,7 @@ def askhub():
                 "reply": best.answer
             })
 
-        # ----------------------------
-        # AI Answer
-        # ----------------------------
+      
         try:
 
             client = Groq(
