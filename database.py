@@ -278,26 +278,26 @@ def search_students(keyword):
 
 from werkzeug.security import generate_password_hash
 def fix_passwords():
-conn = get_db_connection()
-students = conn.execute("SELECT id, password FROM students").fetchall()
+     conn = get_db_connection()
+     students = conn.execute("SELECT id, password FROM students").fetchall()
 
-for s in students:
-     pwd = s["password"]
-
-    
-     if not pwd:
-         continue
+     for s in students:
+              pwd = s["password"]
 
     
-     if pwd.startswith("pbkdf2:sha256") or pwd.startswith("scrypt:"):
-        continue
+              if not pwd:
+                continue
 
     
-     hashed = generate_password_hash(pwd)
-     conn.execute("UPDATE students SET password=? WHERE id=?", (hashed, s["id"]))
+              if pwd.startswith("pbkdf2:sha256") or pwd.startswith("scrypt:"):
+                 continue
 
-     conn.commit()
-     conn.close()
+    
+              hashed = generate_password_hash(pwd)
+              conn.execute("UPDATE students SET password=? WHERE id=?", (hashed, s["id"]))
+
+              conn.commit()
+              conn.close()  
 
 from flask_sqlalchemy import SQLAlchemy
 
