@@ -1,114 +1,562 @@
 {% extends "base1.html" %}
 {% block title %}About Us{% endblock %}
+
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>About Us - Study Quiz Hub</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body {
-      font-family: "Poppins", sans-serif;
-      background: linear-gradient(135deg, #ff9a9e, #fad0c4, #a6c1ee);
-      background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
-      color: #333;
-    }
-    @keyframes gradientBG {
-      0% {background-position: 0% 50%;}
-      50% {background-position: 100% 50%;}
-      100% {background-position: 0% 50%;}
-    }
-    .about-card {
-      max-width: 1000px;
-      margin: 60px auto;
-      background: linear-gradient(135deg, #fff9c4, #ffe082, #ffeb3b);
-      background-size: 200% 200%;
-      animation: oilish 10s ease infinite;
-      border-radius: 20px;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-      padding: 40px;
-    }
-    .profile-img {
-      width: 160px;
-      height: 160px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 5px solid #0d6efd;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    }
-    h2 {
-      color: #0d6efd;
-      font-weight: 700;
-    }
-    .info-section {
-      margin-top: 30px;
-    }
-    .info-section h4 {
-      color: #6610f2;
-      font-weight: 600;
-    }
-    footer {
-      background: #0d6efd;
-      color: #fff;
-      text-align: center;
-      padding: 20px 0;
-      margin-top: 40px;
-      border-radius: 0 0 20px 20px;
-    }
-    footer a {
-      color: #ffd700;
-      text-decoration: none;
-      margin: 0 10px;
-    }
-    footer a:hover {
-      text-decoration: underline;
-    }
-  </style>
-</head>
-<body>
 
-  <div class="about-card text-center">
-    <img src="https://tse4.mm.bing.net/th/id/OIP.kuUAFJGId5YLDrvoThaveAHaEK?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Dhanashri Dattarao Pole" class="profile-img mb-3">
-    <h2>ℹ️ About Us</h2>
-    <p class="lead">Welcome to <strong>Study Quiz Hub</strong> — your interactive learning companion.</p>
+<style>
 
-    <div class="info-section text-start">
-      <h4>📘 Introduction</h4>
-      <p>Study Quiz Hub is a vibrant learning platform designed to make studying engaging and effective. It offers interactive quizzes, detailed notes, leaderboards, and personalized profiles for learners worldwide.</p>
+body{
+    font-family:'Poppins',sans-serif;
+    background:linear-gradient(
+        -45deg,
+        #ff0080,
+        #7928ca,
+        #2b0b53,
+        #00c6ff,
+        #583102,
+        #ff512f,
+        #00dbde,
+        #fc00ff
+    );
+    background-size:800% 800%;
+    animation:rainbowBG 18s ease infinite;
+}
 
-      <h4>⚡ Key Features</h4>
-      <ul>
-        <li>Courses with structured notes and explanations</li>
-        <li>Interactive quizzes with instant feedback</li>
-        <li>Leaderboard system to motivate learners</li>
-        <li>Responsive design for all devices</li>
-      </ul>
+@keyframes rainbowBG{
+    0%{background-position:0% 50%;}
+    25%{background-position:100% 50%;}
+    50%{background-position:100% 100%;}
+    75%{background-position:0% 100%;}
+    100%{background-position:0% 50%;}
+}
 
-      <h4>👩‍💻 Founder</h4>
-      <p><strong>Dhanashri Dattarao Pole</strong> — passionate about building tools that make learning fun and accessible for everyone.</p>
+.about-container{
+    max-width:1200px;
+    margin:auto;
+    padding:50px 20px;
+}
 
-      <h4>📞 Contact Information</h4>
-      <p><strong>Email:</strong> dhanashri@example.com</p>
-      <p><strong>Phone:</strong> +91 9699809443</p>
-      <p><strong>Location:</strong> Maharashtra, India</p>
-    </div>
+/* Glass Card */
 
-    <footer>
-      <p>© 2026 Study Quiz Hub | Designed with ❤️ by Dhanashri Dattarao Pole</p>
-      <div>
-        <a href="https://www.linkedin.com/in/dhanashri-dattarao-pole">LinkedIn</a> | 
-        <a href="https://github.com/DhanashriPole/PYTHON-PROJECT">GitHub</a> | 
-        <a href="https://www.instagram.com/dhanashri_pole">Instagram</a>
-      </div>
-    </footer>
-  </div>
+.glass-card{
+    background:rgba(255,255,255,.12);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:30px;
+    box-shadow:0 20px 50px rgba(0,0,0,.35);
+    animation:
+        floating 4s ease-in-out infinite,
+        cardGlow 6s linear infinite;
+}
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+@keyframes floating{
 
+0%{
+transform:translateY(0px);
+}
+
+50%{
+transform:translateY(-10px);
+}
+
+100%{
+transform:translateY(0px);
+}
+
+}
+
+
+@keyframes cardGlow{
+
+0%{
+box-shadow:0 0 25px #00d4ff;
+}
+
+25%{
+box-shadow:0 0 35px #ff0080;
+}
+
+50%{
+box-shadow:0 0 35px #00ff88;
+}
+
+75%{
+box-shadow:0 0 35px #ffd700;
+}
+
+100%{
+box-shadow:0 0 25px #00d4ff;
+}
+
+}
+/* Profile */
+
+.profile-img{
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    object-fit:cover;
+    border:6px solid white;
+    box-shadow:0 0 25px #00d4ff;
+    transition:.5s;
+}
+
+.profile-img{
+
+width:180px;
+height:180px;
+border-radius:50%;
+border:6px solid transparent;
+
+background:
+linear-gradient(white,white) padding-box,
+
+linear-gradient(
+45deg,
+red,
+orange,
+yellow,
+green,
+cyan,
+blue,
+purple,
+red
+) border-box;
+
+
+
+}
+
+.profile-img:hover{
+
+transform:scale(1.1);
+}
+
+
+
+/* Heading */
+
+.main-title{
+
+font-size:50px;
+
+font-weight:bold;
+
+animation:titleColor 5s linear infinite;
+
+}
+
+@keyframes titleColor{
+
+0%{color:#ff0080;}
+
+20%{color:#00dbde;}
+
+40%{color:#00ff88;}
+
+60%{color:#ffd700;}
+
+80%{color:#ff5722;}
+
+100%{color:#ff0080;}
+
+}
+
+.subtitle{
+    color:#f8f9fa;
+    font-size:18px;
+}
+
+/* Cards */
+
+.feature-card{
+
+background:rgba(255,255,255,.12);
+
+backdrop-filter:blur(10px);
+
+border-radius:20px;
+
+color:white;
+
+box-shadow:0 10px 25px rgba(0,0,0,.25);
+
+transition:.5s;
+
+}
+
+.feature-card:hover{
+
+transform:translateY(-12px) scale(1.04);
+
+background:linear-gradient(
+135deg,
+#ff9a9e,
+#fad0c4,
+#fbc2eb,
+#a18cd1,
+#84fab0
+);
+
+
+
+}
+
+
+.feature-icon{
+    font-size:45px;
+}
+
+/* Statistics */
+
+.stat-card{
+
+animation:stats 8s infinite;
+
+}
+
+@keyframes stats{
+
+0%{
+background:#ff0080;
+}
+
+20%{
+background:#7928ca;
+}
+
+40%{
+background:#00c6ff;
+}
+
+60%{
+background:#00e676;
+}
+
+80%{
+background:#ff9800;
+}
+
+100%{
+background:#ff0080;
+}
+
+}
+.stat-card:hover{
+    transform:translateY(-8px);
+}
+
+.stat-number{
+    font-size:32px;
+    font-weight:bold;
+}
+
+/* Founder */
+
+.founder-box{
+    background: rgb(227, 221, 161);
+    color: #222;
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow: 0 15px 35px rgba(0,0,0,.2);
+}
+
+/* Founder ke andar sab text black */
+.founder-box p,
+.founder-box b,
+.founder-box span,
+.founder-box div,
+.founder-box h2,
+.founder-box a{
+    color:#222 !important;
+}
+
+/* Contact columns */
+.founder-box .col-md-4{
+    color:#222 !important;
+}
+
+/* Social */
+
+.social-btn a{
+
+background:linear-gradient(
+45deg,
+red,
+orange,
+yellow,
+green,
+cyan,
+blue,
+purple);
+
+background-size:500%;
+
+animation:buttonBG 4s linear infinite;
+
+color:white;
+
+font-weight:bold;
+
+}
+
+@keyframes buttonBG{
+
+100%{
+background-position:500%;
+}
+
+}
+
+.linkedin{
+    background:#0A66C2;
+}
+
+.github{
+    background:#24292e;
+}
+
+.instagram{
+    background:#E1306C;
+}
+
+.social-btn a:hover{
+    transform:translateY(-5px);
+}
+
+footer{
+    
+    color:white;
+
+    text-align:center;
+    margin-top:40px;
+}
+
+.founder-card{
+
+background:linear-gradient(
+135deg,
+#ff9a9e,
+#fad0c4,
+#fbc2eb,
+#a18cd1,
+#84fab0
+);
+
+color:white;
+}
+
+</style>
+
+<div class="about-container">
+
+<div class="glass-card p-5">
+
+<div class="row align-items-center">
+
+<div class="col-lg-4 text-center">
+
+<img src="static/uploads/WhatsApp_Image_2026-05-28_at_7.30.37_AM.jpeg"
+class="profile-img">
+
+</div>
+
+<div class="col-lg-8">
+
+<h1 class="main-title">Study Quiz Hub</h1>
+
+<p class="subtitle">
+
+An Interactive Learning Platform designed to help students learn smarter,
+practice quizzes, track performance and improve knowledge through AI-powered education.
+
+</p>
+
+</div>
+
+</div>
+
+<hr class="my-5">
+
+<!-- Statistics -->
+
+<div class="row text-center g-4">
+
+<div class="col-md-3">
+<div class="stat-card">
+<div class="stat-number">10+</div>
+Courses
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="stat-card">
+<div class="stat-number">100+</div>
+Quiz Questions
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="stat-card">
+<div class="stat-number">100%</div>
+Responsive
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="stat-card">
+<div class="stat-number">24/7</div>
+Available
+</div>
+</div>
+
+</div>
+
+<!-- Features -->
+
+<div class="mt-5">
+
+<h2 class="text-center text-white mb-4">🚀 Why Choose Study Quiz Hub?</h2>
+
+<div class="row g-4">
+
+<div class="col-md-3">
+
+<div class="feature-card p-4 text-center">
+
+<div class="feature-icon">📚</div>
+
+<h5>Study Notes</h5>
+
+<p>Easy-to-understand notes with important concepts.</p>
+
+</div>
+
+</div>
+
+<div class="col-md-3">
+
+<div class="feature-card p-4 text-center">
+
+<div class="feature-icon">📝</div>
+
+<h5>Interactive Quiz</h5>
+
+<p>Practice unlimited quizzes and improve learning.</p>
+
+</div>
+
+</div>
+
+<div class="col-md-3">
+
+<div class="feature-card p-4 text-center">
+
+<div class="feature-icon">🏆</div>
+
+<h5>Leaderboard</h5>
+
+<p>Compete with others and track your rank.</p>
+
+</div>
+
+</div>
+
+<div class="col-md-3">
+
+<div class="feature-card p-4 text-center">
+
+<div class="feature-icon">🤖</div>
+
+<h5>AI Learning</h5>
+
+<p>Smart explanations and AI-powered study help.</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Founder -->
+
+<div class="founder-box mt-5">
+
+<h2 class="text-center text-primary mb-4">👩‍💻 Founder</h2>
+
+<p>
+
+<b>Dhanashri Dattarao Pole</b> is a Computer Engineering student passionate
+about Education, Artificial Intelligence, Web Development and creating
+innovative learning platforms that make education fun and interactive.
+
+</p>
+
+<div class="row mt-4">
+
+<div class="col-md-4">
+
+<b>📧 Email</b>
+
+<br>
+
+dhanashri@example.com
+
+</div>
+
+<div class="col-md-4">
+
+<b>📱 Phone</b>
+
+<br>
+
++91 9699809443
+
+</div>
+
+<div class="col-md-4">
+
+<b>📍 Location</b>
+
+<br>
+
+Maharashtra, India
+
+</div>
+
+</div>
+
+<div class="text-center social-btn mt-4">
+
+<a class="linkedin" href="https://www.linkedin.com/in/dhanashri-dattarao-pole">LinkedIn</a>
+
+<a class="github" href="https://github.com/DhanashriPole/PYTHON-PROJECT">GitHub</a>
+
+<a class="instagram" href="https://www.instagram.com/dhanashri_pole">Instagram</a>
+
+</div>
+
+</div>
+
+<footer>
+
+<hr>
+
+<h5>❤️ Thank You for Visiting Study Quiz Hub ❤️</h5>
+
+<p>
+
+© 2026 Study Quiz Hub | Designed & Developed by
+<b>Dhanashri Dattarao Pole</b>
+
+</p>
+
+</footer>
+
+</div>
+
+</div>
 
 {% endblock %}

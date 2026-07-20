@@ -8,294 +8,282 @@
   <title>Study Quiz Hub - Foundation Notes</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    body { background: #f8f9fa; }
-    .notes-card {
-      background: #fffbea;
-      border-left: 5px solid #ff9800;
-      font-family: "Courier New", monospace;
-      white-space: pre-line;
-      line-height: 1.6;
-      padding: 15px;
-    }
-    .notes-card h6 {
-      font-weight: bold;
-      color: #d35400;
-      margin-bottom: 10px;
-    }
-    .btn-notes {
-      font-weight: bold;
-      font-size: 1rem;
-    }
+    body {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+}
+
+.page-title {
+    color: white;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.notes-card {
+    position: relative;
+    overflow: hidden;
+    border: none;
+    border-radius: 25px;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    transition: all 0.4s ease;
+    height: 100%;
+}
+
+.notes-card:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+.notes-card::before {
+    content: "";
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 50%;
+    top: -60px;
+    right: -60px;
+}
+
+.card-header-modern {
+    padding: 20px;
+    color: white;
+    font-size: 1.3rem;
+    font-weight: 700;
+    border: none;
+}
+
+.card-body {
+    color: white;
+    padding: 25px;
+}
+
+.subject-icon {
+    font-size: 2.8rem;
+    margin-bottom: 15px;
+}
+
+.btn-open {
+    border-radius: 50px;
+    padding: 10px 22px;
+    font-weight: 600;
+    background: white;
+    color: #0f172a;
+    border: none;
+}
+
+.btn-download {
+    border-radius: 50px;
+    padding: 10px 22px;
+    font-weight: 600;
+}
+
+.btn-open:hover,
+.btn-download:hover {
+    transform: scale(1.05);
+}
+
+.badge-modern {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    padding: 8px 14px;
+    border-radius: 20px;
+}
   </style>
 </head>
 <body>
 
-<div class="container py-4">
-  <h1 class="mb-4">📚 Study Quiz Hub - Foundation Notes</h1>
-  <p class="text-muted">Click on each subject to open detailed notes. These notes are written in a simple, handwritten style so every student can understand and build a strong foundation.</p>
+<div class="container py-5">
+  <h1 class="mb-4 text-center fw-bold text-white">📚 Study Quiz Hub - Foundation Notes</h1>
+  <p class=" text-center mb-5 text-white fs-5" >Choose a subject to open or download detailed notes. Designed with a modern, student-friendly UI.</p>
 
-  <!-- Python Basics -->
-  <div class="mb-3">
-    <button class="btn btn-info w-100 text-start btn-notes" data-bs-toggle="collapse" data-bs-target="#pythonNotes">
-      🐍 Python Basics
-    </button>
-    <div class="collapse mt-2" id="pythonNotes">
-      <div class="card card-body notes-card">
-        <h6>Python Basics</h6>
-        Python is a beginner-friendly programming language known for its simplicity and readability.  
-        Variables in Python do not need explicit type declarations; the interpreter assigns types dynamically.  
-        Common data types include integers, floats, strings, lists, tuples, dictionaries, and sets. Lists are mutable, meaning you can change their contents, while tuples are immutable.  
-        Functions are defined using the <code>def</code> keyword, and indentation is mandatory to define code blocks.  
-        Control flow is managed using <code>if</code>, <code>elif</code>, and <code>else</code> statements, along with loops like <code>for</code> and <code>while</code>.  
-        Python supports Object-Oriented Programming (OOP) with classes and objects, enabling concepts like inheritance and polymorphism.  
-        Error handling is done using <code>try</code> and <code>except</code> blocks.  
-        Popular libraries include NumPy for numerical operations, Pandas for data analysis, and Matplotlib for visualization.  
-        Python is widely used in web development, data science, machine learning, and automation.
-        Python's simplicity and versatility make it an excellent choice for both beginners and experienced developers.
-        Python's extensive standard library and active community contribute to its popularity and ease of use.
-        Python's syntax is simple and easy to learn, making it a great choice for beginners.
-        Syntax of python has a clear and readable structure, which enhances code maintainability and reduces the likelihood of errors.
-        flow control in python is managed using <code>if</code>, <code>elif</code>, and <code>else</code> statements, along with loops like <code>for</code> and <code>while</code>.  
+  <div class="row g-4">
+    <!-- Python Basics -->
+    <div class="col-md-6">
+      <div class="card notes-card">
+        <div class="card-header bg-gradient text-white" style="background: linear-gradient(135deg,#007bff,#00c6ff);">
+          🐍 Python Basics
+        </div>
+        <div class="card-body">
+          <p>Python is a beginner-friendly programming language known for its simplicity and readability...</p>
+          <div class="d-flex gap-3">
+            <a href="{{ url_for('static', filename='uploads/python_basics.pdf') }}" target="_blank" class="btn btn-primary btn-modern">📖 Open Notes</a>
+            <a href="{{ url_for('static', filename='uploads/python_basics.pdf') }}" download class="btn btn-success btn-modern">⬇️ Download Notes</a>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Web Development -->
+    <div class="col-md-6">
+      <div class="card notes-card">
+        <div class="card-header bg-gradient text-white" style="background: linear-gradient(135deg,#ff9800,#ffc107);">
+          🌐 Web Development
+        </div>
+        <div class="card-body">
+          <p>Learn HTML, CSS, and Flask basics to build interactive web apps...</p>
+          <div class="d-flex gap-3">
+            <a href="{{ url_for('static', filename='uploads/web_development.pdf') }}" target="_blank" class="btn btn-primary btn-modern">
+  📖 Open Notes
+</a>
+<a href="{{ url_for('static', filename='uploads/web_development.pdf') }}" download class="btn btn-success btn-modern">
+  ⬇️ Download Notes
+</a>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+ <div class="row g-4">
+    
+    <div class="col-md-6">
+      <div class="card notes-card">
+        <div class="card-header bg-gradient text-white" style="background: linear-gradient(135deg,#007bff,#00c6ff);">
+        🗃️  Database
+        </div>
+        <div class="card-body">
+          <p>Database management using MySQL.</p>
+          <div class="d-flex gap-3">
+            <a href="{{ url_for('static', filename='uploads/Database_basics.pdf') }}" target="_blank" class="btn btn-primary btn-modern">📖 Open Notes</a>
+            <a href="{{ url_for('static', filename='uploads/Database_basics.pdf') }}" download class="btn btn-success btn-modern">⬇️ Download Notes</a>
+
+          </div>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- Data Science -->
+    <div class="col-md-6">
+      <div class="card notes-card">
+        <div class="card-header bg-gradient text-white" style="background: linear-gradient(135deg,#28a745,#85e085);">
+          📊 Data Science
+        </div>
+        <div class="card-body">
+          <p>Analyze data using Python libraries like Pandas, NumPy, and visualize with Matplotlib...</p>
+          <div class="d-flex gap-3">
+            <a href="{{ url_for('static', filename='uploads/data_science.pdf') }}" target="_blank" class="btn btn-primary btn-modern">
+  📖 Open Notes
+</a>
+<a href="{{ url_for('static', filename='uploads/data_science.pdf') }}" download class="btn btn-success btn-modern">
+  ⬇️ Download Notes
+</a>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  
+
+ <div class="row g-4">
+    
+    <div class="col-md-6">
+      <div class="card notes-card">
+        <div class="card-header bg-gradient text-white" style="background: linear-gradient(135deg,#007bff,#00c6ff);">
+        ⚡JavaScript
+        </div>
+        <div class="card-body">
+          <p>Javascript is a dynamic programming language used for web development.</p>
+          <div class="d-flex gap-3">
+            <a href="{{ url_for('static', filename='uploads/JavaScript_basics.pdf') }}" target="_blank" class="btn btn-primary btn-modern">📖 Open Notes</a>
+            <a href="{{ url_for('static', filename='uploads/JavaScript_basics.pdf') }}" download class="btn btn-success btn-modern">⬇️ Download Notes</a>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="col-md-6">
+      <div class="card notes-card">
+        <div class="card-header bg-gradient text-white" style="background: linear-gradient(135deg,#007bff,#00c6ff);">
+         🎯 C programing
+        </div>
+        <div class="card-body">
+          <p>Learn the basics of C programming language.</p>
+          <div class="d-flex gap-3">
+            <a href="{{ url_for('static', filename='uploads/C_programing_basics.pdf') }}" target="_blank" class="btn btn-primary btn-modern">📖 Open Notes</a>
+            <a href="{{ url_for('static', filename='uploads/C_programing_basics.pdf') }}" download class="btn btn-success btn-modern">⬇️ Download Notes</a>
+
+          </div>
+        </div>
+      </div>
+    </div>
+ </div>
+ <div class="row g-4">
+    
+    <div class="col-md-6">
+      <div class="card notes-card">
+        <div class="card-header bg-gradient text-white" style="background: linear-gradient(135deg,#007bff,#00c6ff);">
+           �C++ programing
+        </div>
+        <div class="card-body">
+          <p>Learn the basics of C++ programming language.</p>
+          <div class="d-flex gap-3">
+            <a href="{{ url_for('static', filename='uploads/C++_programing_basics.pdf') }}" target="_blank" class="btn btn-primary btn-modern">📖 Open Notes</a>
+            <a href="{{ url_for('static', filename='uploads/C++_programing_basics.pdf') }}" download class="btn btn-success btn-modern">⬇️ Download Notes</a>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="col-md-6">
+      <div class="card notes-card">
+        <div class="card-header bg-gradient text-white" style="background: linear-gradient(135deg,#007bff,#00c6ff);">
+          ☕Java programing
+        </div>
+        <div class="card-body">
+          <p>Learn the basics of Java programming language.</p>
+          <div class="d-flex gap-3">
+            <a href="{{ url_for('static', filename='uploads/Java_programing_basics.pdf') }}" target="_blank" class="btn btn-primary btn-modern">📖 Open Notes</a>
+            <a href="{{ url_for('static', filename='uploads/Java_programing_basics.pdf') }}" download class="btn btn-success btn-modern">⬇️ Download Notes</a>
+
+          </div>
+        </div>
+      </div>
+    </div>
+ </div>
+ <div class="row g-4">
+   
+    <div class="col-md-6">
+      <div class="card notes-card">
+        <div class="card-header bg-gradient text-white" style="background: linear-gradient(135deg,#007bff,#00c6ff);">
+          📡 Data Communication
+        </div>
+        <div class="card-body">
+          <p>Learn about data communication and networking concepts.</p>
+          <div class="d-flex gap-3">
+            <a href="{{ url_for('static', filename='uploads/data_communication.pdf') }}" target="_blank" class="btn btn-primary btn-modern">📖 Open Notes</a>
+            <a href="{{ url_for('static', filename='uploads/data_communication.pdf') }}" download class="btn btn-success btn-modern">⬇️ Download Notes</a>
+        </div>
       </div>
     </div>
   </div>
-
-  <!-- Web Development -->
-  <div class="mb-3">
-    <button class="btn btn-success w-100 text-start btn-notes" data-bs-toggle="collapse" data-bs-target="#webNotes">
-      🌐 Web Development
-    </button>
-    <div class="collapse mt-2" id="webNotes">
-      <div class="card card-body notes-card">
-        <h6>Web Development</h6>
-        Web development is the process of building websites and web applications.  
-        HTML (HyperText Markup Language) provides the structure of a webpage. Tags like <code>&lt;h1&gt;</code> define headings, <code>&lt;p&gt;</code> defines paragraphs, <code>&lt;a&gt;</code> creates links, and <code>&lt;img&gt;</code> displays images.  
-        Forms allow user input using <code>&lt;form&gt;</code>, <code>&lt;input&gt;</code>, and <code>&lt;button&gt;</code>.  
-        CSS (Cascading Style Sheets) adds design and styling. The box model explains how margin, border, padding, and content interact. Flexbox and Grid are modern layout systems.  
-        Responsive design ensures webpages look good on all devices using media queries.  
-        JavaScript adds interactivity, handling events like clicks and manipulating the DOM (Document Object Model).  
-        Backend frameworks like Flask and Django (Python) handle server-side logic, routes, and templates.  
-        REST APIs allow communication between frontend and backend using HTTP methods (GET, POST, PUT, DELETE).  
-        Security practices include CSRF protection, XSS prevention, and HTTPS.  
-        Deployment involves servers like Gunicorn, reverse proxies like Nginx, and cloud hosting platforms such as AWS or Heroku.
-        Web development is a dynamic field that requires continuous learning and adaptability.
-        HTML, CSS, and JavaScript are the core technologies for web development, while frameworks like Django and Flask provide additional features.
-        Web development is a dynamic and ever-evolving field, and continuous learning and adaptability are essential for staying up-to-date and creating modern web applications.
-        Web development involves HTML, CSS, and JavaScript, while frameworks like Django and Flask provide additional features for building web applications.  
-      </div>
+<div class="col-md-6">
+  <div class="card notes-card">
+    <div class="card-header bg-gradient text-white" style="background: linear-gradient(135deg,#007bff,#00c6ff);">
+     🎨 CSS
+    </div>
+    <div class="card-body">
+      <p>Learn the basics of Cascading Style Sheets.</p>
+      <div class="d-flex gap-3">
+        <a href="{{ url_for('static', filename='uploads/CSS_basics.pdf') }}" target="_blank" class="btn btn-primary btn-modern">📖 Open Notes</a>
+        <a href="{{ url_for('static', filename='uploads/CSS_basics.pdf') }}" download class="btn btn-success btn-modern">⬇️ Download Notes</a>
     </div>
   </div>
+</div>
+</div>
+</div>
 
-  <!-- Data Science -->
-  <div class="mb-3">
-    <button class="btn btn-warning w-100 text-start btn-notes" data-bs-toggle="collapse" data-bs-target="#dsNotes">
-      📊 Data Science
-    </button>
-    <div class="collapse mt-2" id="dsNotes">
-      <div class="card card-body notes-card">
-        <h6>Data Science</h6>
-        Data Science is the field of extracting insights and knowledge from data.  
-        Pandas provides DataFrames and Series for handling tabular data.  
-        NumPy offers powerful array operations and mathematical functions.  
-        Visualization libraries like Matplotlib and Seaborn help create charts and plots for data analysis.  
-        Machine Learning (ML) is a core part of data science. Supervised learning includes regression (predicting numbers) and classification (predicting categories). Unsupervised learning includes clustering (grouping similar data).  
-        Models are evaluated using metrics such as accuracy, precision, recall, and F1 score. Confusion matrices and ROC curves provide deeper insights.  
-        Deep learning uses neural networks, with frameworks like TensorFlow and PyTorch.  
-        Applications of data science include Natural Language Processing (NLP), computer vision, recommendation systems, and predictive analytics.  
-      </div>
-    </div>
-  </div>
-
-  <!-- Database -->
-  <div class="mb-3">
-    <button class="btn btn-primary w-100 text-start btn-notes" data-bs-toggle="collapse" data-bs-target="#dbNotes">
-      🗄️ Database
-    </button>
-    <div class="collapse mt-2" id="dbNotes">
-      <div class="card card-body notes-card">
-        <h6>Database</h6>
-        A database is an organized collection of data.  
-        SQL (Structured Query Language) is used to interact with relational databases.  
-        Basic commands include SELECT (retrieve data), INSERT (add data), UPDATE (modify data), and DELETE (remove data).  
-        Primary keys uniquely identify records, while foreign keys establish relationships between tables.  
-        Joins (INNER, LEFT, RIGHT, FULL) combine data from multiple tables.  
-        Constraints like NOT NULL and UNIQUE enforce data integrity.  
-        Indexes speed up queries by optimizing data access.  
-        Transactions ensure reliability with COMMIT and ROLLBACK, following ACID properties.  
-        NoSQL databases like MongoDB store data in flexible formats.  
-        Database design involves ER diagrams and normalization to reduce redundancy.  
-      </div>
-    </div>
-  </div>
-
-  <!-- CSS -->
-  <div class="mb-3">
-    <button class="btn btn-secondary w-100 text-start btn-notes" data-bs-toggle="collapse" data-bs-target="#cssNotes">
-      🎨 CSS
-    </button>
-    <div class="collapse mt-2" id="cssNotes">
-      <div class="card card-body notes-card">
-        <h6>CSS</h6>
-        CSS (Cascading Style Sheets) controls the look and feel of webpages.  
-        Selectors target elements: element selectors, class selectors (<code>.classname</code>), and ID selectors (<code>#idname</code>).  
-        The box model explains spacing: margin, border, padding, and content.  
-        Display properties include block, inline, flex, and grid.  
-        Positioning options include static, relative, absolute, and fixed.  
-        Flexbox aligns items horizontally and vertically, while Grid organizes layouts in rows and columns.  
-        Responsive design uses media queries to adapt layouts for different devices.  
-        CSS animations and transitions create dynamic effects.  
-        Transform properties allow rotation, scaling, and translation.  
-        Shadows (<code>text-shadow</code>, <code>box-shadow</code>) add depth.  
-        CSS variables (<code>:root { --main-color: red; }</code>) enable reusable styles.  
-        Best practices include DRY (Don’t Repeat Yourself) and modular CSS for maintainability.  
-      </div>
-    </div>
-  </div>
-  <div class="mb-3">
-    <button class="btn btn-success w-100 text-start btn-notes" data-bs-toggle="collapse" data-bs-target="#jsNotes">
-      💻 JavaScript
-    </button>
-    <div class="collapse mt-2" id="jsNotes">
-      <div class="card card-body notes-card">
-        <h6>JavaScript</h6>
-        JavaScript is a versatile programming language primarily used for web development.  
-        It allows dynamic content updates, form validation, and interactive features on websites.  
-        Variables can be declared using <code>var</code>, <code>let</code>, or <code>const</code>.  
-        Functions can be defined traditionally or as arrow functions (<code>() => {}</code>).  
-        The Document Object Model (DOM) represents the structure of a webpage, allowing manipulation of elements.  
-        Event listeners respond to user actions like clicks, key presses, and mouse movements.  
-        Asynchronous programming uses callbacks, promises, and async/await for handling operations like API calls.  
-        ES6 introduced features like template literals, destructuring, and modules for better code organization.  
-        JavaScript frameworks (React, Angular, Vue) simplify building complex applications.  
-        Debugging tools in browsers help identify and fix issues in code.  
-      </div>
-    </div>
-  </div>
-  <div class="mb-3">
-    <button class="btn btn-danger w-100 text-start btn-notes" data-bs-toggle="collapse" data-bs-target="#dcNotes">
-      🌐 Data Communication
-    </button>
-    <div class="collapse mt-2" id="dcNotes">
-      <div class="card card-body notes-card">
-        <h6>Data Communication</h6>
-        Data communication involves the exchange of information between devices or systems.  
-        HTTP (Hypertext Transfer Protocol) is the foundation of data communication on the web.  
-        REST (Representational State Transfer) is a software architectural style for designing networked applications.  
-        APIs (Application Programming Interfaces) allow different software systems to communicate and share data.  
-        JSON (JavaScript Object Notation) is a lightweight format for storing and transmitting data.  
-        XML (eXtensible Markup Language) is another format for structuring and encoding data.  
-        WebSockets enable full-duplex communication between clients and servers in real-time applications.  
-        CORS (Cross-Origin Resource Sharing) controls how resources on a web page can be requested from another domain. 
-        WebSocket connections can be established using protocols like WebSocket.
-        OSI (Open Systems Interconnection) model defines seven layers for network communication: Physical, Data Link, Network, Transport, Session, Presentation, and Application.
-        TCP/IP (Transmission Control Protocol/Internet Protocol) is a suite of protocols used for data transmission over the internet.
-        DNS (Domain Name System) resolves domain names to IP addresses.
-        HTTP methods like GET, POST, PUT, and DELETE are used for different operations.
-        SMTP (Simple Mail Transfer Protocol) is used for sending emails, while IMAP and POP3 are used for retrieving emails.
-        FTP (File Transfer Protocol) allows file transfers over the internet.
-        Transmission errors can be detected and corrected using error detection and correction techniques like checksums and parity bits.
-        Network security protocols like TLS (Transport Layer Security) and SSL (Secure Sockets Layer) provide encryption and authentication for data transmission. 
-      </div>
-    </div>
-  </div>
-  <div class="mb-3">
-    <button class="btn btn-success w-100 text-start btn-notes" data-bs-toggle="collapse" data-bs-target="#cNotes">
-      💻 C Programming
-    </button>
-    <div class="collapse mt-2" id="cNotes">
-      <div class="card card-body notes-card">
-        <h6>C Programming</h6>
-        C is a general-purpose programming language.  
-        Variables in C are declared with a specific data type.  
-        Control structures like if-else and loops are used for decision making and repetition.  
-        Functions in C allow for code reusability and modularity.  
-        Pointers in C provide a way to directly manipulate memory addresses.  
-        Arrays in C are collections of elements of the same data type.  
-        Structures in C allow grouping of related data items under a single name.  
-        File handling in C enables reading from and writing to files.  
-        Standard I/O functions like <code>printf</code> and <code>scanf</code> are used for input and output.  
-        Memory management in C includes <code>malloc</code> and <code>free</code> for dynamic memory allocation.
-        C programming is a powerful and versatile language that can be used for a wide range of applications.
-        code>malloc</code> and <code>free</code> for dynamic memory allocation.
-      Data types in c are int, float, char, double, long, short, long double, and bool.
-      Data structures in c are arrays, linked lists, stacks, queues, trees, and graphs.
-      Functions in c are defined using the <code>void</code> keyword, and indentation is mandatory to define code blocks.
-      Control flow in c is managed using <code>if</code>, <code>else</code>, and <code>switch</code> statements, along with loops like <code>while</code> and <code>for</code>.
-      loops in c are for loop, while loop, and do-while loop.
-      C supports Object-Oriented Programming (OOP) with classes and objects, enabling concepts like inheritance and polymorphism.
-      Error handling in c is done using <code>try</code> and <code>catch</code> blocks.
-      Popular libraries in c include stdio.h for input/output operations, stdlib.h for memory allocation, and string.h for string manipulation.       
-
-
-      </div>
-    </div>
-  </div>
-  <div class="mb-3">
-    <button class="btn btn-warning w-100 text-start btn-notes" data-bs-toggle="collapse" data-bs-target="#cppNotes">
-    💻🅲++ PROGRAMING
-    </button>
-    <div class="collapse mt-2" id="cppNotes">
-      <div class="card card-body notes-card">
-       <h6>C++ Programming</h6>
-       C++ is a general-purpose programming language.  
-       Variables in C++ are declared with a specific data type.  
-       Control structures like if-else and loops are used for decision making and repetition.  
-       Functions in C++ allow for code reusability and modularity.  
-       Pointers in C++ provide a way to directly manipulate memory addresses.  
-       Arrays in C++ are collections of elements of the same data type.  
-       Classes in C++ represent objects with associated data members and member functions.  
-       Inheritance in C++ allows creating new classes based on existing classes.  
-       Templates in C++ enable creating generic code that can work with different data types.  
-       Standard I/O functions like <code>cout</code> and <code>cin</code> are used for input and output.  
-       Memory management in C++ includes <code>new</code> and <code>delete</code> for dynamic memory allocation.
-       C++ programming is a powerful and versatile language that can be used for a wide range of applications.  
-       code>new</code> and <code>delete</code> for dynamic memory allocation.
-       Data types in c++ are int, float, char, double, long, short, long double, and bool.
-       Data structures in c++ are arrays, linked lists, stacks, queues, trees, and graphs.  
-       Functions in c++ are defined using the <code>void</code> keyword, and indentation is mandatory to define code blocks.      
-        Control flow in c++ is managed using <code>if</code>, <code>else</code>, and <code>switch</code> statements, along with loops like <code>while</code> and <code>for</code>.
-        loops in c++ are for loop, while loop, and do-while loop.
-        C++ supports Object-Oriented Programming (OOP) with classes and objects, enabling concepts
-  like inheritance and polymorphism.
-        
-        Error handling in c++ is done using <code>try</code> and <code>catch</code> blocks.
-        Popular libraries in c++ include iostream for input/output operations, cstdlib for memory allocation, and string for string manipulation.  
-      </div>
-    </div>  
-  </div>
-  <div class="mb-3">
-    <button class="btn btn-danger w-100 text-start btn-notes" data-bs-toggle="collapse" data-bs-target="#javaNotes">
-    💻Java PROGRAMING 
-    </button>
-    <div class="collapse mt-2" id="javaNotes">
-      <div class="card card-body notes-card">
-       <h6>JAVA Programming</h6>
-       Java is a general-purpose programming language.  
-       Variables in Java are declared with a specific data type.  
-       Control structures like if-else and loops are used for decision making and repetition.  
-       Functions in Java allow for code reusability and modularity.  
-       Arrays in Java are collections of elements of the same data type.  
-       Classes in Java represent objects with associated data members and member functions.  
-       Inheritance in Java allows creating new classes based on existing classes.  
-       Interfaces in Java define a contract that classes can implement.  
-       Standard I/O functions like <code>System.out.println</code> are used for output.  
-       Memory management in Java is handled by the garbage collector, which automatically frees memory that is no longer in use.  
-       Java programming is a powerful and versatile language that can be used for a wide range of applications. 
-       Java supports Object-Oriented Programming (OOP) with classes and objects, enabling concepts like inheritance and polymorphism.
-       Error handling in Java is done using <code>try</code> and <code>catch</code> blocks.
-       Popular libraries in Java include java.util for data structures, java.io for input/output operations,  and java.net for networking.
-       Data types in java are int, float, char, double, long, short, long double, and bool.   
-       Data structures in java are arrays, linked lists, stacks, queues, trees, and graphs.
-  </div>
-  </div>
-  </div>
-
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
-``
-
-   
     {%endblock%}

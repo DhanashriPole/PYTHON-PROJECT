@@ -8,6 +8,10 @@ from groq import Groq
 
 from dotenv import load_dotenv   
 load_dotenv()
+import os
+from werkzeug.utils import secure_filename
+from flask_login import current_user
+
 
 
 from database import (
@@ -28,10 +32,19 @@ from database import (
     search_students,
     add_quiz_question,
     get_quiz_questions_by_course,
-    db, Students, Courses, Leaderboard, AskHub, QuizQuestion
+    db, Students, Courses, Leaderboard, AskHub, QuizQuestion, CodeWarsScore,CodeProblem
 )
 app = Flask(__name__, template_folder='Template')
 app.secret_key = secrets.token_bytes(24)
+
+UPLOAD_FOLDER = 'static/uploads'
+ALLowed_Extensions=['pdf','png','jpg','jpeg','gif']
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+os.makedirs(UPLOAD_FOLDER,exist_ok=True)
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.',1)[1].lower() in ALLowed_Extensions
+
+
 
 
 
@@ -48,15 +61,15 @@ init_db()
 
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
-from database import db, Students, Courses, Leaderboard
+from database import db, Students, Courses, Leaderboard, AskHub, QuizQuestion, CodeWarsScore,CodeProblem
 
 class AskHubModelView(ModelView):
     column_list = ['question', 'answer']
     form_columns = ['question', 'answer']
 
 class StudentModelView(ModelView):
-    column_list = ['name', 'email', 'age', 'grade', 'password', 'course_id']
-    form_columns = ['name', 'email', 'age', 'grade', 'password', 'course_id']
+    column_list = ['name', 'email', 'age', 'grade', 'password', 'course_id', 'role', 'photo']
+    form_columns = ['name', 'email', 'age', 'grade', 'password', 'course_id', 'role', 'photo']
 
     def on_model_change(self, form, model, is_created):
         from werkzeug.security import generate_password_hash
@@ -90,6 +103,7 @@ class LeaderboardModelView(ModelView):
 class QuizQuestionModelView(ModelView):
     column_list = ['course_name', 'concept', 'question', 'option_a', 'option_b', 'option_c', 'option_d', 'correct_option']
     form_columns = ['course_name', 'concept', 'question', 'option_a', 'option_b', 'option_c', 'option_d', 'correct_option']
+
 
 
 admin = Admin(app, name='Study Quiz Hub Admin')
@@ -788,11 +802,20 @@ def Quiz_page():
         feedback=feedback,
     )
 
+@app.route("/upload_pdf", methods=["POST"])
+def upload_pdf():
+    pdf_file = request.files["pdf_file"]
+    if pdf_file:
+        save_path = os.path.join("static/uploads", pdf_file.filename)
+        pdf_file.save(save_path)
+        return f"✅ PDF uploaded successfully: {pdf_file.filename}"
+    return "❌ Upload failed"
 
 @app.route("/Information")
 def Study_quiz_hub():
-    
-    return render_template("Study_quiz_hub.html")
+    pdfs = os.listdir("static/uploads")
+    return render_template("Study_quiz_hub.html", pdfs=pdfs)
+
 
 
 
@@ -802,69 +825,79 @@ def student_form():
     courses = get_courses()
 
     if request.method == 'POST':
-        name = request.form.get('name', '').strip()
-        email = request.form.get('email', '').strip()
-        age = request.form.get('age', '').strip()
-        grade = request.form.get('grade', '').strip()
-        password = request.form.get('password', '').strip()
-        confirm_password = request.form.get('confirm_password', '').strip()
-        course_id = request.form.get('course_id')
-        course_name = None
+                name = request.form.get('name', '').strip()
+                email = request.form.get('email', '').strip()
+                age = request.form.get('age', '').strip()
+                grade = request.form.get('grade', '').strip()
+                password = request.form.get('password', '').strip()
+                confirm_password = request.form.get('confirm_password', '').strip()
+                course_id = request.form.get('course_id')
+                photo = request.files.get("photo")
+                filename = "default.png"
 
-        if not name:
-            flash('Student name is required.', 'danger')
-            return render_template('student_form.html', courses=courses, form_data=request.form)
+                if photo and photo.filename != "":
+                   if allowed_file(photo.filename):
+                      filename = secure_filename(photo.filename)
+                      photo.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+                   else:
+                      flash("Invalid image.", "danger")
+                      return render_template('student_form.html', courses=courses, form_data=request.form)
+                course_name = None
+
+                if not name:
+                   flash('Student name is required.', 'danger')
+                   return render_template('student_form.html', courses=courses, form_data=request.form)
 
         
-        if age and not age.isdigit():
-            flash('Please enter a valid age.', 'warning')
-            return render_template('student_form.html', courses=courses, form_data=request.form)
+                if age and not age.isdigit():
+                    flash('Please enter a valid age.', 'warning')
+                    return render_template('student_form.html', courses=courses, form_data=request.form)
 
-        age_value = int(age) if age.isdigit() else None
+                age_value = int(age) if age.isdigit() else None
 
         
        
-        conn = get_db_connection()
-        existing = conn.execute("SELECT * FROM students WHERE email=?", (email,)).fetchone()
+                conn = get_db_connection()
+                existing = conn.execute("SELECT * FROM students WHERE email=?", (email,)).fetchone()
 
-        if existing:
-            flash("Email already registered ❌ Please login instead.", "warning")
-            conn.close()
-            return redirect(url_for("login"))
+                if existing:
+                     flash("Email already registered ❌ Please login instead.", "warning")
+                     conn.close()
+                     return redirect(url_for("login"))
 
-        from werkzeug.security import generate_password_hash
-        hashed_password = generate_password_hash(password)
-
-        
-        conn.execute(
-            "INSERT INTO students (name, email, age, grade, password, course_id, role) VALUES (?, ?, ?, ?, ?, ?, ?)",
-            (name, email, age_value, grade, hashed_password, course_id, "student")
-        )
-        conn.commit()
-        conn.close()
+                from werkzeug.security import generate_password_hash
+                hashed_password = generate_password_hash(password)
 
         
-        session["student_name"] = name
-        session["email"] = email
-        session["role"] = "student"
+                conn.execute(
+                 "INSERT INTO students (name, email, age, grade, password, course_id, role, photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                  (name, email, age_value, grade, hashed_password, course_id, "student",filename),
+                 )
+                conn.commit()
+                conn.close()
 
-        if course_id:
-            selected = get_course_by_id(course_id)
-            if selected:
-                course_name = selected["course_name"]
-                session["course_id"] = course_id
-                session["course_name"] = course_name
-            else:
-                session["course_id"] = None
-                session["course_name"] = None
-        else:
-            session["course_id"] = None
-            session["course_name"] = None
-
-        flash('Student registered successfully ✅', 'success')
         
-        return render_template(
-            'student_submitted.html',
+                session["student_name"] = name
+                session["email"] = email
+                session["role"] = "student"
+
+                if course_id:
+                   selected = get_course_by_id(course_id)
+                   if selected:
+                        course_name = selected["course_name"]
+                        session["course_id"] = course_id
+                        session["course_name"] = course_name
+                   else:
+                      session["course_id"] = None
+                      session["course_name"] = None
+                else:
+                     session["course_id"] = None
+                     session["course_name"] = None
+
+                     flash('Student registered successfully ✅', 'success')
+        
+                return render_template(
+                    'student_submitted.html',
             name=name,
             email=email,
             age=age,
@@ -873,6 +906,8 @@ def student_form():
         )
 
     return render_template("student_form.html", courses=courses)
+
+
 
 
 @app.route('/choose_course', methods=['GET', 'POST'])
@@ -1450,7 +1485,6 @@ def askhub_add():
         return redirect(url_for("askhub_add"))
 
     return render_template("askhub_add.html")
-
 
 
 
