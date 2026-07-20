@@ -17,6 +17,7 @@ from database import (
     get_db_connection,
     init_db,
     get_courses,
+    fix_passwords,
     get_students_with_courses,
     get_course_by_id,
     insert_student,

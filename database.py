@@ -277,7 +277,7 @@ def search_students(keyword):
 
 
 from werkzeug.security import generate_password_hash
-
+def fix_passwords():
 conn = get_db_connection()
 students = conn.execute("SELECT id, password FROM students").fetchall()
 
