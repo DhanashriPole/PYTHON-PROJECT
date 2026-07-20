@@ -10,7 +10,6 @@ from dotenv import load_dotenv
 load_dotenv()
 import os
 from werkzeug.utils import secure_filename
-from flask_login import current_user
 
 
 
