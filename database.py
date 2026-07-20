@@ -5,7 +5,7 @@ import sqlite3
 
 database_file = os.environ.get(
     "DATABASE_FILE",
-    os.path.join(os.path.dirname(__file__), "quiz.db"),
+    os.path.join(os.path.dirname(__file__), "quiz_backup.db")
 )
 
 
@@ -282,22 +282,22 @@ conn = get_db_connection()
 students = conn.execute("SELECT id, password FROM students").fetchall()
 
 for s in students:
-    pwd = s["password"]
+     pwd = s["password"]
 
     
-    if not pwd:
+     if not pwd:
+         continue
+
+    
+     if pwd.startswith("pbkdf2:sha256") or pwd.startswith("scrypt:"):
         continue
 
     
-    if pwd.startswith("pbkdf2:sha256") or pwd.startswith("scrypt:"):
-        continue
+     hashed = generate_password_hash(pwd)
+     conn.execute("UPDATE students SET password=? WHERE id=?", (hashed, s["id"]))
 
-    
-    hashed = generate_password_hash(pwd)
-    conn.execute("UPDATE students SET password=? WHERE id=?", (hashed, s["id"]))
-
-conn.commit()
-conn.close()
+     conn.commit()
+     conn.close()
 
 from flask_sqlalchemy import SQLAlchemy
 
@@ -344,23 +344,7 @@ class QuizQuestion(db.Model):
     option_d = db.Column(db.String(200), nullable=False)
     correct_option = db.Column(db.String(10), nullable=False)
 
-class CodeProblem(db.Model):
-    __tablename__ = 'code_problems'
-    id = db.Column(db.Integer, primary_key=True)
-    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
-    title = db.Column(db.String(200))
-    description = db.Column(db.Text)
-    ai_hint = db.Column(db.Text)
-    test_input = db.Column(db.Text)
-    expected_output = db.Column(db.Text)
-    function_signature = db.Column(db.String(200))
 
-class CodeWarsScore(db.Model):
-    __tablename__ = 'code_wars_score'
-    id = db.Column(db.Integer, primary_key=True)
-    student_id = db.Column(db.Integer, db.ForeignKey('students.id'))   # ✅ link to Students
-    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
-    score = db.Column(db.Integer, default=0)
 
 
 def add_quiz_question(course_name, question, options, correct_option, concept=None):

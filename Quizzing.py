@@ -31,7 +31,7 @@ from database import (
     search_students,
     add_quiz_question,
     get_quiz_questions_by_course,
-    db, Students, Courses, Leaderboard, AskHub, QuizQuestion, CodeWarsScore,CodeProblem
+    db, Students, Courses, Leaderboard, AskHub, QuizQuestion
 )
 app = Flask(__name__, template_folder='Template')
 app.secret_key = secrets.token_bytes(24)
@@ -47,7 +47,7 @@ def allowed_file(filename):
 
 
 
-db_path = os.path.join(os.path.dirname(__file__), "quiz.db")
+db_path = os.path.join(os.path.dirname(__file__), "quiz_backup.db")
 
 app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{db_path}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -60,8 +60,7 @@ init_db()
 
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
-from database import db, Students, Courses, Leaderboard, AskHub, QuizQuestion, CodeWarsScore,CodeProblem
-
+from database import db, Students, Courses, Leaderboard, AskHub, QuizQuestion
 class AskHubModelView(ModelView):
     column_list = ['question', 'answer']
     form_columns = ['question', 'answer']
