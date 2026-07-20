@@ -80,7 +80,7 @@
 
         <div class="card-body p-4">
 
-            <form method="POST" action="/student">
+            <form method="POST" action="/student" enctype="multipart/form-data">
 
                 <div class="form-floating mb-3">
                     <input type="text"
@@ -171,8 +171,19 @@
                         Class / Grade
                     </label>
                 </div>
+               <div class="mb-3">
+    <label for="photo" class="form-label">
+        <i class="bi bi-image-fill me-2"></i>
+        Profile Photo
+    </label>
 
-                
+    <input
+        type="file"
+        class="form-control"
+        id="photo"
+        name="photo"
+        accept=".jpg,.jpeg,.png">
+</div>
 
                 <button class="btn btn-success btn-register w-100">
                     <i class="bi bi-person-check-fill me-2"></i>

@@ -61,6 +61,19 @@ def init_db():
         conn.execute("ALTER TABLE students ADD COLUMN course_id INTEGER")
         conn.commit()
 
+    if not any(col[1] == 'role' for col in column_info):
+        conn.execute("ALTER TABLE students ADD COLUMN role TEXT DEFAULT 'student'")
+        conn.commit()
+
+    column_info = conn.execute("PRAGMA table_info(students)").fetchall()
+    if not any(col[1] == 'photo' for col in column_info):
+        conn.execute("ALTER TABLE students ADD COLUMN photo TEXT")
+    conn.commit()
+    
+
+
+    
+
     leaderboard_info = conn.execute("PRAGMA table_info(leaderboard)").fetchall()
     if not any(col[1] == 'time_taken' for col in leaderboard_info):
         conn.execute("ALTER TABLE leaderboard ADD COLUMN time_taken INTEGER DEFAULT 0")
@@ -90,7 +103,7 @@ def get_students_with_courses():
     conn = get_db_connection()
     students = conn.execute(
         """
-        SELECT students.id, students.name, students.email, students.age, students.grade,
+        SELECT students.id, students.name, students.email, students.age, students.grade,students.role,students.photo,
                courses.course_name
         FROM students
         LEFT JOIN courses ON students.course_id = courses.id
@@ -105,7 +118,7 @@ def get_student_by_id(student_id):
     conn = get_db_connection()
     student = conn.execute(
         """
-        SELECT students.id, students.name, students.email, students.age, students.grade,
+        SELECT students.id, students.name, students.email, students.age, students.grade,students.photo,
                courses.course_name
         FROM students
         LEFT JOIN courses ON students.course_id = courses.id
@@ -128,12 +141,12 @@ def get_course_by_id(course_id):
 
 from werkzeug.security import generate_password_hash
 
-def insert_student(name, email, age_value, grade, password, course_id=None):
+def insert_student(name, email, age_value, grade, password, course_id=None, photo=None):
     conn = get_db_connection()
     hashed_password = generate_password_hash(password)
     conn.execute(
-        """INSERT INTO students (name, email, age, grade, password, course_id) VALUES (?, ?, ?, ?, ?, ?)""",
-        (name, email, age_value, grade, hashed_password, course_id if course_id else None),
+        """INSERT INTO students (name, email, age, grade, password, course_id, role, photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+        (name, email, age_value, grade, hashed_password, course_id if course_id else None, 'student', photo),
     )
     conn.commit()
     conn.close()
@@ -158,8 +171,9 @@ def insert_leaderboard(student_name, score, course_id=None, time_taken=0):
 def get_top_leaderboard(limit=5):
     conn = get_db_connection()
     rows = conn.execute(
-        "SELECT l.student_name AS name, l.score, l.time_taken "
+        "SELECT l.student_name AS name, l.score, l.time_taken,s.photo "
         "FROM leaderboard l "
+        "LEFT JOIN students s ON l.student_name = s.name "
         "JOIN (SELECT student_name, MAX(created_at) AS latest_created "
         "FROM leaderboard GROUP BY student_name) m "
         "ON l.student_name = m.student_name AND l.created_at = m.latest_created "
@@ -298,6 +312,8 @@ class Students(db.Model):
     grade = db.Column(db.String(10))
     password = db.Column(db.String(200))
     course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
+    role = db.Column(db.String(10))
+    photo = db.Column(db.String(200))
 
 class Courses(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -327,6 +343,24 @@ class QuizQuestion(db.Model):
     option_c = db.Column(db.String(200), nullable=False)
     option_d = db.Column(db.String(200), nullable=False)
     correct_option = db.Column(db.String(10), nullable=False)
+
+class CodeProblem(db.Model):
+    __tablename__ = 'code_problems'
+    id = db.Column(db.Integer, primary_key=True)
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
+    title = db.Column(db.String(200))
+    description = db.Column(db.Text)
+    ai_hint = db.Column(db.Text)
+    test_input = db.Column(db.Text)
+    expected_output = db.Column(db.Text)
+    function_signature = db.Column(db.String(200))
+
+class CodeWarsScore(db.Model):
+    __tablename__ = 'code_wars_score'
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey('students.id'))   # ✅ link to Students
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
+    score = db.Column(db.Integer, default=0)
 
 
 def add_quiz_question(course_name, question, options, correct_option, concept=None):
