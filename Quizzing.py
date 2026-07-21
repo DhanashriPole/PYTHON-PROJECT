@@ -37,10 +37,14 @@ from database import (
 app = Flask(__name__, template_folder='Template')
 app.secret_key = secrets.token_bytes(24)
 
-UPLOAD_FOLDER = 'static/uploads'
+
+UPLOAD_FOLDER = os.path.join(app.root_path, "static", "uploads")
 ALLowed_Extensions=['pdf','png','jpg','jpeg','gif']
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-os.makedirs(UPLOAD_FOLDER,exist_ok=True)
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+
+os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
+
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.',1)[1].lower() in ALLowed_Extensions
 
@@ -836,8 +840,15 @@ def student_form():
 
                 if photo and photo.filename != "":
                    if allowed_file(photo.filename):
-                      filename = secure_filename(photo.filename)
-                      photo.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+                      filename = f"{int(time.time())}_{secure_filename(photo.filename)}"
+                      
+
+                      
+                      save_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+                      
+                      photo.save(save_path)
+                      
+
                    else:
                       flash("Invalid image.", "danger")
                       return render_template('student_form.html', courses=courses, form_data=request.form)
