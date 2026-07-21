@@ -298,6 +298,7 @@ def fix_passwords():
 
               conn.commit()
               conn.close()  
+              
 
 from flask_sqlalchemy import SQLAlchemy
 
