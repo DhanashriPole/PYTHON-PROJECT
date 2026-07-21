@@ -12,14 +12,14 @@
     background: linear-gradient(
         -45deg,
         #0f172a,
-        #1e1b4b,
-        #312e81,
-        #0f766e,
+        #430c90,
+        #1f1c6f,
+        #760f22,
         #14532d,
         #7c2d12,
         #3f0d4d,
-        #111827,
-        #0f172a
+        #c63e10,
+        #722789
     );
 
     background-size:500% 500%;
@@ -120,10 +120,10 @@ text-shadow:1px 1px 8px rgba(0,0,0,.4);
 
 background:linear-gradient(
 90deg,
-#0ea5e9,
-#2563eb,
-#7c3aed,
-#db2777);
+#a7e90e,
+#ebe825,
+#eded3a,
+#dbb727);
 
 background-size:300%;
 
@@ -153,23 +153,39 @@ background-position:300%;
  Cards
 ============================ */
 
-.stat-card,
+/* Stats Cards */
+.stat-card{
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(15px);
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,.35);
+
+    height:190px;
+    width:100%;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    transition:.3s;
+}
 .feature-card{
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(15px);
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:20px;
+    
+    min-height:240px;
 
-background:rgba(255,255,255,.08);
-
-backdrop-filter:blur(15px);
-
-border:1px solid rgba(255,255,255,.15);
-
-color:white;
-
-border-radius:20px;
-
-box-shadow:0 10px 25px rgba(0,0,0,.4);
-
-transition:.4s;
-
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+.feature-card p{
+    color:white !important;
 }
 
 .stat-card:hover,
@@ -182,7 +198,12 @@ background:rgba(255,255,255,.15);
 box-shadow:0 0 25px rgba(0,255,255,.35);
 
 }
-
+.row.equal-height{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;   /* Center cards */
+    align-items:stretch;
+}
 
 /* ============================
  Card Glow
@@ -211,12 +232,12 @@ box-shadow:0 0 25px rgba(0,255,255,.35);
 
 .emoji-big,
 .emoji-big-large{
-
-display:inline-block;
-
-animation:floatEmoji 3s ease-in-out infinite;
-
+    font-size:3rem;
+    margin-bottom:8px;   /* pehle 10px tha */
 }
+
+
+
 
 .emoji-big{
 
@@ -253,21 +274,18 @@ transform:translateY(-10px);
  Card Text
 ============================ */
 
-.stat-card h4,
-.feature-card h3{
-
-font-weight:700;
-
-color:white;
-
+.stat-card h4{
+    margin:0;
+    font-size:2.2rem;
+    font-weight:700;
+}
+.stat-card p{
+    margin-top:8px;
+    margin-bottom:0;
+    min-height:auto;
+  
 }
 
-.stat-card p,
-.feature-card p{
-
-color:#f5f5f5 !important;
-
-}
 
 
 /* ============================
@@ -295,25 +313,10 @@ margin-bottom:12px;
 
 }
 
-.emoji-big{
 
-font-size:3rem;
 
 }
 
-.emoji-big-large{
-
-font-size:2.5rem;
-
-}
-
-}
-.row.equal-height {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: stretch;
-}
 </style>
 
 <div class="hero-section text-center shadow-lg">
@@ -343,24 +346,24 @@ font-size:2.5rem;
         <div class="col-md-3">
             <div class="card stat-card text-center p-2">
                 <span class="emoji-big-large">👨‍🎓</span>
-                <h4>{{ total_students }}</h4>
-                <p class="mb-0">Students</p>
+                <h4 class="text-white">{{ total_students }}</h4>
+                <p class="mb-0 text-white">Students</p>
             </div>
         </div>
 
         <div class="col-md-3">
             <div class="card stat-card text-center p-2">
                 <span class="emoji-big-large">📊</span>
-                <h4>{{ total_attempts }}</h4>
-                <p class="mb-0">Quiz Attempts</p>
+                <h4 class="text-white">{{ total_attempts }}</h4>
+                <p class="mb-0 text-white">Quiz Attempts</p>
             </div>
         </div>
 
         <div class="col-md-3">
             <div class="card stat-card text-center p-2">
                 <span class="emoji-big-large">📘</span>
-                <h4>{{ total_courses }}</h4>
-                <p class="mb-0">Courses</p>
+                <h4 class="text-white">{{ total_courses }}</h4>
+                <p class="mb-0 text-white">Courses</p>
             </div>
         </div>
 
@@ -370,26 +373,26 @@ font-size:2.5rem;
     <div class="row equal-height mt-4 g-3">
 
         <div class="col-md-4">
-            <div class="card feature-card text-center p-3">
+            <div class="card feature-card text-center p-3 w-100">
                 <span class="emoji-big-large">💡</span>
-                <h3 class="mt-3">About</h3>
+                <h3 class="mt-3 text-white">About</h3>
                 <p class="text-muted">📖 Structured MCQ quizzes for better learning experience.</p>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card feature-card text-center p-3">
+            <div class="card feature-card text-center p-3 w-100">
                 <span class="emoji-big-large">📚</span>
-                <h3 class="mt-3">Learn</h3>
+                <h3 class="mt-3 text-white">Learn</h3>
                 <p class="text-muted">🧠 Practice and improve with instant feedback system.</p>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card feature-card text-center p-3">
+             <div class="card feature-card h-100 text-center p-3 w-100">
                 <span class="emoji-big-large">🏆</span>
-                <h3 class="mt-3">Leaderboard</h3>
-                <p class="text-muted">⚡ Compete and track your ranking live.</p>
+                <h3 class="mt-3 text-white">Leaderboard</h3>
+                <p class="text-muted">⚡ Compete with others and track your ranking live.</p>
             </div>
         </div>
 
