@@ -91,47 +91,22 @@ box-shadow:0 0 25px #00d4ff;
 }
 /* Profile */
 
-.profile-img{
+.about-profile-img{
     width:180px;
     height:180px;
-    border-radius:50%;
     object-fit:cover;
-    border:6px solid white;
-    box-shadow:0 0 25px #00d4ff;
-    transition:.5s;
+    border-radius:50%;
+    border:6px solid transparent;
+    background:
+        linear-gradient(white,white) padding-box,
+        linear-gradient(45deg,red,orange,yellow,green,cyan,blue,purple,red) border-box;
+    display:block;
+    margin:auto;
 }
 
-.profile-img{
-
-width:180px;
-height:180px;
-border-radius:50%;
-border:6px solid transparent;
-
-background:
-linear-gradient(white,white) padding-box,
-
-linear-gradient(
-45deg,
-red,
-orange,
-yellow,
-green,
-cyan,
-blue,
-purple,
-red
-) border-box;
-
-
-
+.about-profile-img:hover{
+    transform:scale(1.1);
 }
-
-.profile-img:hover{
-
-transform:scale(1.1);
-}
-
 
 
 /* Heading */
@@ -357,7 +332,7 @@ color:white;
 <div class="col-lg-4 text-center">
 
 <img src="static/uploads/WhatsApp_Image_2026-05-28_at_7.30.37_AM.jpeg"
-class="profile-img">
+class="about-profile-img">
 
 </div>
 
