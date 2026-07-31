@@ -259,6 +259,72 @@ color:white;
 color:#38bdf8;
 
 }
+/* ===== Profile Navbar ===== */
+
+.profile-nav{
+    padding:4px 10px !important;
+    border-radius:50px;
+    transition:.3s;
+}
+
+.profile-nav:hover{
+    background:rgba(255,255,255,.08);
+}
+
+.profile-img{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid #22d3ee;
+    transition:.3s;
+}
+
+.profile-img:hover{
+    transform:scale(1.08);
+    box-shadow:0 0 15px #22d3ee;
+}
+
+.profile-info{
+    display:flex;
+    flex-direction:column;
+    line-height:1.1;
+}
+
+.profile-name{
+    color:#fff;
+    font-weight:600;
+    font-size:14px;
+}
+
+.dropdown-menu{
+    min-width:220px;
+}
+
+.dropdown-item{
+    padding:10px 15px;
+    font-weight:500;
+}
+
+.dropdown-item:hover{
+    background:#0d6efd;
+    color:white;
+}
+
+/* Mobile */
+
+@media(max-width:992px){
+
+.profile-info{
+    display:none;
+}
+
+.profile-img{
+    width:38px;
+    height:38px;
+}
+
+}
     </style>
 </head>
 
@@ -298,12 +364,61 @@ color:#38bdf8;
                 <a class="nav-link" href="/students">👨‍🎓 Students</a>
 
                 {% if session.get('student_name') %}
-                    <span class="nav-link">👤 {{ session['student_name'] }}</span>
-                    <a class="nav-link" href="{{ url_for('logout') }}">🚪 Logout</a>
-                {% else %}
-                    <a class="nav-link" href="{{ url_for('login') }}">🔑 Login</a>
-                {% endif %}
 
+<li class="nav-item dropdown ms-2">
+
+    <a class="nav-link dropdown-toggle d-flex align-items-center profile-nav"
+       href="#"
+       id="profileDropdown"
+       role="button"
+       data-bs-toggle="dropdown"
+       aria-expanded="false">
+
+        <img src="{% if session.get('student_photo') %}
+                    {{ url_for('static', filename='uploads/' ~ session['student_photo']) }}
+                  {% else %}
+                    {{ url_for('static', filename='uploads/default.png') }}
+                  {% endif %}"
+             class="profile-img">
+
+        <div class="profile-info ms-2">
+            <span class="profile-name">{{ session['student_name'] }}</span>
+            <small class="text-light">Student</small>
+        </div>
+
+    </a>
+
+    <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4">
+
+        <li>
+            <a class="dropdown-item"
+               href="{{ url_for('view_student', student_id=session['student_id']) }}">
+                👤 My Profile
+            </a>
+        </li>
+
+        <li><hr class="dropdown-divider"></li>
+
+        <li>
+            <a class="dropdown-item text-danger"
+               href="{{ url_for('logout') }}">
+                🚪 Logout
+            </a>
+        </li>
+
+    </ul>
+
+</li>
+
+{% else %}
+
+<li class="nav-item">
+    <a class="nav-link fw-bold" href="{{ url_for('login') }}">
+        🔑 Login
+    </a>
+</li>
+
+{% endif %}
                 <a class="nav-link" href="/Information"> 📒Notes</a>
                 <a class="nav-link" href="/About_us">ℹ️ About</a>
             </div>
