@@ -556,6 +556,7 @@ def search_suggestions():
 
     return jsonify(results)
 
+from math import ceil
 
 @app.route('/filter')
 def filter_students():
@@ -564,11 +565,27 @@ def filter_students():
     grade = request.args.get('grade')
     age = request.args.get('age')
 
+    page = request.args.get('page', 1, type=int)
+    per_page = 10
+    offset = (page - 1) * per_page
+
     conn = get_db_connection()
 
+    # --------------------------
+    # Base Query
+    # --------------------------
     query = """
-        SELECT students.*,
-               courses.course_name
+        SELECT DISTINCT
+            students.*,
+            courses.course_name
+        FROM students
+        LEFT JOIN courses
+        ON students.course_id = courses.id
+        WHERE 1=1
+    """
+
+    count_query = """
+        SELECT COUNT(DISTINCT students.id)
         FROM students
         LEFT JOIN courses
         ON students.course_id = courses.id
@@ -576,54 +593,81 @@ def filter_students():
     """
 
     params = []
+    count_params = []
 
+    # --------------------------
+    # Filters
+    # --------------------------
     if course_id:
-        query += " AND students.course_id = ?"
+        query += " AND students.course_id=?"
+        count_query += " AND students.course_id=?"
         params.append(course_id)
+        count_params.append(course_id)
 
     if age and age.isdigit():
-       query += " AND students.age = ?"
-       params.append(int(age))
-
+        query += " AND students.age=?"
+        count_query += " AND students.age=?"
+        params.append(int(age))
+        count_params.append(int(age))
 
     if grade:
-       query += " AND LOWER(students.grade) = LOWER(?)"
-       params.append(grade.strip())
+        query += " AND LOWER(students.grade)=LOWER(?)"
+        count_query += " AND LOWER(students.grade)=LOWER(?)"
+        params.append(grade.strip())
+        count_params.append(grade.strip())
 
+    # --------------------------
+    # Selected Course Name
+    # --------------------------
     selected_course_name = "All Courses"
-
-    course = None   # initialize first
 
     if course_id:
         course = conn.execute(
-        "SELECT course_name FROM courses WHERE id=?",
-        (course_id,)
-    ).fetchone()
+            "SELECT course_name FROM courses WHERE id=?",
+            (course_id,)
+        ).fetchone()
 
-    if course:
-     selected_course_name = course["course_name"]
-    else:
-     selected_course_name = "All Courses"
+        if course:
+            selected_course_name = course["course_name"]
 
-    students = conn.execute(query, params).fetchall()
+    # --------------------------
+    # Filtered Count
+    # --------------------------
+    filtered_count = conn.execute(
+        count_query,
+        count_params
+    ).fetchone()[0]
 
+    # --------------------------
+    # Pagination
+    # --------------------------
+    total_pages = max(1, ceil(filtered_count / per_page))
+
+    query += """
+        ORDER BY students.id DESC
+        LIMIT ? OFFSET ?
+    """
+
+    students = conn.execute(
+        query,
+        params + [per_page, offset]
+    ).fetchall()
+
+    # --------------------------
+    # Total Students
+    # --------------------------
     total_students = conn.execute(
-    "SELECT COUNT(*) FROM students"
-).fetchone()[0]
-    
-    total_students = conn.execute(
-    "SELECT COUNT(*) FROM students"
-).fetchone()[0]
+        "SELECT COUNT(*) FROM students"
+    ).fetchone()[0]
 
-    filtered_count = len(students)
-
-
+    # --------------------------
+    # Courses
+    # --------------------------
     courses = conn.execute(
-        "SELECT * FROM courses"
+        "SELECT * FROM courses ORDER BY course_name"
     ).fetchall()
 
     conn.close()
-    
 
     return render_template(
         "student_table.html",
@@ -632,10 +676,11 @@ def filter_students():
         selected_course=course_id,
         selected_age=age,
         selected_grade=grade,
+        selected_course_name=selected_course_name,
         total_students=total_students,
         filtered_count=filtered_count,
-        selected_course_name=selected_course_name
-        
+        page=page,
+        total_pages=total_pages
     )
 def update_leaderboard(name, score, course_id=None, time_taken=0):
     insert_leaderboard(name, score, course_id, time_taken)
@@ -1257,6 +1302,7 @@ def login():
         if check_password_hash(student["password"], password):
             session["student_id"] = student["id"]
             session["student_name"] = student["name"]
+            session["student_photo"] = student["photo"]
             session["email"] = student["email"]
             session["role"] = student["role"]
             flash(f"Welcome {student['name']} ✅ (Role: {student['role']})", "success")
@@ -1293,17 +1339,101 @@ def logout():
 
 
 
+from math import ceil
+
 @app.route('/students')
 @app.route('/courses')
 def student_table():
-    students = get_students_with_courses()
-    courses = get_courses()
+
+    page = request.args.get("page", 1, type=int)
+    per_page = 10
+
+    conn = get_db_connection()
+
+    total_students = conn.execute(
+        "SELECT COUNT(*) FROM students"
+    ).fetchone()[0]
+
+    total_pages = ceil(total_students / per_page)
+
+    offset = (page - 1) * per_page
+
+    students = conn.execute("""
+        SELECT students.*,
+               courses.course_name
+        FROM students
+        LEFT JOIN courses
+        ON students.course_id = courses.id
+        LIMIT ? OFFSET ?
+    """, (per_page, offset)).fetchall()
+
+    courses = conn.execute(
+        "SELECT * FROM courses"
+    ).fetchall()
+
+    conn.close()
+
     return render_template(
-        'student_table.html',
+        "student_table.html",
         students=students,
-        courses=courses
+        courses=courses,
+        page=page,
+        total_pages=total_pages
+    )
+client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+def generate_performance_summary(student_name, results):
+
+    if not results:
+        return "No quiz attempts found for this student."
+
+    total_attempts = len(results)
+    highest_score = max(r.score for r in results)
+    average_score = sum(r.score for r in results) / total_attempts
+
+    performance = "\n".join(
+        [f"{r.course_name}: {r.score}/10" for r in results]
     )
 
+    prompt = f"""
+You are an expert teacher.
+
+Analyze this student's quiz performance.
+
+Student Name: {student_name}
+
+Total Attempts: {total_attempts}
+Highest Score: {highest_score}/10
+Average Score: {average_score:.1f}/10
+
+Course Scores:
+{performance}
+
+Write a professional report in about 80-120 words.
+
+Include:
+1. Performance Summary
+2. Strengths
+3. Weaknesses
+4. Recommendations
+"""
+
+    try:
+        response = client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=[
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ],
+            temperature=0.4
+        )
+
+        return response.choices[0].message.content.strip()
+
+    except Exception as e:
+        print(e)
+        return "AI summary could not be generated."
 
 from collections import defaultdict
 
@@ -1330,9 +1460,45 @@ def view_student(student_id):
     for r in results:
         grouped[r.course_name].append(r.score)
 
-    total_attempts = sum(len(scores) for scores in grouped.values())
-    return render_template('student_card.html', student=student, grouped=grouped , total_attempts=total_attempts)
+    
+    highest_score = max((max(scores) for scores in grouped.values() if scores), default=0)
 
+    all_scores = [score for scores in grouped.values() for score in scores]
+
+    average_score = round(sum(all_scores)/len(all_scores),1) if all_scores else 0
+
+    total_attempts = len(all_scores)
+    if all_scores:
+        ai_summary = generate_performance_summary(student["name"],results)
+    else:
+        ai_summary = "This student has not attempted any quiz yet."
+    return render_template('student_card.html', student=student, grouped=grouped , total_attempts=total_attempts,highest_score=highest_score,
+                                             average_score=average_score,
+                                                                         ai_summary=ai_summary)
+@app.route("/change_photo/<int:student_id>", methods=["GET", "POST"])
+def change_photo(student_id):
+
+    if request.method == "POST":
+        photo = request.files["photo"]
+
+        if photo.filename:
+            filename = secure_filename(photo.filename)
+            photo.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+
+            conn = get_db_connection()
+            conn.execute(
+                "UPDATE students SET photo=? WHERE id=?",
+                (filename, student_id)
+            )
+            conn.commit()
+            conn.close()
+
+            flash("Profile photo updated successfully.", "success")
+            
+
+        return redirect(url_for("view_student", student_id=student_id))
+
+    return render_template("change_photo.html", student_id=student_id)
 
 
 @app.route('/student/edit/<int:student_id>', methods=['GET', 'POST'])
@@ -1375,14 +1541,53 @@ def leaderboard_page():
     return render_template("leaderboard.html", leaderboard=top_entries)
 
 
+
+from math import ceil
+
 @app.route("/score_history")
 def score_history():
-    history = get_score_history()
+
+    page = request.args.get("page", 1, type=int)
+    per_page = 10
+
+    conn = get_db_connection()
+
+    total_records = conn.execute(
+        "SELECT COUNT(*) FROM leaderboard"
+    ).fetchone()[0]
+
+    total_pages = ceil(total_records / per_page)
+
+    offset = (page - 1) * per_page
+
+    history = conn.execute("""
+SELECT
+    l.*,
+    c.course_name,
+    (
+        SELECT COUNT(*)
+        FROM leaderboard x
+        WHERE x.student_name = l.student_name
+    ) AS attempts
+FROM leaderboard l
+LEFT JOIN courses c
+ON c.id = l.course_id
+ORDER BY l.created_at DESC
+LIMIT ? OFFSET ?
+""", (per_page, offset)).fetchall()
+    for row in history:
+      print(dict(row))
+
+    conn.close()
+
     attempts = get_attempt_counts()
+
     return render_template(
         "score_history.html",
         history=history,
-        attempts=attempts
+        attempts=attempts,
+        page=page,
+        total_pages=total_pages
     )
 
 @app.before_request

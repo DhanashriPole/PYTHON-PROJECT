@@ -581,6 +581,31 @@ td .d-flex form{
 }
 
 }
+/* Pagination */
+
+.pagination{
+    margin-top:25px;
+}
+
+.pagination .page-link{
+    border:none;
+    border-radius:10px;
+    margin:0 4px;
+    padding:10px 16px;
+    background:#1f2937;
+    color:#fff;
+    transition:.3s;
+}
+
+.pagination .page-link:hover{
+    background:#3b82f6;
+    color:#fff;
+}
+
+.pagination .active .page-link{
+    background:#2563eb;
+    color:#fff;
+}
 
 </style>
 
@@ -861,6 +886,52 @@ td .d-flex form{
         </table>
 
     </div>
+    {% if total_pages > 1 %}
+<nav class="mt-4">
+    <ul class="pagination justify-content-center">
+
+        {% if page > 1 %}
+        <li class="page-item">
+            <a class="page-link"
+               href="{{ url_for('filter_students',
+                   page=page-1,
+                   course_id=selected_course,
+                   age=selected_age,
+                   grade=selected_grade) }}">
+                ← Previous
+            </a>
+        </li>
+        {% endif %}
+
+        {% for p in range(1, total_pages+1) %}
+        <li class="page-item {% if p==page %}active{% endif %}">
+            <a class="page-link"
+               href="{{ url_for('filter_students',
+                   page=p,
+                   course_id=selected_course,
+                   age=selected_age,
+                   grade=selected_grade) }}">
+                {{ p }}
+            </a>
+        </li>
+        {% endfor %}
+
+        {% if page < total_pages %}
+        <li class="page-item">
+            <a class="page-link"
+               href="{{ url_for('filter_students',
+                   page=page+1,
+                   course_id=selected_course,
+                   age=selected_age,
+                   grade=selected_grade) }}">
+                Next →
+            </a>
+        </li>
+        {% endif %}
+
+    </ul>
+</nav>
+{% endif %}
 
 </div>
 
