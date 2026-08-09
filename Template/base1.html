@@ -1022,6 +1022,99 @@ body {
         filter: brightness(0) invert(1);
     }
 }
+/* =========================================================
+   MOBILE BOTTOM NAVIGATION
+========================================================= */
+
+.bottom-nav {
+    display: none;
+}
+
+@media (max-width: 768px) {
+
+    .bottom-nav {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        height: 68px;
+
+        display: flex !important;
+        align-items: center;
+        justify-content: space-around;
+
+        background:
+            linear-gradient(
+                135deg,
+                rgba(10,15,35,.98),
+                rgba(17,24,39,.98)
+            );
+
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+
+        border-top: 1px solid rgba(255,255,255,.15);
+
+        box-shadow:
+            0 -8px 30px rgba(0,0,0,.45);
+
+        z-index: 9999;
+
+        padding: 5px 4px;
+    }
+
+    .bottom-nav a {
+        flex: 1;
+
+        height: 58px;
+
+        display: flex;
+        flex-direction: column;
+
+        align-items: center;
+        justify-content: center;
+
+        gap: 3px;
+
+        color: #cbd5e1 !important;
+
+        text-decoration: none;
+
+        font-size: 11px;
+        font-weight: 600;
+
+        border-radius: 12px;
+
+        transition: .25s ease;
+
+        margin: 0 2px;
+    }
+
+    .bottom-nav a:first-line {
+        font-size: 18px;
+    }
+
+    .bottom-nav a:hover,
+    .bottom-nav a:active {
+        color: #22d3ee !important;
+
+        background:
+            rgba(34,211,238,.10);
+
+        transform: translateY(-2px);
+    }
+
+    /* Make emoji/icons larger */
+    .bottom-nav a {
+        font-size: 11px;
+    }
+
+    /* Space for bottom navigation */
+    main {
+        padding-bottom: 85px !important;
+    }
+}
 </style>
 
         
