@@ -951,14 +951,7 @@ def student_form():
 
                      flash('Student registered successfully ✅', 'success')
         
-                return render_template(
-                    'student_submitted.html',
-            name=name,
-            email=email,
-            age=age,
-            grade=grade,
-            course_name=course_name,
-        )
+                return render_template('login.html')    
 
     return render_template("student_form.html", courses=courses)
 
@@ -1313,9 +1306,104 @@ def login():
     return render_template("login.html", courses=get_courses())
 
 
+@app.route("/forgot_password", methods=["GET", "POST"])
+def forgot_password():
 
+    if request.method == "POST":
 
+        email = request.form.get("email", "").strip().lower()
 
+        if not email:
+            flash("Please enter your email address.", "danger")
+            return redirect(url_for("forgot_password"))
+
+        # Find student
+        student = Students.query.filter_by(email=email).first()
+
+        if not student:
+            flash("No account found with this email address.", "danger")
+            return redirect(url_for("forgot_password"))
+
+        # Store email temporarily in session
+        session["reset_email"] = email
+
+        return redirect(url_for("reset_password"))
+
+    return render_template("forgot_password.html")
+
+from werkzeug.security import check_password_hash, generate_password_hash
+@app.route("/reset_password", methods=["GET", "POST"])
+def reset_password():
+
+    # Check whether user came through forgot-password flow
+    email = session.get("reset_email")
+
+    if not email:
+        flash("Please start the password reset process again.", "warning")
+        return redirect(url_for("forgot_password"))
+
+    student = Students.query.filter_by(email=email).first()
+
+    if not student:
+        session.pop("reset_email", None)
+
+        flash("Account not found.", "danger")
+        return redirect(url_for("forgot_password"))
+
+    if request.method == "POST":
+
+        password = request.form.get("password", "")
+        confirm_password = request.form.get("confirm_password", "")
+
+        # Empty password
+        if not password or not confirm_password:
+
+            flash(
+                "Please enter and confirm your new password.",
+                "danger"
+            )
+
+            return redirect(url_for("reset_password"))
+
+        # Password mismatch
+        if password != confirm_password:
+
+            flash(
+                "Passwords do not match.",
+                "danger"
+            )
+
+            return redirect(url_for("reset_password"))
+
+        # Basic password length validation
+        if len(password) < 6:
+
+            flash(
+                "Password must contain at least 6 characters.",
+                "danger"
+            )
+
+            return redirect(url_for("reset_password"))
+
+        # Hash new password
+        student.password = generate_password_hash(password)
+
+        db.session.commit()
+
+        # Remove reset session
+        session.pop("reset_email", None)
+
+        flash(
+            "Password reset successfully! You can now login.",
+            "success"
+        )
+
+        return redirect(url_for("login"))
+
+    return render_template(
+        "reset_password.html",
+        email=email
+    )
 @app.route('/logout')
 def logout():
     student_id = session.get("student_id")

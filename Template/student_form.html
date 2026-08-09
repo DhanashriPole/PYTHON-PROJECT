@@ -1,214 +1,951 @@
 {% extends "base1.html" %}
-{% block title %}Student Registration{% endblock %}
+
+{% block title %}📝 Register | Study Quiz Hub{% endblock %}
 
 {% block content %}
 
 <style>
-.register-card{
-    max-width:600px;
-    margin:auto;
-    border:none;
-    border-radius:25px;
-    overflow:hidden;
-    box-shadow:0 15px 35px rgba(0,0,0,0.15);
+
+/* =========================================================
+   REGISTER PAGE
+========================================================= */
+
+.register-page {
+    min-height: calc(100vh - 80px);
+    padding: 45px 15px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background:
+        radial-gradient(circle at 10% 10%, rgba(255, 0, 80, .10), transparent 30%),
+        radial-gradient(circle at 90% 10%, rgba(120, 0, 255, .10), transparent 30%),
+        radial-gradient(circle at 50% 100%, rgba(0, 180, 255, .10), transparent 35%),
+        linear-gradient(135deg, #f7f9ff, #f5f0ff, #eef8ff);
 }
 
-.register-header{
-    background:linear-gradient(135deg,#0d6efd,#6610f2);
-    color:white;
-    text-align:center;
-    padding:30px;
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.register-card {
+
+    width: 100%;
+    max-width: 900px;
+
+    padding: 42px;
+
+    position: relative;
+
+    border-radius: 30px;
+
+    background: rgba(255, 255, 255, .72);
+
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+
+    border: 1px solid rgba(255, 255, 255, .9);
+
+    box-shadow:
+        0 25px 70px rgba(31, 41, 55, .14);
+
+    overflow: hidden;
 }
 
-.register-header i{
-    font-size:3rem;
+
+/* Rainbow top border */
+
+.register-card::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 6px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ff1744,
+            #ff9800,
+            #ffee00,
+            #00c853,
+            #00b0ff,
+            #7c4dff,
+            #ff1744
+        );
+
+    background-size: 300%;
+
+    animation: rainbowMove 5s linear infinite;
+}
+
+
+@keyframes rainbowMove {
+
+    100% {
+        background-position: 300%;
+    }
+
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.register-header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.register-logo {
+
+    width: 85px;
+    height: 85px;
+
+    margin: 0 auto 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 25px;
+
+    font-size: 2.7rem;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff1744,
+            #7c4dff
+        );
+
+    box-shadow:
+        0 15px 35px rgba(124, 77, 255, .25);
+}
+
+.register-header h1 {
+
+    margin: 0;
+
+    font-size: 2.2rem;
+
+    font-weight: 900;
+
+    color: #172033;
+}
+
+.register-header p {
+
+    margin-top: 10px;
+
+    color: #667085;
+
+    font-size: 1rem;
+}
+
+
+/* =========================================================
+   SECTION TITLE
+========================================================= */
+
+.form-section-title {
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 30px;
+    margin-bottom: 20px;
+
+    padding-bottom: 10px;
+
+    color: #172033;
+
+    font-size: 1.05rem;
+
+    font-weight: 850;
+
+    border-bottom:
+        1px solid rgba(148, 163, 184, .20);
+}
+
+.form-section-title span {
+
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 23, 68, .10),
+            rgba(124, 77, 255, .12)
+        );
+}
+
+
+/* =========================================================
+   ROW SPACING
+========================================================= */
+
+.register-form .row {
+
+    row-gap: 18px;
+}
+
+
+/* =========================================================
+   FORM INPUTS
+========================================================= */
+
+.form-floating {
+    position: relative;
 }
 
 .form-control,
-.form-select{
-    border-radius:12px;
+.form-select {
+
+    min-height: 58px;
+
+    border-radius: 14px;
+
+    border:
+        1px solid rgba(148, 163, 184, .30);
+
+    background:
+        rgba(255, 255, 255, .75);
+
+    color: #172033;
+
+    box-shadow: none;
+
+    transition: .3s;
 }
 
-.btn-register{
-    border-radius:12px;
-    font-weight:600;
-    padding:12px;
-    transition:0.3s;
+.form-control:focus,
+.form-select:focus {
+
+    border-color: #7c4dff;
+
+    background: white;
+
+    box-shadow:
+        0 0 0 4px rgba(124, 77, 255, .10);
 }
 
-.btn-register:hover{
-    transform:translateY(-3px);
+.form-floating label {
+
+    color: #667085;
 }
 
-.form-floating label{
-    color:#6c757d;
+
+/* =========================================================
+   PROFILE PHOTO
+========================================================= */
+
+.photo-section {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 25px;
+
+    padding: 20px;
+
+    margin-bottom: 5px;
+
+    border-radius: 18px;
+
+    background:
+        rgba(255, 255, 255, .55);
+
+    border:
+        1px solid rgba(148, 163, 184, .18);
 }
 
-.password-wrapper{
-    position:relative;
+.photo-preview {
+
+    width: 95px;
+    height: 95px;
+
+    min-width: 95px;
+
+    border-radius: 50%;
+
+    overflow: hidden;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eef2ff,
+            #f5f3ff
+        );
+
+    border:
+        4px solid white;
+
+    box-shadow:
+        0 8px 25px rgba(31, 41, 55, .12);
 }
 
-.password-toggle{
-    position:absolute;
-    right:15px;
-    top:50%;
-    transform:translateY(-50%);
-    cursor:pointer;
-    z-index:10;
+.photo-preview img {
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
 }
 
-@media(max-width:768px){
-    .register-header{
-        padding:20px;
+.photo-content {
+    flex: 1;
+}
+
+.photo-content label {
+
+    font-weight: 750;
+
+    color: #172033;
+
+    margin-bottom: 8px;
+}
+
+.photo-content small {
+
+    display: block;
+
+    margin-top: 7px;
+
+    color: #98a2b3;
+}
+
+
+/* =========================================================
+   PASSWORD
+========================================================= */
+
+.password-wrapper {
+    position: relative;
+}
+
+.password-toggle {
+
+    position: absolute;
+
+    right: 18px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    cursor: pointer;
+
+    color: #667085;
+
+    z-index: 5;
+
+    transition: .2s;
+}
+
+.password-toggle:hover {
+    color: #7c4dff;
+}
+
+.password-hint {
+
+    margin-top: 12px;
+
+    padding: 12px 15px;
+
+    border-radius: 12px;
+
+    background:
+        rgba(124, 77, 255, .06);
+
+    color: #667085;
+
+    font-size: .85rem;
+}
+
+
+/* =========================================================
+   REGISTER BUTTON
+========================================================= */
+
+.btn-register {
+
+    margin-top: 28px;
+
+    padding: 15px;
+
+    border: none;
+
+    border-radius: 15px;
+
+    color: white !important;
+
+    font-weight: 800;
+
+    font-size: 1rem;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ff1744,
+            #c026d3,
+            #6366f1
+        );
+
+    background-size: 200%;
+
+    box-shadow:
+        0 12px 28px rgba(124, 77, 255, .23);
+
+    transition: .35s;
+}
+
+.btn-register:hover {
+
+    background-position: 100%;
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 18px 35px rgba(124, 77, 255, .30);
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+.login-box {
+
+    margin-top: 25px;
+
+    padding-top: 20px;
+
+    text-align: center;
+
+    border-top:
+        1px solid rgba(148, 163, 184, .18);
+}
+
+.login-box p {
+
+    margin: 0;
+
+    color: #667085;
+}
+
+.login-link {
+
+    color: #6d28d9;
+
+    font-weight: 800;
+
+    text-decoration: none;
+}
+
+.login-link:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   SECURITY
+========================================================= */
+
+.security-note {
+
+    margin-top: 18px;
+
+    text-align: center;
+
+    color: #98a2b3;
+
+    font-size: .82rem;
+}
+
+.security-note i {
+    color: #16a34a;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .register-page {
+        padding: 25px 12px;
     }
 
-    .register-header h2{
-        font-size:1.5rem;
+    .register-card {
+        padding: 28px 20px;
+        border-radius: 25px;
     }
+
+    .register-header h1 {
+        font-size: 1.8rem;
+    }
+
+    .photo-section {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .photo-content {
+        width: 100%;
+    }
+
 }
+
 </style>
 
-<div class="container py-5">
 
-    <div class="card register-card">
+<div class="register-page">
+
+    <div class="register-card">
+
+
+        <!-- =================================================
+             HEADER
+        ================================================= -->
 
         <div class="register-header">
-            <i class="bi bi-person-plus-fill"></i>
-            <h2 class="mt-2">Student Registration</h2>
-            <p class="mb-0">Register your account with Study Quiz Hub</p>
+
+            <div class="register-logo">
+                🎓
+            </div>
+
+            <h1>
+                Join Study Quiz Hub
+            </h1>
+
+            <p>
+                Create your account and start learning smarter.
+            </p>
+
         </div>
 
-        <div class="card-body p-4">
 
-            <form method="POST" action="/student" enctype="multipart/form-data">
+        <!-- =================================================
+             FORM
+        ================================================= -->
 
-                <div class="form-floating mb-3">
-                    <input type="text"
-                           name="name"
-                           class="form-control"
-                           id="name"
-                           placeholder="Full Name"
-                           required
-                           value="{{ form_data.get('name') if form_data else '' }}">
-                    <label for="name">
-                        <i class="bi bi-person-fill me-2"></i>
-                        Full Name
-                    </label>
-                </div>
+        <form
+            method="POST"
+            action="/student"
+            class="register-form"
+            enctype="multipart/form-data"
+        >
 
-                <div class="form-floating mb-3">
-                    <input type="email"
-                           name="email"
-                           class="form-control"
-                           id="email"
-                           placeholder="Email"
-                           value="{{ form_data.get('email') if form_data else '' }}">
-                    <label for="email">
-                        <i class="bi bi-envelope-fill me-2"></i>
-                        Email Address
-                    </label>
-                </div>
 
-                <div class="password-wrapper mb-3">
+            <!-- =================================================
+                 PERSONAL INFORMATION
+            ================================================= -->
+
+            <div class="form-section-title">
+
+                <span>👤</span>
+
+                Personal Information
+
+            </div>
+
+
+            <div class="row">
+
+
+                <!-- FULL NAME -->
+
+                <div class="col-md-6">
+
                     <div class="form-floating">
-                        <input type="password"
-                               name="password"
-                               class="form-control"
-                               id="password"
-                               placeholder="Password"
-                               required>
-                        <label for="password">
-                            <i class="bi bi-lock-fill me-2"></i>
-                            Password
+
+                        <input
+                            type="text"
+                            name="name"
+                            id="name"
+                            class="form-control"
+                            placeholder="Full Name"
+                            autocomplete="name"
+                            required
+                        >
+
+                        <label for="name">
+
+                            <i class="bi bi-person-fill me-2"></i>
+
+                            Full Name
+
                         </label>
+
                     </div>
 
-                    <i class="bi bi-eye-fill password-toggle"
-                       onclick="togglePassword('password')"></i>
                 </div>
-                <div class="password-wrapper mb-3">
-    <div class="form-floating">
-        <input type="password"
-               name="confirm_password"
-               class="form-control"
-               id="confirm_password"
-               placeholder="Confirm Password">
-        <label for="confirm_password">
-            <i class="bi bi-lock-fill me-2"></i>
-            Confirm Password
-        </label>
-    </div>
-
-    <i class="bi bi-eye-fill password-toggle"
-       onclick="togglePassword('confirm_password')"></i>
-</div>
 
 
-               
-                <div class="form-floating mb-3">
-                    <input type="number"
-                           name="age"
-                           class="form-control"
-                           id="age"
-                           placeholder="Age"
-                           min="1"
-                           value="{{ form_data.get('age') if form_data else '' }}">
-                    <label for="age">
-                        <i class="bi bi-calendar-event-fill me-2"></i>
-                        Age
+                <!-- EMAIL -->
+
+                <div class="col-md-6">
+
+                    <div class="form-floating">
+
+                        <input
+                            type="email"
+                            name="email"
+                            id="email"
+                            class="form-control"
+                            placeholder="Email Address"
+                            autocomplete="email"
+                            required
+                        >
+
+                        <label for="email">
+
+                            <i class="bi bi-envelope-fill me-2"></i>
+
+                            Email Address
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+                <!-- AGE -->
+
+                <div class="col-md-6">
+
+                    <div class="form-floating">
+
+                        <input
+                            type="number"
+                            name="age"
+                            id="age"
+                            class="form-control"
+                            placeholder="Age"
+                            min="10"
+                            max="100"
+                            required
+                        >
+
+                        <label for="age">
+
+                            <i class="bi bi-calendar3 me-2"></i>
+
+                            Age
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+                <!-- GRADE -->
+
+                <div class="col-md-6">
+
+                    <div class="form-floating">
+
+                        <input
+                            
+                            name="grade"
+                            id="grade"
+                            class="form-control"
+                            placeholder="Grade"
+                            min="1"
+                            required
+                        >
+
+                        <label for="grade">
+
+                            <i class="bi bi-mortarboard-fill me-2"></i>
+
+                            Grade
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- =================================================
+                 PROFILE PHOTO
+            ================================================= -->
+
+            <div class="form-section-title">
+
+                <span>📸</span>
+
+                Profile Photo
+
+            </div>
+
+
+            <div class="photo-section">
+
+
+                
+
+
+                <div class="photo-content">
+
+                    <label for="photo">
+
+                        <i class="bi bi-image-fill me-2"></i>
+
+                        Choose Profile Photo
+
                     </label>
+
+                    <input
+                        type="file"
+                        class="form-control"
+                        id="photo"
+                        name="photo"
+                        accept=".jpg,.jpeg,.png"
+                    >
+
+                    <small>
+                        JPG, JPEG or PNG • Recommended square image
+                    </small>
+
                 </div>
 
-                <div class="form-floating mb-3">
-                    <input type="text"
-                           name="grade"
-                           class="form-control"
-                           id="grade"
-                           placeholder="Grade"
-                           value="{{ form_data.get('grade') if form_data else '' }}">
-                    <label for="grade">
-                        <i class="bi bi-mortarboard-fill me-2"></i>
-                        Class / Grade
-                    </label>
+
+            </div>
+
+
+            <!-- =================================================
+                 ACCOUNT SECURITY
+            ================================================= -->
+
+            <div class="form-section-title">
+
+                <span>🔐</span>
+
+                Account Security
+
+            </div>
+
+
+            <div class="row">
+
+
+                <!-- PASSWORD -->
+
+                <div class="col-md-6">
+
+                    <div class="password-wrapper">
+
+                        <div class="form-floating">
+
+                            <input
+                                type="password"
+                                name="password"
+                                id="password"
+                                class="form-control"
+                                placeholder="Password"
+                                minlength="6"
+                                autocomplete="new-password"
+                                required
+                            >
+
+                            <label for="password">
+
+                                <i class="bi bi-lock-fill me-2"></i>
+
+                                Password
+
+                            </label>
+
+                        </div>
+
+
+                        <i
+                            class="bi bi-eye-fill password-toggle"
+                            onclick="togglePassword('password', this)"
+                        ></i>
+
+                    </div>
+
                 </div>
-               <div class="mb-3">
-    <label for="photo" class="form-label">
-        <i class="bi bi-image-fill me-2"></i>
-        Profile Photo
-    </label>
 
-    <input
-        type="file"
-        class="form-control"
-        id="photo"
-        name="photo"
-        accept=".jpg,.jpeg,.png">
-</div>
 
-                <button class="btn btn-success btn-register w-100">
-                    <i class="bi bi-person-check-fill me-2"></i>
-                    Register Now
-                </button>
+                <!-- CONFIRM PASSWORD -->
 
-            </form>
+                <div class="col-md-6">
+
+                    <div class="password-wrapper">
+
+                        <div class="form-floating">
+
+                            <input
+                                type="password"
+                                name="confirm_password"
+                                id="confirm_password"
+                                class="form-control"
+                                placeholder="Confirm Password"
+                                minlength="6"
+                                autocomplete="new-password"
+                                required
+                            >
+
+                            <label for="confirm_password">
+
+                                <i class="bi bi-shield-lock-fill me-2"></i>
+
+                                Confirm Password
+
+                            </label>
+
+                        </div>
+
+
+                        <i
+                            class="bi bi-eye-fill password-toggle"
+                            onclick="togglePassword('confirm_password', this)"
+                        ></i>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- PASSWORD HINT -->
+
+            <div class="password-hint">
+
+                🔒 Password must contain at least 6 characters.
+
+            </div>
+
+
+            <!-- REGISTER BUTTON -->
+
+            <button
+                type="submit"
+                class="btn btn-register w-100"
+            >
+
+                <i class="bi bi-person-plus-fill me-2"></i>
+
+                Create My Account
+
+            </button>
+
+
+        </form>
+
+
+        <!-- =================================================
+             LOGIN
+        ================================================= -->
+
+        <div class="login-box">
+
+            <p>
+
+                Already have an account?
+
+                <a
+                    href="/login"
+                    class="login-link"
+                >
+
+                    🔑 Login Here
+
+                </a>
+
+            </p>
 
         </div>
 
+
+        <!-- =================================================
+             SECURITY NOTE
+        ================================================= -->
+
+        <div class="security-note">
+
+            <i class="bi bi-shield-check me-1"></i>
+
+            Your information is securely protected.
+
+        </div>
+
+
     </div>
 
 </div>
 
+
+<!-- =========================================================
+     PHOTO PREVIEW
+========================================================= -->
+
 <script>
-function togglePassword(id){
 
-    let field = document.getElementById(id);
+const photoInput =
+    document.getElementById("photo");
 
-    if(field.type === "password"){
-        field.type = "text";
-    }else{
-        field.type = "password";
-    }
+const profilePreview =
+    document.getElementById("profilePreview");
+
+
+if (photoInput) {
+
+    photoInput.addEventListener(
+        "change",
+        function () {
+
+            const file = this.files[0];
+
+            if (file) {
+
+                profilePreview.src =
+                    URL.createObjectURL(file);
+
+            }
+
+        }
+    );
+
 }
+
 </script>
+
 
 {% endblock %}
