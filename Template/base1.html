@@ -9,363 +9,1112 @@
    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
-       body{
-    background: linear-gradient(
-        -45deg,
-        #0f172a,
-        #111827,
-        #1e1b4b,
-        #0f1876,
-        #111827,
-        #3b0764,
-        #0f172a
-    );
+      
 
-    background-size:500% 500%;
-    animation:bgMove 18s ease infinite;
+/* =========================================================
+   BODY
+========================================================= */
 
-    min-height:100vh;
-    font-family:'Segoe UI',sans-serif;
-    color:white;
+body {
+    margin: 0;
+    padding: 0;
+
+    min-height: 100vh;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    font-family: "Segoe UI", sans-serif;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            -45deg,
+            #0f172a,
+            #111827,
+            #1e1b4b,
+            #172554,
+            #312e81,
+            #0f172a
+        );
+
+    background-size: 500% 500%;
+
+    animation: bgMove 18s ease infinite;
 }
 
-@keyframes bgMove{
 
-0%{background-position:0% 50%;}
-50%{background-position:100% 50%;}
-100%{background-position:0% 50%;}
+@keyframes bgMove {
 
-}
-html,
-body{
-    min-height:100%;
-    overflow-x:hidden;
-    overflow-y:auto;
-}
-        /* TOP NAVBAR */
-        .navbar{
+    0% {
+        background-position: 0% 50%;
+    }
 
-background:rgba(20,20,30,.75);
+    50% {
+        background-position: 100% 50%;
+    }
 
-backdrop-filter:blur(18px);
-
-border-bottom:1px solid rgba(255,255,255,.1);
-
-box-shadow:0 10px 30px rgba(0,0,0,.4);
-
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
-        .navbar-brand{
 
-font-size:30px;
+/* =========================================================
+   MAIN NAVBAR
+========================================================= */
 
-font-weight:900;
+.custom-navbar {
 
-background:linear-gradient(
-90deg,
-#17f3ff,
-#17f3ff,
-#17f3ff,
-#17f3ff,
-#17f3ff,
-#17f3ff
+    width: 100%;
 
-);
+    background:
+        linear-gradient(
+            135deg,
+            rgba(10,15,35,.96),
+            rgba(17,24,39,.94)
+        ) !important;
 
-background-size:300%;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
 
-background-clip:text;
--webkit-background-clip:text;
+    border-bottom:
+        1px solid rgba(255,255,255,.12);
 
--webkit-text-fill-color:transparent;
+    box-shadow:
+        0 8px 30px rgba(0,0,0,.45);
 
-animation:logoMove 6s linear infinite;
+    position: relative;
 
+    z-index: 1000;
+
+    padding: 0 !important;
+
+    color: white;
 }
 
-@keyframes logoMove{
 
-100%{
-background-position:300%;
+/* =========================================================
+   TOP ROW
+========================================================= */
+
+.navbar-top {
+
+    width: 100%;
+
+    min-height: 88px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 28px;
+
+    padding: 12px 35px;
+
+    box-sizing: border-box;
+
+    border-bottom:
+        1px solid rgba(255,255,255,.06);
 }
 
+
+/* =========================================================
+   DATE + TIME
+========================================================= */
+
+.live-date-time {
+
+    width: 175px;
+
+    min-width: 175px;
+
+    padding: 9px 15px;
+
+    text-align: center;
+
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.10),
+            rgba(255,255,255,.04)
+        );
+
+    border:
+        1px solid rgba(255,255,255,.14);
+
+    box-shadow:
+        0 5px 20px rgba(0,0,0,.25);
+
+    backdrop-filter: blur(15px);
+
+    transition: .3s ease;
 }
-        .nav-link{
 
-color:#e5e7eb !important;
 
-font-weight:600;
+.live-date-time:hover {
 
-padding:10px 14px;
+    transform: translateY(-2px);
 
-border-radius:10px;
+    border-color: rgba(34,211,238,.5);
 
-transition:.35s;
-
+    box-shadow:
+        0 0 20px rgba(34,211,238,.2);
 }
 
-.nav-link:hover{
 
-background:rgba(255,255,255,.12);
+#liveDate {
 
-color:#38bdf8 !important;
+    font-size: 13px;
 
-transform:translateY(-3px);
+    color: #cbd5e1;
 
-box-shadow:0 0 15px rgba(56,189,248,.4);
-
+    margin-bottom: 3px;
 }
-        
-        /* SEARCH */
+
+
+#liveTime {
+
+    font-size: 20px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    color: white;
+}
+
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.custom-brand {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    text-decoration: none !important;
+
+    white-space: nowrap;
+
+    font-size: 30px !important;
+
+    font-weight: 900 !important;
+
+    letter-spacing: -.5px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #22d3ee,
+            #38bdf8,
+            #818cf8,
+            #22d3ee
+        );
+
+    background-size: 300%;
+
+    background-clip: text;
+
+    -webkit-background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+
+    animation:
+        logoGradient 6s linear infinite;
+
+    transition: .3s ease;
+}
+
+
+.custom-brand:hover {
+
+    transform: scale(1.03);
+
+    filter:
+        drop-shadow(
+            0 0 12px
+            rgba(34,211,238,.45)
+        );
+}
+
+
+@keyframes logoGradient {
+
+    0% {
+        background-position: 0%;
+    }
+
+    100% {
+        background-position: 300%;
+    }
+}
+
+
+/* =========================================================
+   SEARCH BOX
+========================================================= */
 
 .search-box {
+
     position: relative;
+
     width: 280px;
-    margin-right: auto;
-}
-#searchInput{
 
-background:rgba(255,255,255,.08);
-
-border:1px solid rgba(255,255,255,.15);
-
-color:white;
-
-border-radius:50px;
-
-backdrop-filter:blur(10px);
-
-padding:12px 20px;
-
-}
-
-#searchInput::placeholder{
-
-color:#d1d5db;
-
-}
-
-#searchInput:focus{
-
-background:rgba(255,255,255,.15);
-
-box-shadow:0 0 20px rgba(59,130,246,.4);
-
-border-color:#38bdf8;
-
+    min-width: 280px;
 }
 
 
-#suggestions{
-    position:absolute;
-    top:100%;
-    left:0;
-    width:100%;          /* search box jitni width */
-    max-height:250px;
-    overflow-y:auto;
+#searchInput {
 
-    background:#1f2937;
-    border:1px solid rgba(255,255,255,.15);
-    border-radius:12px;
+    width: 100%;
 
-    box-shadow:0 10px 25px rgba(0,0,0,.4);
-    z-index:9999;
+    height: 48px;
+
+    box-sizing: border-box;
+
+    padding: 10px 20px;
+
+    border-radius: 50px;
+
+    border:
+        1px solid rgba(255,255,255,.16);
+
+    outline: none;
+
+    color: white;
+
+    background:
+        rgba(255,255,255,.07);
+
+    backdrop-filter: blur(15px);
+
+    font-size: 14px;
+
+    transition: .3s ease;
 }
 
-#suggestions a{
 
-background:#1f2937;
+#searchInput::placeholder {
 
-color:white;
+    color: #cbd5e1;
+}
 
-transition:.3s;
+
+#searchInput:focus {
+
+    background:
+        rgba(255,255,255,.12);
+
+    border-color:
+        #22d3ee;
+
+    box-shadow:
+        0 0 20px
+        rgba(34,211,238,.25);
+}
+
+
+/* =========================================================
+   SEARCH SUGGESTIONS
+========================================================= */
+
+#suggestions {
+
+    position: absolute;
+
+    top: calc(100% + 8px);
+
+    left: 0;
+
+    width: 100%;
+
+    max-height: 250px;
+
+    overflow-y: auto;
+
+    background:
+        rgba(17,24,39,.98);
+
+    border:
+        1px solid rgba(255,255,255,.15);
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 15px 35px rgba(0,0,0,.5);
+
+    z-index: 9999;
+}
+
+
+#suggestions a {
+
+    display: block;
+
+    padding: 11px 15px;
+
+    color: white;
+
+    text-decoration: none;
+
+    transition: .25s;
+}
+
+
+#suggestions a:hover {
+
+    background:
+        linear-gradient(
+            90deg,
+            #2563eb,
+            #0891b2
+        );
+
+    color: white;
+}
+
+
+/* =========================================================
+   SECOND NAVIGATION ROW
+========================================================= */
+
+.navbar-bottom {
+
+    width: 100%;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 7px 20px 9px;
+
+    box-sizing: border-box;
+}
+
+
+.custom-nav {
+
+    display: flex !important;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 5px;
+
+    flex-wrap: wrap;
+
+    width: 100%;
+}
+
+
+/* =========================================================
+   NAV LINKS
+========================================================= */
+
+.custom-nav .nav-link {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 5px;
+
+    color:white !important;
+
+    font-size: 14px !important;
+
+    font-weight: 700 !important;
+
+    padding: 9px 13px !important;
+
+    margin: 0 !important;
+
+    border-radius: 11px;
+
+    white-space: nowrap;
+
+    text-decoration: none;
+
+    transition:
+        .25s ease;
+
+    position: relative;
+}
+
+
+.custom-nav .nav-link:hover {
+
+    color: #22d3ee !important;
+
+    background:
+        rgba(255,255,255,.08);
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 5px 18px
+        rgba(34,211,238,.15);
+}
+
+
+/* Bottom glowing line */
+
+.custom-nav .nav-link::after {
+
+    content: "";
+
+    position: absolute;
+
+    left: 50%;
+
+    bottom: 3px;
+
+    width: 0;
+
+    height: 2px;
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #22d3ee,
+            #818cf8
+        );
+
+    transform:
+        translateX(-50%);
+
+    transition: .3s ease;
+}
+
+
+.custom-nav .nav-link:hover::after {
+
+    width: 60%;
+}
+
+/* ================================
+   NAVBAR LINKS - WHITE COLOR
+================================ */
+
+.navbar .nav-link,
+.navbar-nav .nav-link {
+    color: #ffffff !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    opacity: 1 !important;
+    text-shadow: 0 1px 8px rgba(255,255,255,0.15);
+}
+
+/* Hover */
+.navbar .nav-link:hover,
+.navbar-nav .nav-link:hover {
+    color: #38f5ff !important;
+    background: rgba(255,255,255,0.10);
+    transform: translateY(-2px);
+    border-radius: 10px;
+}
+
+/* Active link */
+.navbar .nav-link.active,
+.navbar-nav .nav-link.active {
+    color: #38f5ff !important;
+    background: rgba(56,189,248,0.12);
+    border-radius: 10px;
+}
+
+/* Icons bhi white/bright */
+.navbar .nav-link i,
+.navbar .nav-link span {
+    color: inherit !important;
+}
+/* ================================
+   NAVBAR BRAND / LOGO
+================================ */
+
+.navbar .navbar-brand {
+    color: #17f3ff !important;
+
+    font-size: 30px !important;
+    font-weight: 900 !important;
+
+    text-decoration: none !important;
+
+    background: linear-gradient(
+        90deg,
+        #17f3ff,
+        #38bdf8,
+        #ffffff,
+        #17f3ff
+    );
+
+    background-size: 300%;
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+
+    animation: brandGlow 6s linear infinite;
+
+    opacity: 1 !important;
+}
+
+/* Logo hover */
+.navbar .navbar-brand:hover {
+    -webkit-text-fill-color: #17f3ff !important;
+    transform: scale(1.03);
+    filter: drop-shadow(0 0 10px rgba(23,243,255,.6));
+}
+
+/* Gradient animation */
+@keyframes brandGlow {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+/* ================================
+   STUDENT PROFILE NAVBAR
+================================ */
+
+.profile-nav {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+
+    padding: 5px 8px !important;
+    border-radius: 50px;
+
+    color: white !important;
+    white-space: nowrap;
+
+    min-width: max-content;
+
+    transition: all .3s ease;
+}
+
+.profile-nav:hover {
+    background: rgba(255,255,255,.12);
+    box-shadow: 0 0 15px rgba(34,211,238,.25);
+}
+
+
+/* Profile Image */
+
+.profile-img {
+    width: 40px;
+    height: 40px;
+
+    min-width: 40px;
+    min-height: 40px;
+
+    border-radius: 50%;
+    object-fit: cover;
+
+    border: 2px solid #22d3ee;
+
+    transition: .3s;
+}
+
+.profile-img:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 15px #22d3ee;
+}
+
+
+/* ================================
+   NAME + STUDENT TEXT
+================================ */
+
+.profile-info {
+    display: flex !important;
+    flex-direction: column;
+
+    justify-content: center;
+
+    line-height: 1.15;
+
+    width: auto;
+    min-width: 80px;
+
+    white-space: nowrap;
+
+    overflow: visible;
+}
+
+
+/* COMPLETE NAME */
+
+.profile-name {
+    display: block;
+
+    color: #ffffff !important;
+
+    font-size: 13px;       /* pehle 16px tha */
+    font-weight: 700;
+
+    line-height: 1.1;
+
+    white-space: nowrap;
+
+    overflow: visible;
+    text-overflow: clip;
+
+    max-width: none;
+}
+
+.profile-info small {
+    color: #cbd5e1 !important;
+    font-size: 9px;
+    line-height: 1;
+}
+/* =========================================
+   PROFILE NAME - FIX SIZE IN ALL STATES
+========================================= */
+
+.navbar .profile-nav .profile-info .profile-name,
+.navbar .profile-nav .profile-name {
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    line-height: 1.1 !important;
+
+    color: #fff !important;
+
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+
+    transform: none !important;
+}
+
+/* Same size when clicked / dropdown opened */
+.navbar .profile-nav:focus .profile-name,
+.navbar .profile-nav:active .profile-name,
+.navbar .profile-nav[aria-expanded="true"] .profile-name {
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    transform: none !important;
+}
+
+/* Student text */
+.navbar .profile-nav .profile-info small {
+    font-size: 9px !important;
+    line-height: 1 !important;
+    color: #cbd5e1 !important;
+}
+
+/* Don't let Bootstrap change profile link appearance */
+.navbar .profile-nav {
+    font-size: 13px !important;
+    transform: none !important;
+}
+
+/* Click/Focus */
+.navbar .profile-nav:focus,
+.navbar .profile-nav:active {
+    font-size: 13px !important;
+    transform: none !important;
+}
+
+
+/* Dropdown arrow */
+
+.profile-nav::after {
+    color: #ffffff;
+    margin-left: 3px;
+}
+
+
+/* ================================
+   DROPDOWN
+================================ */
+
+.dropdown-menu {
+    min-width: 220px;
+
+    background: rgba(20,25,40,.97);
+
+    backdrop-filter: blur(15px);
+
+    border: 1px solid rgba(255,255,255,.12) !important;
+
+    box-shadow: 0 15px 35px rgba(0,0,0,.45);
+}
+
+.dropdown-item {
+    padding: 10px 15px;
+
+    color: #ffffff !important;
+
+    font-weight: 600;
+
+    border-radius: 8px;
+
+    transition: .25s;
+}
+
+.dropdown-item:hover {
+    background: #2563eb;
+
+    color: white !important;
+}
+
+
+/* Divider */
+
+.dropdown-divider {
+    border-color: rgba(255,255,255,.15);
+}
+
+
+/* ================================
+   LARGE SCREEN
+================================ */
+
+@media (min-width: 1200px) {
+
+    .profile-nav {
+        min-width: 125px;
+    }
+
+    .profile-name {
+        font-size: 16px;
+    }
 
 }
 
-#suggestions a:hover{
 
-background:#2563eb;
+/* ================================
+   TABLET
+================================ */
 
-color:white;
+@media (max-width: 1199px) {
 
-}
-.main{
+    .profile-nav {
+        min-width: 110px;
+    }
 
-background:rgba(255,255,255,.05);
-
-backdrop-filter:blur(15px);
-
-border-radius:25px;
-
-padding:30px;
-
-margin-top:30px;
-
-box-shadow:0 20px 40px rgba(0,0,0,.35);
+    .profile-name {
+        font-size: 14px;
+    }
 
 }
 
-        /* FLASH */
-        .alert {
-            border-radius: 12px;
-        }
 
-        /* BOTTOM NAVBAR */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
+/* ================================
+   MOBILE
+================================ */
 
-            background: linear-gradient(90deg, #212529, #2c3034);
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            z-index: 999;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.3);
-            border-top: 1px solid rgba(255,255,255,0.08);
-        }
+@media (max-width: 768px) {
 
-        .bottom-nav a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 13px;
-            text-align: center;
-            transition: 0.3s;
-        }
+    .profile-info {
+        display: none !important;
+    }
 
-        .bottom-nav a:hover {
-            color: #0d6efd;
-            transform: translateY(-3px);
-        }
+    .profile-img {
+        width: 38px;
+        height: 38px;
 
-        /* ABOUT PROJECT FULL WIDTH */
-        .about-project{
+        min-width: 38px;
+        min-height: 38px;
+    }
 
-background:rgba(17,24,39,.9);
-
-backdrop-filter:blur(20px);
-
-border-top:1px solid rgba(255,255,255,.08);
-
-margin-top:60px;
-
-color:white;
+    .profile-nav {
+        padding: 4px 6px !important;
+    }
 
 }
+/* Laptop */
 
-.about-project h5{
+@media (max-width: 1200px) {
 
-color:#38bdf8;
+    .navbar-top {
 
-}
-/* ===== Profile Navbar ===== */
+        gap: 18px;
 
-.profile-nav{
-    padding:4px 10px !important;
-    border-radius:50px;
-    transition:.3s;
-}
+        padding-left: 20px;
 
-.profile-nav:hover{
-    background:rgba(255,255,255,.08);
-}
+        padding-right: 20px;
+    }
 
-.profile-img{
-    width:42px;
-    height:42px;
-    border-radius:50%;
-    object-fit:cover;
-    border:2px solid #22d3ee;
-    transition:.3s;
-}
+    .custom-brand {
 
-.profile-img:hover{
-    transform:scale(1.08);
-    box-shadow:0 0 15px #22d3ee;
-}
+        font-size: 26px !important;
+    }
 
-.profile-info{
-    display:flex;
-    flex-direction:column;
-    line-height:1.1;
+    .search-box {
+
+        width: 240px;
+
+        min-width: 240px;
+    }
+
+    .custom-nav .nav-link {
+
+        font-size: 13px !important;
+
+        padding:
+            8px 10px !important;
+    }
 }
 
-.profile-name{
-    color:#fff;
-    font-weight:600;
-    font-size:14px;
+
+/* Smaller laptop */
+
+@media (max-width: 992px) {
+
+    .navbar-top {
+
+        flex-wrap: wrap;
+
+        min-height: auto;
+
+        padding:
+            12px 15px;
+
+        gap: 12px;
+    }
+
+    .live-date-time {
+
+        width: 150px;
+
+        min-width: 150px;
+    }
+
+    .custom-brand {
+
+        font-size: 24px !important;
+    }
+
+    .search-box {
+
+        width: 230px;
+
+        min-width: 230px;
+    }
+
+    .navbar-bottom {
+
+        padding:
+            8px 10px;
+    }
+
+    .custom-nav {
+
+        gap: 3px;
+    }
 }
 
-.dropdown-menu{
-    min-width:220px;
+
+/* Tablet */
+
+@media (max-width: 768px) {
+
+    .navbar-top {
+
+        flex-direction: column;
+
+        gap: 10px;
+    }
+
+    .live-date-time {
+
+        width: 160px;
+
+        min-width: 160px;
+    }
+
+    .custom-brand {
+
+        font-size: 25px !important;
+    }
+
+    .search-box {
+
+        width: 90%;
+
+        min-width: 0;
+    }
+
+    .navbar-bottom {
+
+        padding:
+            8px;
+    }
+
+    .custom-nav .nav-link {
+
+        font-size: 13px !important;
+
+        padding:
+            8px 10px !important;
+    }
 }
 
-.dropdown-item{
-    padding:10px 15px;
-    font-weight:500;
-}
-
-.dropdown-item:hover{
-    background:#0d6efd;
-    color:white;
-}
 
 /* Mobile */
 
-@media(max-width:992px){
+@media (max-width: 500px) {
 
-.profile-info{
-    display:none;
-}
+    .live-date-time {
 
-.profile-img{
-    width:38px;
-    height:38px;
-}
+        width: 150px;
 
+        min-width: 150px;
+    }
+
+    #liveTime {
+
+        font-size: 17px;
+    }
+
+    #liveDate {
+
+        font-size: 11px;
+    }
+
+    .custom-brand {
+
+        font-size: 21px !important;
+    }
+
+    .search-box {
+
+        width: 95%;
+    }
+
+    .custom-nav .nav-link {
+
+        font-size: 12px !important;
+
+        padding:
+            7px 8px !important;
+    }
 }
-    </style>
-</head>
+</style>
+
+        
 
 <body>
     
 
 <!-- TOP NAVBAR -->
-<nav class="navbar navbar-expand-lg navbar-dark shadow-sm sticky-top">
-    <div class="container">
+<nav class="navbar navbar-expand-xl">
 
-        <a class="navbar-brand" href="{{ url_for('home_page') }}">
+    <div class="container-fluid">
+
+        <!-- DATE TIME -->
+        <div class="live-date-time">
+            <div id="liveDate"></div>
+            <div id="liveTime"></div>
+        </div>
+
+        <!-- LOGO -->
+        <a class="navbar-brand" href="/">
             ⚡ Study Quiz Hub
         </a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <!-- SEARCH -->
+        <div class="search-box">
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="🔍 Search Student"
+            >
+            <div id="suggestions"></div>
+        </div>
+
+
+        <!-- MOBILE BUTTON -->
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#mainNavbar"
+        >
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navMenu">
 
-            <!-- SEARCH -->
-            <div class="search-box ms-3">
-                <input id="searchInput" class="form-control" type="search" placeholder="🔍 Search Student">
-                <div id="suggestions" class="list-group position-absolute shadow"></div>
-            </div>
+        <!-- NAV LINKS -->
+        <div class="collapse navbar-collapse" id="mainNavbar">
 
-            <!-- LINKS -->
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="/">🏠 Home</a>
-                <a class="nav-link" href="/Quiz_page">✏️ Quiz</a>
-                
-                 
+            <ul class="navbar-nav ms-auto">
 
-                <a class="nav-link" href="/score_history">⏳ Record</a>
-                <a class="nav-link" href="/askhub">💬 AskHub</a>
-                <a class="nav-link" href="/leaderboard">🏆 Leaderboard</a>
-                <a class="nav-link" href="/students">👨‍🎓 Students</a>
+                <li class="nav-item">
+                    <a class="nav-link" href="/">
+                        🏠 Home
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/Quiz_page">
+                        🖍️ Quiz
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/exam_roadmap">
+                        🤖 AI Exam Roadmap
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/score_history">
+                        ⏳ Record
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/askhub">
+                        💬 AskHub
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/leaderboard">
+                        🏆 Leaderboard
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/students">
+                        👨‍🎓 Students
+                    </a>
+                </li>
 
                 {% if session.get('student_name') %}
 
-<li class="nav-item dropdown ms-2">
+                <li class="nav-item dropdown ms-2">
 
     <a class="nav-link dropdown-toggle d-flex align-items-center profile-nav"
        href="#"
@@ -419,14 +1168,25 @@ color:#38bdf8;
 </li>
 
 {% endif %}
-                <a class="nav-link" href="/Information"> 📒Notes</a>
-                <a class="nav-link" href="/About_us">ℹ️ About</a>
-            </div>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Information">
+                        📒 Notes
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/About_us">
+                        ℹ️ About
+                    </a>
+                </li>
+
+            </ul>
 
         </div>
-    </div>
-</nav>
 
+    </div>
+
+</nav>
 <!-- MAIN CONTENT -->
 <main class="container py-5">
 
@@ -479,6 +1239,50 @@ color:#38bdf8;
 <!-- SCRIPTS -->
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+function updateLiveDateTime() {
+
+    const now = new Date();
+
+    const dateOptions = {
+        weekday: "short",
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+    };
+
+    const timeOptions = {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true
+    };
+
+    const date = now.toLocaleDateString(
+        "en-IN",
+        dateOptions
+    );
+
+    const time = now.toLocaleTimeString(
+        "en-IN",
+        timeOptions
+    );
+
+    document.getElementById("liveDate").textContent = date;
+
+    document.getElementById("liveTime").textContent = time;
+}
+
+
+updateLiveDateTime();
+
+setInterval(
+    updateLiveDateTime,
+    1000
+);
+
+</script>
 <script>
 const searchInput = document.getElementById("searchInput");
 const suggestions = document.getElementById("suggestions");
