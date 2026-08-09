@@ -1,101 +1,878 @@
 {% extends "base1.html" %}
-{% block title %}Login{% endblock %}
+
+{% block title %}🔐 Login | Study Quiz Hub{% endblock %}
 
 {% block content %}
+
 <style>
-.login-card {
-    max-width: 400px;
-    margin: auto;
-    border: none;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+
+/* =====================================================
+   LOGIN PAGE
+===================================================== */
+
+.login-page{
+
+    min-height:calc(100vh - 80px);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:50px 20px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    background:
+        radial-gradient(
+            circle at 10% 20%,
+            rgba(255,0,100,.18),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 90% 20%,
+            rgba(98,0,255,.18),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 50% 90%,
+            rgba(0,200,255,.15),
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #f8fbff,
+            #eef5ff,
+            #faf5ff
+        );
 }
 
-.login-header {
-    background: linear-gradient(135deg, #0d6efd, #6610f2);
-    color: white;
-    text-align: center;
-    padding: 25px;
+
+/* =====================================================
+   BACKGROUND GLOW
+===================================================== */
+
+.login-page::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:350px;
+    height:350px;
+
+    border-radius:50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff1744,
+            #7c4dff
+        );
+
+    filter:blur(100px);
+
+    opacity:.18;
+
+    top:-100px;
+    left:-100px;
 }
 
-.login-header i {
-    font-size: 2.5rem;
+
+.login-page::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:350px;
+    height:350px;
+
+    border-radius:50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #00c853,
+            #00b0ff
+        );
+
+    filter:blur(100px);
+
+    opacity:.15;
+
+    bottom:-120px;
+    right:-100px;
 }
 
-.form-control {
-    border-radius: 12px;
+
+/* =====================================================
+   LOGIN CARD
+===================================================== */
+
+.login-card{
+
+    width:100%;
+
+    max-width:480px;
+
+    position:relative;
+
+    z-index:2;
+
+    padding:40px;
+
+    border-radius:30px;
+
+    background:
+        rgba(255,255,255,.72);
+
+    border:
+        1px solid rgba(255,255,255,.95);
+
+    backdrop-filter:blur(25px);
+
+    -webkit-backdrop-filter:blur(25px);
+
+    box-shadow:
+        0 25px 70px rgba(31,41,55,.18);
+
+    overflow:hidden;
 }
 
-.btn-login {
-    border-radius: 12px;
-    font-weight: 600;
-    padding: 12px;
-    transition: 0.3s;
+
+/* Rainbow top border */
+
+.login-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:0;
+    right:0;
+
+    height:6px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ff1744,
+            #ff9800,
+            #ffee00,
+            #00c853,
+            #00b0ff,
+            #7c4dff,
+            #ff1744
+        );
+
+    background-size:300%;
+
+    animation:
+        rainbowBorder 5s linear infinite;
 }
 
-.btn-login:hover {
-    transform: translateY(-3px);
+
+@keyframes rainbowBorder{
+
+    100%{
+        background-position:300%;
+    }
+
 }
 
-.password-wrapper {
-    position: relative;
+
+/* =====================================================
+   BRAND
+===================================================== */
+
+.login-brand{
+
+    text-align:center;
+
+    margin-bottom:30px;
 }
 
-.password-toggle {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    z-index: 10;
+
+.login-logo{
+
+    width:75px;
+    height:75px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    margin:0 auto 15px;
+
+    border-radius:22px;
+
+    font-size:2.5rem;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff1744,
+            #c026d3,
+            #6366f1
+        );
+
+    box-shadow:
+        0 12px 30px rgba(124,77,255,.30);
+
+    animation:
+        logoFloat 3s ease-in-out infinite;
 }
+
+
+@keyframes logoFloat{
+
+    0%,100%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-6px);
+    }
+
+}
+
+
+.login-brand h1{
+
+    color:#172033 !important;
+
+    font-size:2rem;
+
+    font-weight:900;
+
+    margin:0;
+}
+
+
+.login-brand p{
+
+    color:#667085 !important;
+
+    margin-top:8px;
+
+    margin-bottom:0;
+
+}
+
+
+/* =====================================================
+   WELCOME TEXT
+===================================================== */
+
+.login-welcome{
+
+    text-align:center;
+
+    margin-bottom:25px;
+}
+
+
+.login-welcome h2{
+
+    color:#172033 !important;
+
+    font-size:1.5rem;
+
+    font-weight:800;
+
+    margin-bottom:8px;
+}
+
+
+.login-welcome p{
+
+    color:#667085 !important;
+
+    margin:0;
+
+}
+
+
+/* =====================================================
+   FORM
+===================================================== */
+
+.login-form{
+
+    margin-top:20px;
+}
+
+
+/* Floating input */
+
+.login-form .form-floating{
+
+    margin-bottom:18px;
+}
+
+
+.login-form .form-control{
+
+    height:58px;
+
+    border-radius:15px;
+
+    border:
+        1px solid #dbe2ea;
+
+    background:
+        rgba(255,255,255,.85);
+
+    color:#172033;
+
+    font-size:.98rem;
+
+    padding-left:18px;
+
+    transition:.3s;
+}
+
+
+.login-form .form-control:focus{
+
+    border-color:#7c4dff;
+
+    box-shadow:
+        0 0 0 4px rgba(124,77,255,.10);
+
+    background:white;
+}
+
+
+.login-form label{
+
+    color:#667085;
+
+    font-weight:500;
+}
+
+
+/* =====================================================
+   PASSWORD
+===================================================== */
+
+.password-wrapper{
+
+    position:relative;
+}
+
+
+.password-wrapper .form-floating{
+
+    margin-bottom:0;
+}
+
+
+.password-toggle{
+
+    position:absolute;
+
+    right:18px;
+
+    top:20px;
+
+    z-index:10;
+
+    cursor:pointer;
+
+    color:#667085;
+
+    font-size:1.1rem;
+
+    transition:.2s;
+}
+
+
+.password-toggle:hover{
+
+    color:#7c4dff;
+
+}
+
+
+/* =====================================================
+   FORGOT PASSWORD
+===================================================== */
+
+.login-options{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    margin:
+        10px 0 22px;
+}
+
+
+.forgot-link{
+
+    color:#6d28d9;
+
+    text-decoration:none;
+
+    font-weight:700;
+
+    font-size:.9rem;
+
+    transition:.2s;
+}
+
+
+.forgot-link:hover{
+
+    color:#e11d48;
+
+    text-decoration:underline;
+}
+
+
+/* =====================================================
+   LOGIN BUTTON
+===================================================== */
+
+.btn-login{
+
+    height:56px;
+
+    border:none;
+
+    border-radius:15px;
+
+    color:white !important;
+
+    font-size:1rem;
+
+    font-weight:800;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ff1744,
+            #c026d3,
+            #6366f1
+        );
+
+    background-size:200%;
+
+    box-shadow:
+        0 10px 25px rgba(124,77,255,.25);
+
+    transition:.35s;
+}
+
+
+.btn-login:hover{
+
+    transform:
+        translateY(-3px);
+
+    background-position:100%;
+
+    box-shadow:
+        0 15px 35px rgba(124,77,255,.35);
+}
+
+
+/* =====================================================
+   DIVIDER
+===================================================== */
+
+.login-divider{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    margin:25px 0;
+
+    color:#98a2b3;
+
+    font-size:.85rem;
+}
+
+
+.login-divider::before,
+.login-divider::after{
+
+    content:"";
+
+    height:1px;
+
+    flex:1;
+
+    background:#dbe2ea;
+}
+
+
+/* =====================================================
+   REGISTER
+===================================================== */
+
+.register-box{
+
+    text-align:center;
+
+    padding:18px;
+
+    border-radius:15px;
+
+    background:
+        rgba(124,77,255,.06);
+
+    border:
+        1px solid rgba(124,77,255,.10);
+}
+
+
+.register-box p{
+
+    color:#667085;
+
+    margin:0;
+
+    font-size:.95rem;
+}
+
+
+.register-link{
+
+    display:inline-block;
+
+    margin-left:5px;
+
+    color:#6d28d9;
+
+    font-weight:800;
+
+    text-decoration:none;
+}
+
+
+.register-link:hover{
+
+    color:#e11d48;
+
+    text-decoration:underline;
+}
+
+
+/* =====================================================
+   SECURITY TEXT
+===================================================== */
+
+.security-note{
+
+    text-align:center;
+
+    margin-top:20px;
+
+    color:#98a2b3;
+
+    font-size:.8rem;
+}
+
+
+.security-note i{
+
+    color:#16a34a;
+
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width:576px){
+
+    .login-page{
+
+        padding:30px 15px;
+
+    }
+
+    .login-card{
+
+        padding:30px 22px;
+
+        border-radius:25px;
+
+    }
+
+    .login-brand h1{
+
+        font-size:1.7rem;
+
+    }
+
+    .login-logo{
+
+        width:65px;
+        height:65px;
+
+        font-size:2.1rem;
+
+    }
+
+}
+
 </style>
 
-<div class="container py-5">
-    <div class="card login-card">
-        <div class="login-header">
-            <i class="bi bi-box-arrow-in-right"></i>
-            <h2 class="mt-2">Student Login</h2>
-            <p class="mb-0">Access your Study Quiz Hub account</p>
+
+<!-- =====================================================
+     LOGIN PAGE
+===================================================== -->
+
+<div class="login-page">
+
+    <div class="login-card">
+
+
+        <!-- BRAND -->
+
+        <div class="login-brand">
+
+            <div class="login-logo">
+                🎓
+            </div>
+
+            <h1>
+                Study Quiz Hub
+            </h1>
+
+            <p>
+                📚 Learn • Practice • Achieve
+            </p>
+
         </div>
 
-        <div class="card-body p-4">
-            <form method="POST" action="/login">
-              
 
-                <div class="form-floating mb-3">
-                    <input type="email" name="email" class="form-control" id="email" placeholder="Email" required>
-                    <label for="email">
-                        <i class="bi bi-envelope-fill me-2"></i>
-                        Email Address
+        <!-- WELCOME -->
+
+        <div class="login-welcome">
+
+            <h2>
+                Welcome Back! 👋
+            </h2>
+
+            <p>
+                Login to continue your learning journey.
+            </p>
+
+        </div>
+
+
+        <!-- LOGIN FORM -->
+
+        <form
+            method="POST"
+            action="/login"
+            class="login-form"
+        >
+
+
+            <!-- EMAIL -->
+
+            <div class="form-floating">
+
+                <input
+                    type="email"
+                    name="email"
+                    class="form-control"
+                    id="email"
+                    placeholder="Email Address"
+                    autocomplete="email"
+                    required
+                >
+
+                <label for="email">
+
+                    <i class="bi bi-envelope-fill me-2"></i>
+
+                    Email Address
+
+                </label>
+
+            </div>
+
+
+            <!-- PASSWORD -->
+
+            <div class="password-wrapper">
+
+                <div class="form-floating">
+
+                    <input
+                        type="password"
+                        name="password"
+                        class="form-control"
+                        id="password"
+                        placeholder="Password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                    <label for="password">
+
+                        <i class="bi bi-lock-fill me-2"></i>
+
+                        Password
+
                     </label>
+
                 </div>
 
-                <div class="password-wrapper mb-3">
-                    <div class="form-floating">
-                        <input type="password" name="password" class="form-control" id="password" placeholder="Password" required>
-                        <label for="password">
-                            <i class="bi bi-lock-fill me-2"></i>
-                            Password
-                        </label>
-                    </div>
-                    <i class="bi bi-eye-fill password-toggle" onclick="togglePassword('password')"></i>
-                </div>
 
-                <button class="btn btn-success btn-login w-100">
-                    <i class="bi bi-box-arrow-in-right me-2"></i>
-                    Login Now
-                </button>
-            </form>
+                <i
+                    class="bi bi-eye-fill password-toggle"
+                    id="passwordIcon"
+                    onclick="togglePassword('password')"
+                ></i>
+
+            </div>
+
+
+            <!-- FORGOT PASSWORD -->
+
+            <div class="login-options">
+
+                <a
+                    href="/forgot_password"
+                    class="forgot-link"
+                >
+
+                    🔑 Forgot Password?
+
+                </a>
+
+            </div>
+
+
+            <!-- LOGIN BUTTON -->
+
+            <button
+                type="submit"
+                class="btn btn-login w-100"
+            >
+
+                <i class="bi bi-box-arrow-in-right me-2"></i>
+
+                Login Now
+
+            </button>
+
+
+        </form>
+
+
+        <!-- DIVIDER -->
+
+        <div class="login-divider">
+
+            <span>
+                New to Study Quiz Hub?
+            </span>
+
         </div>
+
+
+        <!-- REGISTER -->
+
+        <div class="register-box">
+
+            <p>
+
+                Don't have an account?
+
+                <a
+                    href="/student"
+                    class="register-link"
+                >
+
+                    📝 Create Account
+
+                </a>
+
+            </p>
+
+        </div>
+
+
+        <!-- SECURITY -->
+
+        <div class="security-note">
+
+            <i class="bi bi-shield-check me-1"></i>
+
+            Your account information is securely protected.
+
+        </div>
+
+
     </div>
+
 </div>
 
+
+<!-- =====================================================
+     PASSWORD TOGGLE
+===================================================== -->
+
 <script>
+
 function togglePassword(id){
-    let field = document.getElementById(id);
-    field.type = (field.type === "password") ? "text" : "password";
+
+    const password =
+        document.getElementById(id);
+
+    const icon =
+        document.getElementById("passwordIcon");
+
+
+    if(password.type === "password"){
+
+        password.type = "text";
+
+        icon.classList.remove(
+            "bi-eye-fill"
+        );
+
+        icon.classList.add(
+            "bi-eye-slash-fill"
+        );
+
+    }
+    else{
+
+        password.type = "password";
+
+        icon.classList.remove(
+            "bi-eye-slash-fill"
+        );
+
+        icon.classList.add(
+            "bi-eye-fill"
+        );
+
+    }
+
 }
+
 </script>
+
+
 {% endblock %}

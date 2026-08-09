@@ -1,403 +1,1808 @@
 {% extends "base1.html" %}
-{% block title %}🏠 Home{% endblock %}
+
+{% block title %}🏠 Study Quiz Hub{% endblock %}
 
 {% block content %}
 
 <style>
-/* ============================
-   Rainbow Background
-============================ */
 
-.hero-section{
-    background: linear-gradient(
-        -45deg,
-        #0f172a,
-        #430c90,
-        #1f1c6f,
-        #760f22,
-        #14532d,
-        #7c2d12,
-        #3f0d4d,
-        #c63e10,
-        #722789
-    );
+/* =========================================================
+   GLOBAL
+========================================================= */
 
-    background-size:500% 500%;
-    animation:darkRainbow 15s ease infinite;
+*{
+    box-sizing:border-box;
+}
 
-    border-radius:25px;
-    padding:4rem 2rem;
-    color:white;
-    overflow:hidden;
+.home-page{
+    width:100%;
+    min-height:100vh;
+
+    background:
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(255,0,100,.15),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 90% 20%,
+            rgba(98,0,255,.15),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 50% 90%,
+            rgba(0,200,255,.12),
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #f8fbff,
+            #eef8ff,
+            #faf5ff
+        );
+
+    padding:30px 0 60px;
+}
+
+
+/* =========================================================
+   MAIN CONTAINER
+========================================================= */
+
+.home-container{
+    width:94%;
+    max-width:1500px;
+    margin:auto;
+}
+
+
+/* =========================================================
+   HERO SECTION
+========================================================= */
+
+.hero{
     position:relative;
 
-    box-shadow:0 20px 40px rgba(0,0,0,.4);
-}
+    min-height:560px;
 
-@keyframes darkRainbow{
+    border-radius:35px;
 
-0%{
-background-position:0% 50%;
-}
+    overflow:hidden;
 
-25%{
-background-position:100% 50%;
-}
+    display:flex;
 
-50%{
-background-position:100% 100%;
-}
+    align-items:center;
 
-75%{
-background-position:0% 100%;
-}
+    justify-content:center;
 
-100%{
-background-position:0% 50%;
-}
+    text-align:center;
 
+    box-shadow:
+        0 25px 60px rgba(20,20,60,.25);
+
+    border:
+        1px solid rgba(255,255,255,.5);
 }
 
 
-/* ============================
-   Rainbow Heading
-============================ */
+/* Hero image */
+
+.hero-image{
+    position:absolute;
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    inset:0;
+
+    z-index:0;
+}
+
+
+/* Dark overlay */
+
+.hero-overlay{
+    position:absolute;
+
+    inset:0;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(12,18,45,.90),
+            rgba(67,12,144,.72),
+            rgba(15,23,42,.78)
+        );
+
+    z-index:1;
+}
+
+
+/* Rainbow glow */
+
+.hero::after{
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+        linear-gradient(
+            120deg,
+            rgba(255,0,80,.18),
+            rgba(255,165,0,.10),
+            rgba(0,255,150,.10),
+            rgba(0,150,255,.12),
+            rgba(140,0,255,.18)
+        );
+
+    z-index:2;
+
+    pointer-events:none;
+}
+
+
+/* Hero content */
+
+.hero-content{
+    position:relative;
+
+    z-index:3;
+
+    width:90%;
+
+    max-width:900px;
+
+    color:white;
+}
+
+
+/* Badge */
+
+.hero-badge{
+
+    display:inline-block;
+
+    padding:11px 24px;
+
+    border-radius:50px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ff1744,
+            #c026d3,
+            #6366f1
+        );
+
+    font-weight:800;
+
+    font-size:.9rem;
+
+    letter-spacing:.5px;
+
+    box-shadow:
+        0 10px 25px rgba(168,85,247,.35);
+
+    margin-bottom:20px;
+}
+
+
+/* Hero title */
 
 .hero-title{
 
-font-weight:900;
-letter-spacing:2px;
+    margin:0;
 
-background:linear-gradient(
-90deg,
-#fff,
-#ffe082,
-#fff,
-#ffe082,
-#fff);
+    font-size:clamp(3rem,7vw,6rem);
 
-background-size:400%;
-background-clip:text;
--webkit-background-clip:text;
+    font-weight:950;
 
+    letter-spacing:2px;
 
--webkit-text-fill-color:transparent;
+    background:
+        linear-gradient(
+            90deg,
+            #ffffff,
+            #ffe082,
+            #ffffff,
+            #a7f3d0,
+            #ffffff
+        );
 
-animation:titleMove 6s linear infinite;
+    background-size:400%;
 
-text-shadow:none;
+    background-clip:text;
 
+    -webkit-background-clip:text;
+
+    -webkit-text-fill-color:transparent;
+
+    animation:
+        heroTitleRainbow 6s linear infinite;
+
+    text-shadow:
+        0 10px 30px rgba(0,0,0,.25);
 }
 
-@keyframes titleMove{
+@keyframes heroTitleRainbow{
 
-100%{
-background-position:400%;
-}
-
-}
-
-
-/* ============================
- Subtitle
-============================ */
-
-.hero-subtitle{
-
-font-size:1.2rem;
-
-font-weight:500;
-
-text-shadow:1px 1px 8px rgba(0,0,0,.4);
+    100%{
+        background-position:400%;
+    }
 
 }
 
 
-/* ============================
- Buttons
-============================ */
-.custom-btn{
+/* Tagline */
 
-background:linear-gradient(
-90deg,
-#a7e90e,
-#ebe825,
-#eded3a,
-#dbb727);
+.hero-tagline{
 
-background-size:300%;
+    font-size:1.5rem;
 
-animation:buttonGlow 6s linear infinite;
+    font-weight:700;
 
-color:white;
+    margin:
+        15px 0;
 
-border:none;
-
-border-radius:50px;
-
-font-weight:bold;
-
-}
-
-@keyframes buttonGlow{
-
-100%{
-background-position:300%;
-}
-
+    color:#ffffff;
 }
 
 
+/* Description */
 
-/* ============================
- Cards
-============================ */
+.hero-description{
 
-/* Stats Cards */
-.stat-card{
-    background:rgba(255,255,255,.08);
-    backdrop-filter:blur(15px);
-    border:1px solid rgba(255,255,255,.15);
-    border-radius:20px;
-    box-shadow:0 10px 25px rgba(0,0,0,.35);
+    max-width:750px;
 
-    height:190px;
-    width:100%;
+    margin:
+        15px auto 30px;
 
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
+    font-size:1.15rem;
+
+    line-height:1.8;
+
+    color:rgba(255,255,255,.90);
+
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.hero-btn{
+
+    display:inline-block;
+
+    text-decoration:none;
+
+    padding:
+        14px 28px;
+
+    margin:
+        5px;
+
+    border-radius:50px;
+
+    font-weight:800;
 
     transition:.3s;
+
+    border:2px solid transparent;
 }
+
+
+.hero-btn-primary{
+
+    color:white;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ff1744,
+            #ff9100,
+            #ff1744
+        );
+
+    background-size:200%;
+
+    box-shadow:
+        0 10px 25px rgba(255,23,68,.25);
+}
+
+
+.hero-btn-secondary{
+
+    color:white;
+
+    background:
+        rgba(255,255,255,.12);
+
+    border:
+        2px solid rgba(255,255,255,.7);
+
+    backdrop-filter:blur(10px);
+
+    -webkit-backdrop-filter:blur(10px);
+}
+
+
+.hero-btn:hover{
+
+    transform:
+        translateY(-4px);
+
+    color:white;
+
+    box-shadow:
+        0 15px 30px rgba(0,0,0,.2);
+}
+
+
+/* =========================================================
+   STATISTICS
+========================================================= */
+
+.stats-section{
+
+    padding:
+        35px 0;
+}
+
+
+.stat-card{
+
+    min-height:190px;
+
+    padding:25px 15px;
+
+    border-radius:25px;
+
+    text-align:center;
+
+    background:
+        rgba(255,255,255,.72);
+
+    border:
+        1px solid rgba(255,255,255,.95);
+
+    backdrop-filter:blur(20px);
+
+    -webkit-backdrop-filter:blur(20px);
+
+    box-shadow:
+        0 12px 35px rgba(31,41,55,.10);
+
+    transition:.35s;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+
+.stat-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:0;
+    right:0;
+
+    height:5px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ff1744,
+            #ff9800,
+            #ffee00,
+            #00c853,
+            #00b0ff,
+            #7c4dff
+        );
+
+}
+
+
+.stat-card:hover{
+
+    transform:
+        translateY(-10px);
+
+    box-shadow:
+        0 20px 40px rgba(31,41,55,.18);
+}
+
+
+.stat-icon{
+
+    font-size:3rem;
+
+    margin-bottom:8px;
+}
+
+
+.stat-number{
+
+    font-size:2.3rem;
+
+    font-weight:900;
+
+    color:#172033;
+}
+
+
+.stat-label{
+
+    font-size:1rem;
+
+    font-weight:600;
+
+    color:#667085;
+}
+
+
+/* =========================================================
+   COMMON SECTION
+========================================================= */
+
+.section{
+
+    padding:
+        80px 0;
+}
+
+
+.section-heading{
+
+    text-align:center;
+
+    max-width:800px;
+
+    margin:
+        0 auto 50px;
+}
+
+
+.section-badge{
+
+    display:inline-block;
+
+    padding:
+        10px 22px;
+
+    border-radius:50px;
+
+    color:white;
+
+    font-size:.85rem;
+
+    font-weight:850;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ff1744,
+            #c026d3,
+            #6366f1
+        );
+
+    box-shadow:
+        0 8px 20px rgba(124,77,255,.20);
+
+    margin-bottom:18px;
+}
+
+
+.section-heading h2{
+
+    color:#172033 !important;
+
+    font-size:
+        clamp(2rem,4vw,3rem);
+
+    font-weight:900;
+
+    margin-bottom:15px;
+}
+
+
+.section-heading p{
+
+    color:#667085 !important;
+
+    font-size:1.05rem;
+
+    line-height:1.7;
+}
+
+
+/* =========================================================
+   ABOUT
+========================================================= */
+
+.about-card{
+
+    padding:30px;
+
+    border-radius:30px;
+
+    background:
+        rgba(255,255,255,.70);
+
+    border:
+        1px solid rgba(255,255,255,.95);
+
+    backdrop-filter:blur(20px);
+
+    -webkit-backdrop-filter:blur(20px);
+
+    box-shadow:
+        0 15px 40px rgba(31,41,55,.10);
+}
+
+
+.about-image{
+
+    width:100%;
+
+    height:420px;
+
+    object-fit:cover;
+
+    border-radius:25px;
+
+    box-shadow:
+        0 15px 35px rgba(0,0,0,.15);
+}
+
+
+.about-content h2{
+
+    color:#172033 !important;
+
+    font-size:2rem;
+
+    font-weight:900;
+
+    margin-bottom:20px;
+}
+
+
+.about-content p{
+
+    color:#5f6875 !important;
+
+    line-height:1.8;
+
+    font-size:1.05rem;
+}
+
+
+.about-list{
+
+    margin-top:25px;
+}
+
+
+.about-list div{
+
+    color:#273142;
+
+    font-weight:650;
+
+    margin-bottom:12px;
+
+    padding:10px 15px;
+
+    border-radius:12px;
+
+    background:
+        rgba(255,255,255,.65);
+}
+
+
+/* =========================================================
+   FEATURES
+========================================================= */
+
 .feature-card{
-    background:rgba(255,255,255,.08);
-    backdrop-filter:blur(15px);
-    border:1px solid rgba(255,255,255,.15);
-    border-radius:20px;
-    
-    min-height:240px;
 
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-}
-.feature-card p{
-    color:white !important;
+    height:100%;
+
+    min-height:250px;
+
+    padding:30px 25px;
+
+    text-align:center;
+
+    border-radius:25px;
+
+    background:
+        rgba(255,255,255,.72);
+
+    border:
+        1px solid rgba(255,255,255,.95);
+
+    backdrop-filter:blur(20px);
+
+    -webkit-backdrop-filter:blur(20px);
+
+    box-shadow:
+        0 12px 35px rgba(31,41,55,.10);
+
+    transition:.35s;
+
+    position:relative;
+
+    overflow:hidden;
 }
 
-.stat-card:hover,
+
+.feature-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:0;
+    right:0;
+
+    height:4px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ff1744,
+            #ff9800,
+            #00c853,
+            #00b0ff,
+            #7c4dff
+        );
+
+}
+
+
 .feature-card:hover{
 
-transform:translateY(-10px);
+    transform:
+        translateY(-10px);
 
-background:rgba(255,255,255,.15);
-
-box-shadow:0 0 25px rgba(0,255,255,.35);
-
+    box-shadow:
+        0 20px 45px rgba(31,41,55,.18);
 }
-.row.equal-height{
+
+
+.feature-icon{
+
+    width:70px;
+    height:70px;
+
     display:flex;
-    flex-wrap:wrap;
-    justify-content:center;   /* Center cards */
-    align-items:stretch;
-}
 
-/* ============================
- Card Glow
-============================ */
+    align-items:center;
+    justify-content:center;
 
-@keyframes cardGlow{
+    margin:
+        0 auto 20px;
 
-0%{box-shadow:0 0 15px #ff1744;}
+    border-radius:20px;
 
-20%{box-shadow:0 0 20px #ff9800;}
-
-40%{box-shadow:0 0 20px #ffee00;}
-
-60%{box-shadow:0 0 20px #00e676;}
-
-80%{box-shadow:0 0 20px #2979ff;}
-
-100%{box-shadow:0 0 15px #ff1744;}
-
-}
-
-
-/* ============================
- Emoji Animation
-============================ */
-
-.emoji-big,
-.emoji-big-large{
-    font-size:3rem;
-    margin-bottom:8px;   /* pehle 10px tha */
-}
-
-
-
-
-.emoji-big{
-
-font-size:4rem;
-
-}
-
-.emoji-big-large{
-
-font-size:3rem;
-
-margin-bottom:10px;
-
-}
-
-@keyframes floatEmoji{
-
-0%,100%{
-
-transform:translateY(0);
-
-}
-
-50%{
-
-transform:translateY(-10px);
-
-}
-
-}
-
-
-/* ============================
- Card Text
-============================ */
-
-.stat-card h4{
-    margin:0;
     font-size:2.2rem;
-    font-weight:700;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,23,68,.15),
+            rgba(124,77,255,.15)
+        );
 }
-.stat-card p{
-    margin-top:8px;
-    margin-bottom:0;
-    min-height:auto;
-  
+
+
+.feature-card h3{
+
+    color:#172033 !important;
+
+    font-size:1.3rem;
+
+    font-weight:850;
+
+    margin-bottom:12px;
 }
 
 
+.feature-card p{
 
-/* ============================
- Responsive
-============================ */
+    color:#667085 !important;
+
+    line-height:1.7;
+
+    margin:0;
+}
+
+
+/* =========================================================
+   AI ASSISTANT
+========================================================= */
+
+.ai-card{
+
+    padding:
+        40px;
+
+    border-radius:30px;
+
+    color:white;
+
+    background:
+        linear-gradient(
+            120deg,
+            #d81b60,
+            #9333ea,
+            #4f46e5,
+            #2563eb
+        );
+
+    background-size:300% 300%;
+
+    animation:
+        aiRainbow 10s ease infinite;
+
+    box-shadow:
+        0 20px 50px rgba(79,70,229,.25);
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+
+@keyframes aiRainbow{
+
+    0%{
+        background-position:0% 50%;
+    }
+
+    50%{
+        background-position:100% 50%;
+    }
+
+    100%{
+        background-position:0% 50%;
+    }
+
+}
+
+
+.ai-icon{
+
+    font-size:5rem;
+
+    filter:
+        drop-shadow(
+            0 8px 10px rgba(0,0,0,.2)
+        );
+}
+
+
+.ai-card h2{
+
+    color:white !important;
+
+    font-weight:900;
+
+    margin-bottom:12px;
+}
+
+
+.ai-card p{
+
+    color:rgba(255,255,255,.9) !important;
+
+    line-height:1.7;
+
+    margin:0;
+}
+
+
+/* =========================================================
+   HOW IT WORKS
+========================================================= */
+
+.how-section{
+
+    padding:
+        80px 0;
+}
+
+
+.process-card{
+
+    position:relative;
+
+    min-height:280px;
+
+    padding:
+        35px 25px;
+
+    text-align:center;
+
+    border-radius:25px;
+
+    background:
+        rgba(255,255,255,.78);
+
+    border:
+        1px solid rgba(255,255,255,.95);
+
+    backdrop-filter:blur(20px);
+
+    -webkit-backdrop-filter:blur(20px);
+
+    box-shadow:
+        0 12px 35px rgba(31,41,55,.12);
+
+    transition:.35s;
+
+    overflow:hidden;
+}
+
+
+.process-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:0;
+    right:0;
+
+    height:5px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ff1744,
+            #ff9800,
+            #ffee00,
+            #00c853,
+            #00b0ff,
+            #7c4dff
+        );
+
+}
+
+
+.process-card:hover{
+
+    transform:
+        translateY(-12px);
+
+    box-shadow:
+        0 22px 45px rgba(31,41,55,.20);
+}
+
+
+.process-number{
+
+    width:72px;
+    height:72px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    margin:
+        5px auto 20px;
+
+    border-radius:50%;
+
+    color:white !important;
+
+    font-size:1.5rem;
+
+    font-weight:900;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff1744,
+            #c026d3,
+            #6366f1
+        );
+
+    box-shadow:
+        0 10px 25px rgba(124,77,255,.35);
+}
+
+
+.process-card h4{
+
+    color:#172033 !important;
+
+    font-size:1.3rem;
+
+    font-weight:850;
+
+    margin:
+        10px 0 12px;
+}
+
+
+.process-card p{
+
+    color:#5f6875 !important;
+
+    line-height:1.7;
+
+    margin:0;
+}
+
+
+/* =========================================================
+   FINAL CTA
+========================================================= */
+
+.cta{
+
+    text-align:center;
+
+    padding:
+        70px 30px;
+
+    margin-top:30px;
+
+    border-radius:35px;
+
+    color:white;
+
+    background:
+        linear-gradient(
+            120deg,
+            #ec4899,
+            #9333ea,
+            #6366f1,
+            #2563eb
+        );
+
+    background-size:300% 300%;
+
+    animation:
+        ctaRainbow 10s ease infinite;
+
+    box-shadow:
+        0 20px 50px rgba(79,70,229,.25);
+}
+
+
+@keyframes ctaRainbow{
+
+    0%{
+        background-position:0% 50%;
+    }
+
+    50%{
+        background-position:100% 50%;
+    }
+
+    100%{
+        background-position:0% 50%;
+    }
+
+}
+
+
+.cta h2{
+
+    color:white !important;
+
+    font-size:
+        clamp(2rem,4vw,3rem);
+
+    font-weight:900;
+
+    margin:
+        15px 0;
+}
+
+
+.cta p{
+
+    color:rgba(255,255,255,.9) !important;
+
+    max-width:700px;
+
+    margin:
+        0 auto 25px;
+
+    font-size:1.1rem;
+
+    line-height:1.7;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
 
 @media(max-width:768px){
 
-.hero-title{
+    .home-page{
+        padding:
+            15px 0 40px;
+    }
 
-font-size:2rem;
+    .home-container{
+        width:94%;
+    }
+
+    .hero{
+        min-height:560px;
+
+        border-radius:25px;
+    }
+
+    .hero-title{
+        font-size:3rem;
+    }
+
+    .hero-tagline{
+        font-size:1.1rem;
+    }
+
+    .hero-description{
+        font-size:.95rem;
+    }
+
+    .hero-btn{
+        display:block;
+
+        width:90%;
+
+        margin:
+            10px auto;
+    }
+
+    .section{
+        padding:
+            55px 0;
+    }
+
+    .about-card{
+        padding:18px;
+    }
+
+    .about-image{
+        height:280px;
+    }
+
+    .ai-card{
+        padding:30px 20px;
+
+        text-align:center;
+    }
+
+    .ai-icon{
+        font-size:4rem;
+
+        margin-bottom:20px;
+    }
+
+    .process-card{
+        min-height:240px;
+    }
+
+    .cta{
+        padding:
+            55px 20px;
+    }
 
 }
 
-.hero-subtitle{
 
-font-size:1rem;
+/* =========================================================
+   EXTRA SMALL MOBILE
+========================================================= */
 
-}
+@media(max-width:480px){
 
-.custom-btn{
+    .hero-title{
+        font-size:2.4rem;
+    }
 
-width:100%;
-margin-bottom:12px;
+    .hero-badge{
+        font-size:.75rem;
 
-}
+        padding:
+            9px 16px;
+    }
 
+    .stat-card{
+        min-height:160px;
+    }
 
+    .stat-icon{
+        font-size:2.3rem;
+    }
+
+    .stat-number{
+        font-size:1.8rem;
+    }
 
 }
 
 </style>
 
-<div class="hero-section text-center shadow-lg">
 
-    <span class="emoji-big">🌟</span>
+<!-- =========================================================
+     HOME PAGE
+========================================================= -->
 
-    <h1 class="display-4 hero-title mt-3">
-        Welcome to Study Quiz Hub 🎓
-    </h1>
+<div class="home-page">
 
-    <p class="hero-subtitle">
-        📚 Practice quizzes, <i class="bi bi-bar-chart-fill"></i> track progress and 🚀 improve your skills.
-    </p>
+<div class="home-container">
 
-    <div class="mt-4">
-        <a href="/login" class="btn btn-light custom-btn me-md-3">
-            🔑 Login
-        </a>
-        <a href="/student" class="btn btn-warning custom-btn">
-            📝 Register
-        </a>
-    </div>
 
-    <!-- Stats Cards -->
-    <div class="row equal-height mt-4 g-3 ">
+<!-- =========================================================
+     1. HERO SECTION
+========================================================= -->
 
-        <div class="col-md-3">
-            <div class="card stat-card text-center p-2">
-                <span class="emoji-big-large">👨‍🎓</span>
-                <h4 class="text-white">{{ total_students }}</h4>
-                <p class="mb-0 text-white">Students</p>
-            </div>
+<section class="hero">
+
+    <img
+        src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1900&q=85"
+        class="hero-image"
+        alt="Students learning"
+    >
+
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+
+        <div class="hero-badge">
+            🎓 SMART LEARNING PLATFORM
         </div>
 
-        <div class="col-md-3">
-            <div class="card stat-card text-center p-2">
-                <span class="emoji-big-large">📊</span>
-                <h4 class="text-white">{{ total_attempts }}</h4>
-                <p class="mb-0 text-white">Quiz Attempts</p>
-            </div>
+        <h1 class="hero-title">
+            Study Quiz Hub
+        </h1>
+
+        <div class="hero-tagline">
+            📚 Learn • 📝 Practice • 🏆 Achieve
         </div>
 
-        <div class="col-md-3">
-            <div class="card stat-card text-center p-2">
-                <span class="emoji-big-large">📘</span>
-                <h4 class="text-white">{{ total_courses }}</h4>
-                <p class="mb-0 text-white">Courses</p>
-            </div>
-        </div>
+        <p class="hero-description">
 
-    </div>
+            An interactive learning platform designed to
+            help students practice their knowledge,
+            improve their performance and learn smarter.
 
-    <!-- Feature Cards -->
-    <div class="row equal-height mt-4 g-3">
+        </p>
 
-        <div class="col-md-4">
-            <div class="card feature-card text-center p-3 w-100">
-                <span class="emoji-big-large">💡</span>
-                <h3 class="mt-3 text-white">About</h3>
-                <p class="text-muted">📖 Structured MCQ quizzes for better learning experience.</p>
-            </div>
-        </div>
+        <div>
 
-        <div class="col-md-4">
-            <div class="card feature-card text-center p-3 w-100">
-                <span class="emoji-big-large">📚</span>
-                <h3 class="mt-3 text-white">Learn</h3>
-                <p class="text-muted">🧠 Practice and improve with instant feedback system.</p>
-            </div>
-        </div>
+            <a href="/Quiz_page"
+               class="hero-btn hero-btn-primary">
 
-        <div class="col-md-4">
-             <div class="card feature-card h-100 text-center p-3 w-100">
-                <span class="emoji-big-large">🏆</span>
-                <h3 class="mt-3 text-white">Leaderboard</h3>
-                <p class="text-muted">⚡ Compete with others and track your ranking live.</p>
-            </div>
+                📚 Explore Quizzes
+
+            </a>
+
+            <a href="/student"
+               class="hero-btn hero-btn-secondary">
+
+                🚀 Get Started
+
+            </a>
+
         </div>
 
     </div>
+
+</section>
+
+
+<!-- =========================================================
+     2. STATISTICS
+========================================================= -->
+
+<section class="stats-section">
+
+<div class="row g-3">
+
+
+    <div class="col-6 col-lg-3">
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                👨‍🎓
+            </div>
+
+            <div class="stat-number">
+                {{ total_students }}
+            </div>
+
+            <div class="stat-label">
+                Students
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-6 col-lg-3">
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                📝
+            </div>
+
+            <div class="stat-number">
+                {{ total_attempts }}
+            </div>
+
+            <div class="stat-label">
+                Quiz Attempts
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-6 col-lg-3">
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                📚
+            </div>
+
+            <div class="stat-number">
+                {{ total_courses }}
+            </div>
+
+            <div class="stat-label">
+                Courses
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-6 col-lg-3">
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🏆
+            </div>
+
+            <div class="stat-number">
+                #1
+            </div>
+
+            <div class="stat-label">
+                Goal: Top Rank
+            </div>
+
+        </div>
+
+    </div>
+
 
 </div>
+
+</section>
+
+
+<!-- =========================================================
+     3. ABOUT US
+========================================================= -->
+
+<section class="section">
+
+    <div class="section-heading">
+
+        <span class="section-badge">
+            ✨ ABOUT US
+        </span>
+
+        <h2>
+            Make Learning More Interactive
+        </h2>
+
+        <p>
+            Study Quiz Hub brings quizzes, learning resources,
+            performance tracking and AI assistance together
+            in one simple platform.
+        </p>
+
+    </div>
+
+
+    <div class="about-card">
+
+        <div class="row align-items-center g-5">
+
+
+            <div class="col-lg-6">
+
+                <img
+                    src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1000&q=85"
+                    class="about-image"
+                    alt="Students studying"
+                >
+
+            </div>
+
+
+            <div class="col-lg-6 about-content">
+
+                <h2>
+                    Study Smarter, Not Harder 🎯
+                </h2>
+
+                <p>
+
+                    Traditional learning can sometimes become boring.
+                    Study Quiz Hub makes practice more engaging by
+                    allowing students to test their knowledge,
+                    receive instant results and track their progress.
+
+                </p>
+
+
+                <div class="about-list">
+
+                    <div>
+                        ✅ Interactive MCQ quizzes
+                    </div>
+
+                    <div>
+                        ✅ Instant quiz results
+                    </div>
+
+                    <div>
+                        ✅ Student performance tracking
+                    </div>
+
+                    <div>
+                        ✅ Course-based learning
+                    </div>
+
+                    <div>
+                        ✅ AI-powered study assistance
+                    </div>
+
+                    <div>
+                        ✅ Live leaderboard
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+<section class="section">
+
+    <div class="section-heading">
+
+        <span class="section-badge">
+            🚀 FEATURES
+        </span>
+
+        <h2>
+            Everything for Better Learning
+        </h2>
+
+        <p>
+            Powerful features designed around the student's
+            learning journey.
+        </p>
+
+    </div>
+
+
+    <div class="row g-4">
+
+
+        
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    📝
+                </div>
+
+                <h3>
+                    Interactive Quizzes
+                </h3>
+
+                <p>
+                    Test your knowledge with carefully designed
+                    multiple-choice questions.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    📊
+                </div>
+
+                <h3>
+                    Progress Tracking
+                </h3>
+
+                <p>
+                    Track your attempts, scores and performance
+                    as you continue learning.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    🏆
+                </div>
+
+                <h3>
+                    Leaderboard
+                </h3>
+
+                <p>
+                    See your ranking and challenge yourself
+                    to reach the top.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    🤖
+                </div>
+
+                <h3>
+                    AI Assistant
+                </h3>
+
+                <p>
+                    Ask questions and get AI-powered learning
+                    support whenever you need it.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    📚
+                </div>
+
+                <h3>
+                    Multiple Courses
+                </h3>
+
+                <p>
+                    Choose different subjects and practice
+                    according to your learning needs.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    ⚡
+                </div>
+
+                <h3>
+                    Instant Feedback
+                </h3>
+
+                <p>
+                    Get immediate results after completing
+                    your quiz and understand your performance.
+                </p>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+
+<section class="section">
+
+    <div class="ai-card">
+
+        <div class="row align-items-center">
+
+
+            <div class="col-lg-2 text-center">
+
+                <div class="ai-icon">
+                    🤖
+                </div>
+
+            </div>
+
+
+            <div class="col-lg-7">
+
+                <h2>
+                    Your AI Study Assistant
+                </h2>
+
+                <p>
+
+                    Confused about a topic?
+
+                    AskHub helps students find answers,
+                    understand concepts and get useful study
+                    guidance using AI.
+
+                </p>
+
+            </div>
+
+
+            <div class="col-lg-3 text-center">
+
+                <a href="/askhub"
+                   class="hero-btn hero-btn-secondary">
+
+                    🤖 AskHub
+
+                </a>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+<section class="section how-section">
+
+    <div class="section-heading">
+
+        <span class="section-badge">
+            📌 HOW IT WORKS
+        </span>
+
+        <h2>
+            Start Learning in 4 Steps
+        </h2>
+
+        <p>
+            Follow four simple steps and begin your
+            learning journey with Study Quiz Hub.
+        </p>
+
+    </div>
+
+
+    <div class="row g-4">
+
+
+        
+
+        <div class="col-md-6 col-lg-3">
+
+            <div class="process-card">
+
+                <div class="process-number">
+                    1
+                </div>
+
+                <h4>
+                    📝 Register
+                </h4>
+
+                <p>
+                    Create your student account
+                    and get started.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        
+
+        <div class="col-md-6 col-lg-3">
+
+            <div class="process-card">
+
+                <div class="process-number">
+                    2
+                </div>
+
+                <h4>
+                    📚 Select Course
+                </h4>
+
+                <p>
+                    Choose the subject you
+                    want to practice.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        
+
+        <div class="col-md-6 col-lg-3">
+
+            <div class="process-card">
+
+                <div class="process-number">
+                    3
+                </div>
+
+                <h4>
+                    🧠 Take Quiz
+                </h4>
+
+                <p>
+                    Answer questions and
+                    test your knowledge.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        
+        <div class="col-md-6 col-lg-3">
+
+            <div class="process-card">
+
+                <div class="process-number">
+                    4
+                </div>
+
+                <h4>
+                    🏆 Improve
+                </h4>
+
+                <p>
+                    Check your results and
+                    improve your performance.
+                </p>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+
+<section class="cta">
+
+    <div style="font-size:3.5rem;">
+        🎓✨
+    </div>
+
+
+    <h2>
+        Ready to Test Your Knowledge?
+    </h2>
+
+
+    <p>
+
+        Start practicing today and discover a smarter
+        way to learn with Study Quiz Hub.
+
+    </p>
+
+
+    <a href="/student"
+       class="hero-btn hero-btn-secondary">
+
+        📝 Create Account
+
+    </a>
+
+
+    <a href="/Quiz_page"
+       class="hero-btn hero-btn-primary">
+
+        📚 Start Quiz
+
+    </a>
+
+</section>
+
+
+</div>
+
+</div>
+
 
 {% endblock %}

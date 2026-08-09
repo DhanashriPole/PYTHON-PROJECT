@@ -1234,12 +1234,15 @@ body {
 
     <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4">
 
+         
         <li>
-            <a class="dropdown-item"
-               href="{{ url_for('view_student', student_id=session['student_id']) }}">
-                👤 My Profile
-            </a>
-        </li>
+           {% if session.get('student_id') %}   
+         <a  class ="dropdown-item" href="{{ url_for('view_student', student_id=session.get('student_id')) }}">
+                 👤 My Profile
+        </a>
+        {% endif %}
+            </li>
+                       
 
         <li><hr class="dropdown-divider"></li>
 
@@ -1247,7 +1250,7 @@ body {
             <a class="dropdown-item text-danger"
                href="{{ url_for('logout') }}">
                 🚪 Logout
-            </a>
+            </a>    
         </li>
 
     </ul>
