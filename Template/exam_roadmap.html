@@ -1,0 +1,784 @@
+{% extends "base1.html" %}
+{% block title %}🤖 AI Exam Roadmap{% endblock %}
+{% block content %}
+ <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+
+            margin: 0;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            min-height: 100vh;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0f172a,
+                    #1e1b4b,
+                    #312e81
+                );
+
+            color: white;
+        }
+
+
+        /* MAIN CONTAINER */
+
+        .container {
+
+            width: 92%;
+
+            max-width: 1100px;
+
+            margin: auto;
+
+            padding: 40px 0 60px;
+        }
+
+
+        /* HEADER */
+
+        .header {
+
+            text-align: center;
+
+            margin-bottom: 35px;
+        }
+
+        .header h1 {
+
+            font-size: 42px;
+
+            margin: 0 0 10px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #60a5fa,
+                    #c084fc,
+                    #f472b6
+                );
+
+            background-clip: text;
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color:
+                transparent;
+        }
+
+        .header p {
+
+            color: #cbd5e1;
+
+            font-size: 17px;
+        }
+
+
+        /* CARD */
+
+        .card {
+
+            background:
+                rgba(255,255,255,0.08);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.15);
+
+            backdrop-filter:
+                blur(20px);
+
+            border-radius: 25px;
+
+            padding: 30px;
+
+            margin-bottom: 25px;
+
+            box-shadow:
+                0 20px 50px
+                rgba(0,0,0,0.25);
+        }
+
+
+        /* FORM */
+
+        .form-title {
+
+            font-size: 25px;
+
+            margin-top: 0;
+
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+
+            margin-bottom: 20px;
+        }
+
+        label {
+
+            display: block;
+
+            margin-bottom: 8px;
+
+            font-weight: bold;
+
+            color: #e2e8f0;
+        }
+
+        input,
+        textarea {
+
+            width: 100%;
+
+            padding: 14px 16px;
+
+            border: 1px solid
+                rgba(255,255,255,.2);
+
+            border-radius: 12px;
+
+            outline: none;
+
+            background:
+                rgba(255,255,255,.08);
+
+            color: white;
+
+            font-size: 15px;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+
+            color: #94a3b8;
+        }
+
+        textarea {
+
+            min-height: 120px;
+
+            resize: vertical;
+        }
+
+        input:focus,
+        textarea:focus {
+
+            border-color: #818cf8;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(129,140,248,.15);
+        }
+
+
+        /* BUTTON */
+
+        .generate-btn {
+
+            width: 100%;
+
+            padding: 15px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            cursor: pointer;
+
+            color: white;
+
+            font-size: 17px;
+
+            font-weight: bold;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #6366f1,
+                    #8b5cf6,
+                    #ec4899
+                );
+
+            transition: .3s;
+        }
+
+        .generate-btn:hover {
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 10px 30px
+                rgba(139,92,246,.35);
+        }
+
+
+        /* EXAM INFO */
+
+        .exam-title {
+
+            font-size: 30px;
+
+            margin: 0 0 10px;
+        }
+
+        .overview {
+
+            color: #cbd5e1;
+
+            line-height: 1.7;
+        }
+
+
+        /* ROADMAP */
+
+        .roadmap-heading {
+
+            font-size: 27px;
+
+            margin-top: 0;
+        }
+
+
+        .day-card {
+
+            position: relative;
+
+            padding: 22px;
+
+            margin: 18px 0;
+
+            border-radius: 18px;
+
+            background:
+                rgba(15,23,42,.55);
+
+            border-left:
+                5px solid #8b5cf6;
+
+            transition: .3s;
+        }
+
+        .day-card:hover {
+
+            transform:
+                translateX(5px);
+
+            background:
+                rgba(30,41,59,.7);
+        }
+
+
+        .day-header {
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items: center;
+
+            gap: 15px;
+
+            flex-wrap: wrap;
+        }
+
+        .day-header h3 {
+
+            margin: 0;
+
+            font-size: 22px;
+        }
+
+
+        .hours {
+
+            padding: 7px 14px;
+
+            border-radius: 30px;
+
+            background:
+                rgba(99,102,241,.2);
+
+            color: #c4b5fd;
+
+            font-size: 14px;
+
+            font-weight: bold;
+        }
+
+
+        .section-title {
+
+            color: #a5b4fc;
+
+            margin-top: 20px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .topics {
+
+            padding-left: 20px;
+
+            line-height: 1.8;
+
+            color: #e2e8f0;
+        }
+
+
+        .day-text {
+
+            color: #cbd5e1;
+
+            line-height: 1.7;
+        }
+
+
+        /* TIPS */
+
+        .tips {
+
+            padding-left: 20px;
+
+            line-height: 2;
+
+            color: #e2e8f0;
+        }
+
+
+        /* NEW ROADMAP */
+
+        .new-roadmap {
+
+            text-align: center;
+
+            margin-top: 30px;
+        }
+
+
+        .new-roadmap a {
+
+            display: inline-block;
+
+            padding: 13px 25px;
+
+            border-radius: 12px;
+
+            text-decoration: none;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #4f46e5,
+                    #9333ea
+                );
+
+            font-weight: bold;
+        }
+
+
+        /* FLASH */
+
+        .alert {
+
+            padding: 14px 18px;
+
+            border-radius: 12px;
+
+            margin-bottom: 20px;
+
+            background:
+                rgba(239,68,68,.2);
+
+            border:
+                1px solid
+                rgba(239,68,68,.4);
+
+            color: #fecaca;
+        }
+
+
+        /* RESPONSIVE */
+
+        @media(max-width:700px) {
+
+            .header h1 {
+
+                font-size: 32px;
+            }
+
+            .container {
+
+                width: 94%;
+            }
+
+            .card {
+
+                padding: 20px;
+            }
+
+            .day-header {
+
+                align-items: flex-start;
+            }
+        }
+
+    </style>
+
+
+
+
+<body>
+
+
+<div class="container">
+
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <h1>
+            🤖 AI Exam Roadmap
+        </h1>
+
+        <p>
+            Generate your personalized
+            exam preparation plan with AI
+        </p>
+
+    </div>
+
+
+    <!-- FLASH MESSAGE -->
+
+    {% with messages =
+        get_flashed_messages() %}
+
+        {% if messages %}
+
+            {% for message in messages %}
+
+                <div class="alert">
+
+                    {{ message }}
+
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- ========================= -->
+    <!-- INPUT FORM -->
+    <!-- ========================= -->
+
+    {% if not generated %}
+
+    <div class="card">
+
+        <h2 class="form-title text-white">
+
+            📝 Enter Exam Details
+
+        </h2>
+
+
+        <form
+            method="POST"
+            action="{{ url_for('exam_roadmap') }}"
+        >
+
+
+            <!-- EXAM NAME -->
+
+            <div class="form-group">
+
+                <label>
+                    Exam Name
+                </label>
+
+                <input
+                    type="text"
+                    name="exam_name"
+                    placeholder="Example: UNIT TESTS,hackathon,winter exam,summer exam, MSBTE Exam, JEE, NEET, UPSC, SSC, GATE, CAT, GRE, GMAT, IELTS, TOEFL, SAT, ACT, AP Exams, IB Exams, CBSE Board Exams, ICSE Board Exams, State Board Exams"
+                    required
+                >
+
+            </div>
+
+
+            <!-- EXAM DATE -->
+
+            <div class="form-group">
+
+                <label>
+                    Exam Date
+                </label>
+
+                <input
+                    type="date"
+                    name="exam_date"
+                    required
+                >
+
+            </div>
+
+
+            <!-- SUBJECTS -->
+
+            <div class="form-group">
+
+                <label>
+                    Subjects
+                </label>
+
+                <textarea
+                    name="subjects"
+                    placeholder="Example:
+HTML, CSS, JavaScript, Python, C++, Java, Data Structures, Algorithms, Operating Systems, Database Management Systems, Computer Networks, Software Engineering, Artificial Intelligence, Machine Learning, Deep Learning, Cloud Computing, Cybersecurity, Web Development, Mobile App Development, Game Development, Data Science, Big Data Analytics, Internet of Things (IoT), Blockchain Technology, DevOps Practices, Agile Methodologies, Project Management Principles, Communication Skills, Problem-Solving Techniques, Critical Thinking Strategies, Time Management Skills, Leadership Qualities, Team Collaboration Skills, Adaptability and Flexibility in Work Environment
+Reasoning
+General Knowledge
+English"
+                    required
+                ></textarea>
+
+            </div>
+
+
+            <!-- DAILY HOURS -->
+
+            <div class="form-group">
+
+                <label>
+                    Daily Study Hours
+                </label>
+
+                <input
+                    type="number"
+                    name="daily_hours"
+                    min="1"
+                    max="16"
+                    step="0.5"
+                    placeholder="Example: 4"
+                    required
+                >
+
+            </div>
+
+
+            <!-- BUTTON -->
+
+            <button
+                type="submit"
+                class="generate-btn"
+            >
+
+                🚀 Generate AI Roadmap
+
+            </button>
+
+
+        </form>
+
+    </div>
+
+
+    {% else %}
+
+
+    <!-- ========================= -->
+    <!-- EXAM OVERVIEW -->
+    <!-- ========================= -->
+
+    <div class="card">
+
+        <h2 class="exam-title text-white">
+
+            📚 {{ roadmap.exam_name }}
+
+        </h2>
+
+        <p class="overview">
+
+            {{ roadmap.overview }}
+
+        </p>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- ROADMAP -->
+    <!-- ========================= -->
+
+    <div class="card" >
+
+        <h2 class="roadmap-heading text-white">
+
+            🗓️ Your Study Roadmap
+
+        </h2>
+
+
+        {% for day in roadmap.roadmap %}
+
+
+        <div class="day-card">
+
+
+            <div class="day-header text-white">
+
+                <h3>
+
+                    Day {{ day.day }}
+
+                </h3>
+
+
+                <span class="hours">
+
+                    ⏱️
+                    {{ day.study_hours }}
+                    Hours
+
+                </span>
+
+            </div>
+
+
+            <!-- TOPICS -->
+
+            <h4 class="section-title">
+
+                📖 Topics
+
+            </h4>
+
+
+            <ul class="topics">
+
+                {% for topic in day.topics %}
+
+                    <li>
+
+                        {{ topic }}
+
+                    </li>
+
+                {% endfor %}
+
+            </ul>
+
+
+            <!-- PRACTICE -->
+
+            <h4 class="section-title">
+
+                ✍️ Practice
+
+            </h4>
+
+            <p class="day-text">
+
+                {{ day.practice }}
+
+            </p>
+
+
+            <!-- REVISION -->
+
+            <h4 class="section-title">
+
+                🔄 Revision
+
+            </h4>
+
+            <p class="day-text">
+
+                {{ day.revision }}
+
+            </p>
+
+
+        </div>
+
+
+        {% endfor %}
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- FINAL TIPS -->
+    <!-- ========================= -->
+
+    <div class="card">
+
+        <h2>
+
+            🎯 Final Exam Tips
+
+        </h2>
+
+
+        <ul class="tips">
+
+            {% for tip in roadmap.final_tips %}
+
+                <li>
+
+                    {{ tip }}
+
+                </li>
+
+            {% endfor %}
+
+        </ul>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- NEW ROADMAP -->
+    <!-- ========================= -->
+
+    <div class="new-roadmap">
+
+        <a href="{{ url_for('exam_roadmap') }}">
+
+            🔄 Create New Roadmap
+
+        </a>
+
+    </div>
+
+
+    {% endif %}
+
+
+</div>
+
+
+</body>
+
+</html>
+
+{% endblock %}

@@ -1702,7 +1702,231 @@ def askhub_add():
     return render_template("askhub_add.html")
 
 
+@app.route("/exam_roadmap", methods=["GET", "POST"])
+def exam_roadmap():
 
+    if request.method == "POST":
+
+        exam_name = request.form.get("exam_name", "").strip()
+        exam_date = request.form.get("exam_date", "").strip()
+        subjects = request.form.get("subjects", "").strip()
+        daily_hours = request.form.get("daily_hours", "").strip()
+
+        # Validation
+        if not exam_name or not exam_date or not subjects or not daily_hours:
+            flash("Please fill all fields.", "warning")
+            return render_template(
+                "exam_roadmap.html",
+                generated=False
+            )
+
+        try:
+            daily_hours = float(daily_hours)
+
+            if daily_hours <= 0 or daily_hours > 16:
+                raise ValueError
+
+        except ValueError:
+            flash("Please enter valid daily study hours.", "danger")
+            return render_template(
+                "exam_roadmap.html",
+                generated=False
+            )
+
+        # -----------------------------
+        # AI PROMPT
+        # -----------------------------
+
+        prompt = f"""
+You are an expert exam preparation planner.
+
+Create a personalized exam preparation roadmap.
+
+Exam Name:
+{exam_name}
+
+Exam Date:
+{exam_date}
+
+Subjects:
+{subjects}
+
+Daily Study Hours:
+{daily_hours}
+
+Create a practical day-wise study roadmap.
+
+The roadmap should include:
+
+1. Daily topics
+2. Study hours
+3. Practice questions
+4. Revision
+5. Mock tests
+6. Weak topic improvement
+7. Final revision
+8. Exam preparation tips
+
+IMPORTANT:
+
+Return ONLY valid JSON.
+
+Do NOT return markdown.
+Do NOT return ```json.
+Do NOT return explanations outside JSON.
+
+Use exactly this format:
+
+{{
+    "exam_name": "{exam_name}",
+    "overview": "Short preparation strategy",
+    "roadmap": [
+        {{
+            "day": 1,
+            "topics": [
+                "Topic 1",
+                "Topic 2"
+            ],
+            "study_hours": 4,
+            "practice": "Practice 20 questions",
+            "revision": "Revise today's topics"
+        }}
+    ],
+    "final_tips": [
+        "Tip 1",
+        "Tip 2",
+        "Tip 3"
+    ]
+}}
+"""
+
+        try:
+
+            # -----------------------------
+            # GROQ CLIENT
+            # -----------------------------
+
+            client = Groq(
+                api_key=os.environ.get("GROQ_API_KEY")
+            )
+
+            response = client.chat.completions.create(
+
+                model="llama-3.1-8b-instant",
+
+                messages=[
+                    {
+                        "role": "system",
+                        "content": """
+You are an expert exam preparation AI.
+Generate realistic and practical study plans.
+Always return valid JSON when requested.
+"""
+                    },
+                    {
+                        "role": "user",
+                        "content": prompt
+                    }
+                ],
+
+                temperature=0.4
+            )
+
+            # -----------------------------
+            # GET AI RESPONSE
+            # -----------------------------
+
+            text = response.choices[0].message.content.strip()
+
+            print("\n========== AI ROADMAP RESPONSE ==========\n")
+            print(text)
+
+            # -----------------------------
+            # CLEAN MARKDOWN
+            # -----------------------------
+
+            text = text.replace("```json", "")
+            text = text.replace("```", "")
+            text = text.strip()
+
+            # -----------------------------
+            # FIND JSON
+            # -----------------------------
+
+            start = text.find("{")
+            end = text.rfind("}")
+
+            if start == -1 or end == -1:
+                raise Exception("JSON object not found")
+
+            text = text[start:end + 1]
+
+            # -----------------------------
+            # REMOVE TRAILING COMMAS
+            # -----------------------------
+
+            text = re.sub(
+                r",\s*}",
+                "}",
+                text
+            )
+
+            text = re.sub(
+                r",\s*]",
+                "]",
+                text
+            )
+
+            # -----------------------------
+            # PARSE JSON
+            # -----------------------------
+
+            roadmap = json.loads(text)
+
+            print("\n========== PARSED ROADMAP ==========\n")
+            print(roadmap)
+
+            # -----------------------------
+            # VALIDATE ROADMAP
+            # -----------------------------
+
+            if "roadmap" not in roadmap:
+                raise Exception("Roadmap data missing")
+
+            if not isinstance(roadmap["roadmap"], list):
+                raise Exception("Invalid roadmap format")
+
+            # -----------------------------
+            # SHOW RESULT
+            # -----------------------------
+
+            return render_template(
+                "exam_roadmap.html",
+                roadmap=roadmap,
+                generated=True
+            )
+
+        except Exception as e:
+
+            print("\n========== ROADMAP ERROR ==========")
+            print(e)
+
+            flash(
+                "AI roadmap generation failed. Please try again.",
+                "danger"
+            )
+
+            return render_template(
+                "exam_roadmap.html",
+                generated=False
+            )
+
+    # GET REQUEST
+
+    return render_template(
+        "exam_roadmap.html",
+        generated=False
+    )
 
 if __name__ == "__main__":
    
