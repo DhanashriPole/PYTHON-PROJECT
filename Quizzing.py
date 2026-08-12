@@ -5,7 +5,12 @@ import re
 import secrets
 from flask import Flask, render_template, request,session, redirect, url_for, flash,jsonify
 from groq import Groq
-
+from datetime import datetime
+import os
+import sys
+import tempfile
+import subprocess
+import shutil
 from dotenv import load_dotenv   
 load_dotenv()
 import os
@@ -1317,14 +1322,14 @@ def forgot_password():
             flash("Please enter your email address.", "danger")
             return redirect(url_for("forgot_password"))
 
-        # Find student
+       
         student = Students.query.filter_by(email=email).first()
 
         if not student:
             flash("No account found with this email address.", "danger")
             return redirect(url_for("forgot_password"))
 
-        # Store email temporarily in session
+       
         session["reset_email"] = email
 
         return redirect(url_for("reset_password"))
@@ -1335,7 +1340,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 @app.route("/reset_password", methods=["GET", "POST"])
 def reset_password():
 
-    # Check whether user came through forgot-password flow
+   
     email = session.get("reset_email")
 
     if not email:
@@ -1355,7 +1360,7 @@ def reset_password():
         password = request.form.get("password", "")
         confirm_password = request.form.get("confirm_password", "")
 
-        # Empty password
+        
         if not password or not confirm_password:
 
             flash(
@@ -1375,7 +1380,7 @@ def reset_password():
 
             return redirect(url_for("reset_password"))
 
-        # Basic password length validation
+       
         if len(password) < 6:
 
             flash(
@@ -1533,7 +1538,6 @@ def view_student(student_id):
         flash('Student record not found.', 'warning')
         return redirect(url_for('student_table'))
 
-    # Fetch all attempts
     results = db.session.query(
         Courses.course_name,
         Leaderboard.score,
@@ -1789,7 +1793,6 @@ def askhub_add():
 
     return render_template("askhub_add.html")
 
-
 @app.route("/exam_roadmap", methods=["GET", "POST"])
 def exam_roadmap():
 
@@ -1800,7 +1803,6 @@ def exam_roadmap():
         subjects = request.form.get("subjects", "").strip()
         daily_hours = request.form.get("daily_hours", "").strip()
 
-        # Validation
         if not exam_name or not exam_date or not subjects or not daily_hours:
             flash("Please fill all fields.", "warning")
             return render_template(
@@ -1815,100 +1817,185 @@ def exam_roadmap():
                 raise ValueError
 
         except ValueError:
-            flash("Please enter valid daily study hours.", "danger")
+            flash(
+                "Please enter valid daily study hours between 1 and 16.",
+                "danger"
+                )
             return render_template(
                 "exam_roadmap.html",
                 generated=False
             )
 
-        # -----------------------------
-        # AI PROMPT
-        # -----------------------------
+        try:
+            exam_date_obj = datetime.strptime(
+                exam_date,
+                "%Y-%m-%d"
+            ).date()
+
+            today = datetime.now().date()
+            days_remaining = (exam_date_obj - today).days
+
+        except ValueError:
+            flash(
+                "Please enter a valid exam date.",
+                "danger"
+            )
+            return render_template(
+                "exam_roadmap.html",
+                generated=False
+            )
+
+        if days_remaining < 0:
+            flash(
+                "Exam date cannot be in the past.",
+                "danger"
+            )
+            return render_template(
+                "exam_roadmap.html",
+                generated=False
+            )
+
+        if days_remaining == 0:
+            flash(
+                "Your exam is today. No preparation days are available.",
+                "warning"
+            )
+            return render_template(
+                "exam_roadmap.html",
+                generated=False
+            )
+
+        today_display = today.strftime("%d %B %Y")
+        exam_display = exam_date_obj.strftime("%d %B %Y")
 
         prompt = f"""
 You are an expert exam preparation planner.
 
-Create a personalized exam preparation roadmap.
+Create a personalized and realistic exam preparation roadmap.
 
-Exam Name:
+TODAY:
+{today_display}
+
+EXAM DATE:
+{exam_display}
+
+NUMBER OF PREPARATION DAYS:
+{days_remaining}
+
+EXAM NAME:
 {exam_name}
 
-Exam Date:
-{exam_date}
-
-Subjects:
+SUBJECTS:
 {subjects}
 
-Daily Study Hours:
+DAILY STUDY HOURS:
 {daily_hours}
 
-Create a practical day-wise study roadmap.
+The student has exactly {days_remaining} preparation days.
 
-The roadmap should include:
+The roadmap MUST contain exactly {days_remaining} days.
+
+Today is the first preparation day.
+
+The exam date itself MUST NOT be included as a study day.
+
+For example, if today is 12 August and exam date is 15 August:
+
+Day 1 = 12 August
+Day 2 = 13 August
+Day 3 = 14 August
+15 August = EXAM DAY
+
+Generate exactly 3 roadmap entries in this example.
+
+The roadmap should intelligently divide the subjects across the available days.
+
+Include:
 
 1. Daily topics
 2. Study hours
 3. Practice questions
 4. Revision
-5. Mock tests
+5. Mock tests when appropriate
 6. Weak topic improvement
 7. Final revision
 8. Exam preparation tips
 
-IMPORTANT:
+Do not create extra days.
+Do not create fewer days.
+Do not include the exam date in the roadmap.
+Use realistic study hours.
+Distribute subjects properly.
+Give more attention to difficult or important topics.
+Include revision before the exam.
+If only 1-3 days are available, create an intensive revision plan.
+If many days are available, gradually cover topics and include mock tests.
 
-Return ONLY valid JSON.
+RETURN ONLY VALID JSON.
 
 Do NOT return markdown.
 Do NOT return ```json.
 Do NOT return explanations outside JSON.
 
-Use exactly this format:
+Use exactly this structure:
 
 {{
     "exam_name": "{exam_name}",
+    "exam_date": "{exam_date}",
+    "days_remaining": {days_remaining},
     "overview": "Short preparation strategy",
     "roadmap": [
         {{
             "day": 1,
+            "date": "YYYY-MM-DD",
             "topics": [
                 "Topic 1",
                 "Topic 2"
             ],
-            "study_hours": 4,
-            "practice": "Practice 20 questions",
+            "study_hours": {daily_hours},
+            "practice": "Practice questions related to today's topics",
             "revision": "Revise today's topics"
         }}
     ],
     "final_tips": [
         "Tip 1",
         "Tip 2",
-        "Tip 3"
+        "Tip 3",
+        "Tip 4",
+        "Tip 5"
     ]
 }}
 """
 
         try:
 
-            # -----------------------------
-            # GROQ CLIENT
-            # -----------------------------
+            api_key = os.environ.get("GROQ_API_KEY")
+
+            if not api_key:
+                raise Exception(
+                    "GROQ_API_KEY environment variable is missing."
+                )
 
             client = Groq(
-                api_key=os.environ.get("GROQ_API_KEY")
+                api_key=api_key
             )
 
             response = client.chat.completions.create(
-
                 model="llama-3.1-8b-instant",
-
                 messages=[
                     {
                         "role": "system",
                         "content": """
 You are an expert exam preparation AI.
-Generate realistic and practical study plans.
-Always return valid JSON when requested.
+
+Create realistic, practical and personalized study plans.
+
+When JSON is requested:
+- Return ONLY valid JSON.
+- Do not use markdown.
+- Do not use ```json.
+- Do not add explanations.
+- Follow the requested JSON structure exactly.
 """
                     },
                     {
@@ -1916,42 +2003,27 @@ Always return valid JSON when requested.
                         "content": prompt
                     }
                 ],
-
-                temperature=0.4
+                temperature=0.3
             )
-
-            # -----------------------------
-            # GET AI RESPONSE
-            # -----------------------------
 
             text = response.choices[0].message.content.strip()
 
             print("\n========== AI ROADMAP RESPONSE ==========\n")
             print(text)
 
-            # -----------------------------
-            # CLEAN MARKDOWN
-            # -----------------------------
-
             text = text.replace("```json", "")
             text = text.replace("```", "")
             text = text.strip()
-
-            # -----------------------------
-            # FIND JSON
-            # -----------------------------
 
             start = text.find("{")
             end = text.rfind("}")
 
             if start == -1 or end == -1:
-                raise Exception("JSON object not found")
+                raise Exception(
+                    "JSON object not found in AI response."
+                )
 
             text = text[start:end + 1]
-
-            # -----------------------------
-            # REMOVE TRAILING COMMAS
-            # -----------------------------
 
             text = re.sub(
                 r",\s*}",
@@ -1965,33 +2037,49 @@ Always return valid JSON when requested.
                 text
             )
 
-            # -----------------------------
-            # PARSE JSON
-            # -----------------------------
-
             roadmap = json.loads(text)
 
             print("\n========== PARSED ROADMAP ==========\n")
             print(roadmap)
 
-            # -----------------------------
-            # VALIDATE ROADMAP
-            # -----------------------------
-
             if "roadmap" not in roadmap:
-                raise Exception("Roadmap data missing")
+                raise Exception(
+                    "Roadmap data missing."
+                )
 
             if not isinstance(roadmap["roadmap"], list):
-                raise Exception("Invalid roadmap format")
+                raise Exception(
+                    "Invalid roadmap format."
+                )
 
-            # -----------------------------
-            # SHOW RESULT
-            # -----------------------------
+            if len(roadmap["roadmap"]) != days_remaining:
+                raise Exception(
+                    f"AI generated {len(roadmap['roadmap'])} days "
+                    f"instead of {days_remaining} days."
+                )
+
+            if "final_tips" not in roadmap:
+                roadmap["final_tips"] = []
 
             return render_template(
                 "exam_roadmap.html",
                 roadmap=roadmap,
                 generated=True
+            )
+
+        except json.JSONDecodeError as e:
+
+            print("\n========== JSON ERROR ==========")
+            print(e)
+
+            flash(
+                "AI returned an invalid roadmap. Please try again.",
+                "danger"
+            )
+
+            return render_template(
+                "exam_roadmap.html",
+                generated=False
             )
 
         except Exception as e:
@@ -2009,12 +2097,437 @@ Always return valid JSON when requested.
                 generated=False
             )
 
-    # GET REQUEST
-
     return render_template(
         "exam_roadmap.html",
         generated=False
     )
+@app.route("/code_lab")
+def code_lab():
+    return render_template("code_lab.html")
+@app.route("/run_code", methods=["POST"])
+def run_code():
+
+    try:
+        data = request.get_json() or {}
+
+        code = data.get("code", "")
+        language = data.get("language", "python").lower().strip()
+        input_data = data.get("input", "")
+
+        if not code.strip():
+            return jsonify({
+                "success": False,
+                "error": "Please enter some code."
+            })
+
+        allowed_languages = [
+            "python",
+            "c",
+            "cpp",
+            "c++",
+            "java",
+            "javascript",
+            "js"
+        ]
+
+        if language not in allowed_languages:
+            return jsonify({
+                "success": False,
+                "error": "Unsupported language."
+            })
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+
+            if language == "python":
+
+                file_path = os.path.join(
+                    temp_dir,
+                    "program.py"
+                )
+
+                with open(
+                    file_path,
+                    "w",
+                    encoding="utf-8"
+                ) as file:
+                    file.write(code)
+
+                result = subprocess.run(
+                    ["python", file_path],
+                    input=input_data,
+                    capture_output=True,
+                    text=True,
+                    timeout=5,
+                    cwd=temp_dir
+                )
+
+            elif language == "c":
+
+                source_file = os.path.join(
+                    temp_dir,
+                    "program.c"
+                )
+
+                output_file = os.path.join(
+                    temp_dir,
+                    "program.exe"
+                )
+
+                with open(
+                    source_file,
+                    "w",
+                    encoding="utf-8"
+                ) as file:
+                    file.write(code)
+
+                compile_result = subprocess.run(
+                    [
+                        "gcc",
+                        source_file,
+                        "-o",
+                        output_file
+                    ],
+                    capture_output=True,
+                    text=True,
+                    timeout=10,
+                    cwd=temp_dir
+                )
+
+                if compile_result.returncode != 0:
+                    return jsonify({
+                        "success": False,
+                        "error": compile_result.stderr
+                    })
+
+                result = subprocess.run(
+                    [output_file],
+                    input=input_data,
+                    capture_output=True,
+                    text=True,
+                    timeout=5,
+                    cwd=temp_dir
+                )
+
+            elif language in ["cpp", "c++"]:
+
+                source_file = os.path.join(
+                    temp_dir,
+                    "program.cpp"
+                )
+
+                output_file = os.path.join(
+                    temp_dir,
+                    "program.exe"
+                )
+
+                with open(
+                    source_file,
+                    "w",
+                    encoding="utf-8"
+                ) as file:
+                    file.write(code)
+
+                compile_result = subprocess.run(
+                    [
+                        "g++",
+                        source_file,
+                        "-o",
+                        output_file
+                    ],
+                    capture_output=True,
+                    text=True,
+                    timeout=10,
+                    cwd=temp_dir
+                )
+
+                if compile_result.returncode != 0:
+                    return jsonify({
+                        "success": False,
+                        "error": compile_result.stderr
+                    })
+
+                result = subprocess.run(
+                    [output_file],
+                    input=input_data,
+                    capture_output=True,
+                    text=True,
+                    timeout=5,
+                    cwd=temp_dir
+                )
+
+            elif language == "java":
+
+                source_file = os.path.join(
+                    temp_dir,
+                    "Main.java"
+                )
+
+                with open(
+                    source_file,
+                    "w",
+                    encoding="utf-8"
+                ) as file:
+                    file.write(code)
+
+                compile_result = subprocess.run(
+                    [
+                        "javac",
+                        source_file
+                    ],
+                    capture_output=True,
+                    text=True,
+                    timeout=10,
+                    cwd=temp_dir
+                )
+
+                if compile_result.returncode != 0:
+                    return jsonify({
+                        "success": False,
+                        "error": compile_result.stderr
+                    })
+
+                result = subprocess.run(
+                    [
+                        "java",
+                        "Main"
+                    ],
+                    input=input_data,
+                    capture_output=True,
+                    text=True,
+                    timeout=5,
+                    cwd=temp_dir
+                )
+
+            elif language in ["javascript", "js"]:
+
+                file_path = os.path.join(
+                    temp_dir,
+                    "program.js"
+                )
+
+                with open(
+                    file_path,
+                    "w",
+                    encoding="utf-8"
+                ) as file:
+                    file.write(code)
+
+                result = subprocess.run(
+                    [
+                        "node",
+                        file_path
+                    ],
+                    input=input_data,
+                    capture_output=True,
+                    text=True,
+                    timeout=5,
+                    cwd=temp_dir
+                )
+
+            else:
+
+                return jsonify({
+                    "success": False,
+                    "error": "Unsupported language."
+                })
+
+            if result.returncode == 0:
+
+                return jsonify({
+                    "success": True,
+                    "output": result.stdout
+                })
+
+            return jsonify({
+                "success": False,
+                "error": result.stderr or result.stdout
+            })
+
+    except subprocess.TimeoutExpired:
+
+        return jsonify({
+            "success": False,
+            "error": "Execution time exceeded."
+        })
+
+    except FileNotFoundError as e:
+
+        return jsonify({
+            "success": False,
+            "error": "Required compiler or runtime is not installed: " + str(e)
+        })
+
+    except Exception as e:
+
+        print("Code execution error:", e)
+
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        })
+@app.route("/generate_coding_questions", methods=["POST"])
+def generate_coding_questions():
+
+    try:
+
+        data = request.get_json()
+
+        language = data.get("language", "Python")
+        difficulty = data.get("difficulty", "Easy")
+        count = int(data.get("count", 5))
+
+        if count < 1:
+            count = 1
+
+        if count > 10:
+            count = 10
+
+        prompt = f"""
+You are an expert programming problem creator.
+
+Generate {count} coding practice questions.
+
+Language: {language}
+Difficulty: {difficulty}
+
+The questions are for students learning programming.
+
+Each question must contain:
+
+1. title
+2. difficulty
+3. description
+4. input
+5. output
+6. example_input
+7. example_output
+8. constraints
+9. hint
+10. starter_code
+
+IMPORTANT:
+
+Return ONLY valid JSON.
+
+Do not return markdown.
+Do not return ```json.
+Do not add explanations outside JSON.
+
+Use exactly this format:
+
+[
+    {{
+        "title": "Find Largest Number",
+        "difficulty": "{difficulty}",
+        "description": "Write a program to find the largest number among three numbers.",
+        "input": "Three integers.",
+        "output": "Print the largest number.",
+        "example_input": "10 25 15",
+        "example_output": "25",
+        "constraints": "Numbers can be positive or negative.",
+        "hint": "Compare the numbers using conditions.",
+        "starter_code": "a, b, c = map(int, input().split())"
+    }}
+]
+
+Make every question different.
+
+Make the questions suitable for the selected difficulty.
+
+Do not generate duplicate questions.
+
+The starter code must be valid {language} code.
+"""
+
+        api_key = os.environ.get("GROQ_API_KEY")
+
+        if not api_key:
+            raise Exception("GROQ_API_KEY is missing.")
+
+        client = Groq(
+            api_key=api_key
+        )
+
+        response = client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+
+            messages=[
+                {
+                    "role": "system",
+                    "content": """
+You are an expert programming education AI.
+
+Generate high-quality coding problems.
+
+When JSON is requested:
+- Return ONLY valid JSON.
+- Do not use markdown.
+- Do not add explanations.
+- Follow the requested structure exactly.
+"""
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ],
+
+            temperature=0.5
+        )
+
+        text = response.choices[0].message.content.strip()
+
+        text = text.replace("```json", "")
+        text = text.replace("```", "")
+        text = text.strip()
+
+        start = text.find("[")
+        end = text.rfind("]")
+
+        if start == -1 or end == -1:
+            raise Exception("JSON array not found.")
+
+        text = text[start:end + 1]
+
+        text = re.sub(
+            r",\s*}",
+            "}",
+            text
+        )
+
+        text = re.sub(
+            r",\s*]",
+            "]",
+            text
+        )
+
+        questions = json.loads(text)
+
+        if not isinstance(questions, list):
+            raise Exception("Invalid question format.")
+
+        return jsonify({
+            "success": True,
+            "questions": questions
+        })
+
+    except json.JSONDecodeError:
+
+        return jsonify({
+            "success": False,
+            "error": "AI returned invalid question data."
+        })
+
+    except Exception as e:
+
+        print("Coding question generation error:", e)
+
+        return jsonify({
+            "success": False,
+            "error": "Unable to generate coding questions."
+        })
+
+
 
 if __name__ == "__main__":
    
