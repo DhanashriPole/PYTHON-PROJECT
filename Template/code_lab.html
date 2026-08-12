@@ -1,0 +1,1170 @@
+{% extends "base1.html" %}
+
+{% block title %}Code Lab{% endblock %}
+
+{% block content %}
+
+<style>
+
+.code-lab-page {
+    max-width: 1400px;
+    margin: auto;
+}
+
+.code-hero {
+    background: linear-gradient(135deg, #111827, #1e3a8a, #312e81);
+    border-radius: 24px;
+    padding: 35px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.code-hero::after {
+    content: "</>";
+    position: absolute;
+    right: 35px;
+    top: 10px;
+    font-size: 110px;
+    font-weight: 800;
+    opacity: 0.08;
+}
+
+.code-hero h1 {
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.code-hero p {
+    margin: 0;
+    opacity: 0.85;
+}
+
+.code-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 8px 14px;
+    border-radius: 30px;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.status-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #22c55e;
+}
+
+.lab-card {
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    overflow: hidden;
+}
+
+.lab-card-header {
+    padding: 20px 22px;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    background: rgba(255,255,255,0.7);
+}
+
+.lab-card-body {
+    padding: 22px;
+}
+
+.ai-generator {
+    margin-top: 24px;
+}
+
+.form-select,
+.form-control {
+    border-radius: 12px;
+    min-height: 45px;
+}
+
+.form-select:focus,
+.form-control:focus {
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+}
+
+.generate-btn {
+    border-radius: 12px;
+    font-weight: 600;
+    padding: 11px 20px;
+}
+
+.question-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    transition: all 0.25s ease;
+    background: white;
+}
+
+.question-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.question-number {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eef2ff;
+    color: #4f46e5;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.difficulty-badge {
+    border-radius: 20px;
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+.problem-card {
+    position: sticky;
+    top: 20px;
+}
+
+.problem-placeholder {
+    text-align: center;
+    padding: 65px 20px;
+    color: #6b7280;
+}
+
+.problem-placeholder-icon {
+    width: 75px;
+    height: 75px;
+    margin: auto;
+    border-radius: 20px;
+    background: #eef2ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 34px;
+    margin-bottom: 20px;
+}
+
+.problem-content h5 {
+    font-weight: 700;
+}
+
+.problem-content pre,
+.question-card pre {
+    background: #111827;
+    color: #e5e7eb;
+    border-radius: 10px;
+    padding: 14px;
+    overflow-x: auto;
+    font-size: 13px;
+}
+
+.editor-card {
+    background: #111827;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.18);
+}
+
+.editor-topbar {
+    padding: 14px 18px;
+    background: #1f2937;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.editor-title {
+    color: white;
+    font-weight: 600;
+}
+
+.editor-select {
+    min-width: 150px;
+    background: #111827;
+    color: white;
+    border: 1px solid #374151;
+}
+
+.code-editor {
+    width: 100%;
+    min-height: 390px;
+    resize: vertical;
+    background: #0b1120;
+    color: #e5e7eb;
+    border: none;
+    border-radius: 0;
+    padding: 20px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.code-editor:focus {
+    background: #0b1120;
+    color: #e5e7eb;
+    box-shadow: none;
+}
+
+.input-area {
+    background: #1f2937;
+    padding: 18px;
+}
+
+.input-label {
+    color: #d1d5db;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.code-input {
+    background: #111827;
+    color: #e5e7eb;
+    border: 1px solid #374151;
+}
+
+.code-input:focus {
+    background: #111827;
+    color: white;
+    border-color: #6366f1;
+}
+
+.editor-actions {
+    padding: 15px 18px;
+    background: #1f2937;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.run-btn {
+    border-radius: 10px;
+    font-weight: 600;
+    padding: 10px 20px;
+}
+
+.clear-btn {
+    border-radius: 10px;
+}
+
+.output-section {
+    background: #0b1120;
+    padding: 18px;
+}
+
+.output-label {
+    color: #d1d5db;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.output-box {
+    min-height: 120px;
+    margin: 0;
+    background: #020617;
+    color: #d1fae5;
+    border: 1px solid #1f2937;
+    border-radius: 10px;
+    padding: 15px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+}
+
+.solve-btn {
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.empty-generated {
+    border-radius: 16px;
+}
+
+@media (max-width: 991px) {
+
+    .problem-card {
+        position: static;
+    }
+
+    .code-hero {
+        padding: 28px 22px;
+    }
+
+    .code-hero::after {
+        display: none;
+    }
+
+}
+
+@media (max-width: 576px) {
+
+    .code-hero {
+        border-radius: 18px;
+        padding: 24px 18px;
+    }
+
+    .code-hero h1 {
+        font-size: 25px;
+    }
+
+    .lab-card-body {
+        padding: 16px;
+    }
+
+    .editor-topbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .editor-select {
+        width: 100%;
+    }
+
+    .code-editor {
+        min-height: 300px;
+        font-size: 13px;
+    }
+
+    .editor-actions .btn {
+        flex: 1;
+    }
+
+    .question-card .d-flex {
+        align-items: flex-start !important;
+    }
+
+}
+
+</style>
+
+
+<div class="container-fluid py-4 code-lab-page">
+
+    <div class="code-hero mb-4">
+
+        <h1>💻 Code Lab</h1>
+
+        <p>
+            Practice programming, solve AI-generated problems
+            and improve your coding skills.
+        </p>
+
+        <div class="code-status">
+            <span class="status-dot"></span>
+            Coding Environment Ready
+        </div>
+
+    </div>
+
+
+    <div class="lab-card ai-generator mb-4">
+
+        <div class="lab-card-header">
+
+            <h4 class="mb-1">
+                🤖 AI Coding Question Generator
+            </h4>
+
+            <small class="text-muted">
+                Generate programming problems based on your selected language and difficulty.
+            </small>
+
+        </div>
+
+        <div class="lab-card-body">
+
+            <div class="row g-3">
+
+                <div class="col-lg-4 col-md-6">
+
+                    <label class="form-label fw-semibold">
+                        Programming Language
+                    </label>
+
+                    <select id="aiLanguage" class="form-select">
+
+                        <option value="Python">🐍 Python</option>
+                        <option value="C">🔵 C</option>
+                        <option value="C++">⚡ C++</option>
+                        <option value="Java">☕ Java</option>
+                        <option value="JavaScript">🟨 JavaScript</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="col-lg-4 col-md-6">
+
+                    <label class="form-label fw-semibold">
+                        Difficulty
+                    </label>
+
+                    <select id="aiDifficulty" class="form-select">
+
+                        <option value="Easy">🟢 Easy</option>
+                        <option value="Medium">🟡 Medium</option>
+                        <option value="Hard">🔴 Hard</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="col-lg-4 col-md-12">
+
+                    <label class="form-label fw-semibold">
+                        Number of Questions
+                    </label>
+
+                    <select id="aiCount" class="form-select">
+
+                        <option value="3">3 Questions</option>
+                        <option value="5" selected>5 Questions</option>
+                        <option value="10">10 Questions</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <button
+                id="generateQuestions"
+                class="btn btn-primary generate-btn mt-4">
+
+                🤖 Generate Questions
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div id="generatedQuestions"></div>
+
+
+    <div class="row g-4 mt-1">
+
+        <div class="col-lg-5">
+
+            <div class="lab-card problem-card">
+
+                <div class="lab-card-header">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+                            <h4 class="mb-1">📝 Problem</h4>
+                            <small class="text-muted">
+                                Select an AI question to start coding
+                            </small>
+                        </div>
+
+                        <span class="badge bg-primary">
+                            Problem
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="lab-card-body">
+
+                    <div id="problemContent">
+
+                        <div class="problem-placeholder">
+
+                            <div class="problem-placeholder-icon">
+                                💡
+                            </div>
+
+                            <h5>
+                                Ready to Code?
+                            </h5>
+
+                            <p class="mb-0">
+                                Generate AI coding questions above
+                                and select a problem to start solving.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-lg-7">
+
+            <div class="editor-card">
+
+                <div class="editor-topbar">
+
+                    <div class="editor-title">
+                        💻 Code Editor
+                    </div>
+
+                    <select
+                        id="language"
+                        class="form-select editor-select">
+
+                        <option value="python">🐍 Python</option>
+                        <option value="c">🔵 C</option>
+                        <option value="cpp">⚡ C++</option>
+                        <option value="java">☕ Java</option>
+                        <option value="javascript">🟨 JavaScript</option>
+
+                    </select>
+
+                </div>
+
+
+                <textarea
+                    id="code"
+                    class="code-editor"
+                    spellcheck="false"
+                    placeholder="Write your code here...">a = 5
+b = 10
+
+print(a + b)</textarea>
+
+
+                <div class="input-area">
+
+                    <label class="input-label">
+                        📥 Program Input
+                    </label>
+
+                    <textarea
+                        id="input"
+                        class="form-control code-input mt-2"
+                        rows="3"
+                        placeholder="Enter program input here...">10 20</textarea>
+
+                </div>
+
+
+                <div class="editor-actions">
+
+                    <button
+                        id="runBtn"
+                        class="btn btn-success run-btn">
+
+                        ▶ Run Code
+
+                    </button>
+
+
+                    <button
+                        id="clearBtn"
+                        class="btn btn-secondary clear-btn">
+
+                        🗑 Clear
+
+                    </button>
+
+                </div>
+
+
+                <div class="output-section">
+
+                    <div class="output-label">
+                        📤 Output
+                    </div>
+
+                    <pre
+                        id="output"
+                        class="output-box">Output will appear here...</pre>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+let generatedQuestions = [];
+
+
+document
+    .getElementById("generateQuestions")
+    .addEventListener("click", async function () {
+
+        const language =
+            document.getElementById("aiLanguage").value;
+
+        const difficulty =
+            document.getElementById("aiDifficulty").value;
+
+        const count =
+            document.getElementById("aiCount").value;
+
+        const button =
+            document.getElementById("generateQuestions");
+
+        const container =
+            document.getElementById("generatedQuestions");
+
+        button.disabled = true;
+
+        button.innerHTML =
+            "⏳ Generating Questions...";
+
+        container.innerHTML = `
+            <div class="lab-card mb-4">
+                <div class="lab-card-body text-center py-5">
+                    <div class="spinner-border text-primary"></div>
+                    <p class="mt-3 mb-0">
+                        AI is creating coding questions...
+                    </p>
+                </div>
+            </div>
+        `;
+
+        try {
+
+            const response = await fetch(
+                "/generate_coding_questions",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        language: language,
+                        difficulty: difficulty,
+                        count: count
+                    })
+                }
+            );
+
+            const data =
+                await response.json();
+
+            if (!data.success) {
+
+                container.innerHTML = `
+                    <div class="alert alert-danger rounded-4">
+                        ❌ ${escapeHtml(
+                            data.error ||
+                            "Question generation failed."
+                        )}
+                    </div>
+                `;
+
+                return;
+            }
+
+            generatedQuestions =
+                data.questions || [];
+
+            displayQuestions(
+                generatedQuestions
+            );
+
+        } catch (error) {
+
+            console.error(error);
+
+            container.innerHTML = `
+                <div class="alert alert-danger rounded-4">
+                    ❌ Unable to connect to AI.
+                    Please try again.
+                </div>
+            `;
+
+        } finally {
+
+            button.disabled = false;
+
+            button.innerHTML =
+                "🤖 Generate Questions";
+
+        }
+
+    });
+
+
+function displayQuestions(questions) {
+
+    const container =
+        document.getElementById("generatedQuestions");
+
+    if (!questions || questions.length === 0) {
+
+        container.innerHTML = `
+            <div class="alert alert-warning empty-generated">
+                ⚠️ No questions were generated.
+            </div>
+        `;
+
+        return;
+    }
+
+    let html = `
+        <div class="lab-card mb-4">
+
+            <div class="lab-card-header">
+
+                <h4 class="mb-1">
+                    📚 Generated Coding Questions
+                </h4>
+
+                <small class="text-muted">
+                    Choose a problem and start solving.
+                </small>
+
+            </div>
+
+            <div class="lab-card-body">
+    `;
+
+
+    questions.forEach(function (question, index) {
+
+        html += `
+
+            <div class="question-card mb-3">
+
+                <div class="p-3 p-md-4">
+
+                    <div class="d-flex gap-3">
+
+                        <div class="question-number">
+                            ${index + 1}
+                        </div>
+
+                        <div class="flex-grow-1">
+
+                            <div class="d-flex justify-content-between align-items-start gap-2 flex-wrap">
+
+                                <h5 class="mb-0">
+                                    ${escapeHtml(question.title)}
+                                </h5>
+
+                                <span class="badge bg-primary difficulty-badge">
+                                    ${escapeHtml(
+                                        question.difficulty ||
+                                        "Easy"
+                                    )}
+                                </span>
+
+                            </div>
+
+
+                            <p class="mt-3 mb-3 text-muted">
+                                ${escapeHtml(
+                                    question.description
+                                )}
+                            </p>
+
+
+                            <div class="row g-3">
+
+                                <div class="col-md-6">
+
+                                    <h6>
+                                        📥 Input
+                                    </h6>
+
+                                    <pre>${escapeHtml(
+                                        question.input
+                                    )}</pre>
+
+                                </div>
+
+
+                                <div class="col-md-6">
+
+                                    <h6>
+                                        📤 Output
+                                    </h6>
+
+                                    <pre>${escapeHtml(
+                                        question.output
+                                    )}</pre>
+
+                                </div>
+
+                            </div>
+
+
+                            <details class="mb-3">
+
+                                <summary class="fw-semibold">
+                                    View Examples & Hint
+                                </summary>
+
+                                <div class="mt-3">
+
+                                    <h6>
+                                        Example Input
+                                    </h6>
+
+                                    <pre>${escapeHtml(
+                                        question.example_input
+                                    )}</pre>
+
+
+                                    <h6>
+                                        Example Output
+                                    </h6>
+
+                                    <pre>${escapeHtml(
+                                        question.example_output
+                                    )}</pre>
+
+
+                                    <h6>
+                                        Constraints
+                                    </h6>
+
+                                    <p>
+                                        ${escapeHtml(
+                                            question.constraints
+                                        )}
+                                    </p>
+
+
+                                    <h6>
+                                        💡 Hint
+                                    </h6>
+
+                                    <p class="mb-0">
+                                        ${escapeHtml(
+                                            question.hint
+                                        )}
+                                    </p>
+
+                                </div>
+
+                            </details>
+
+
+                            <button
+                                class="btn btn-success solve-btn"
+                                onclick="solveQuestion(${index})">
+
+                                💻 Solve This
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+
+    html += `
+            </div>
+        </div>
+    `;
+
+
+    container.innerHTML = html;
+
+
+    container.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+
+}
+
+
+function solveQuestion(index) {
+
+    const question =
+        generatedQuestions[index];
+
+    if (!question) {
+        return;
+    }
+
+
+    const problemContent =
+        document.getElementById("problemContent");
+
+
+    problemContent.innerHTML = `
+
+        <div class="problem-content">
+
+            <div class="d-flex justify-content-between align-items-start gap-2">
+
+                <h5 class="mt-1">
+                    ${escapeHtml(question.title)}
+                </h5>
+
+                <span class="badge bg-primary">
+                    ${escapeHtml(
+                        question.difficulty ||
+                        "Easy"
+                    )}
+                </span>
+
+            </div>
+
+
+            <p class="mt-3">
+                ${escapeHtml(
+                    question.description
+                )}
+            </p>
+
+
+            <h6>📥 Input</h6>
+
+            <pre>${escapeHtml(
+                question.input
+            )}</pre>
+
+
+            <h6>📤 Expected Output</h6>
+
+            <pre>${escapeHtml(
+                question.output
+            )}</pre>
+
+
+            <h6>Example Input</h6>
+
+            <pre>${escapeHtml(
+                question.example_input
+            )}</pre>
+
+
+            <h6>Example Output</h6>
+
+            <pre>${escapeHtml(
+                question.example_output
+            )}</pre>
+
+
+            <h6>Constraints</h6>
+
+            <p>
+                ${escapeHtml(
+                    question.constraints
+                )}
+            </p>
+
+
+            <h6>💡 Hint</h6>
+
+            <p>
+                ${escapeHtml(
+                    question.hint
+                )}
+            </p>
+
+        </div>
+
+    `;
+
+
+    document.getElementById("code").value =
+        question.starter_code || "";
+
+
+    const languageSelect =
+        document.getElementById("language");
+
+
+    const language =
+        String(
+            question.language || "Python"
+        )
+        .trim()
+        .toLowerCase();
+
+
+    const languageMap = {
+
+        "python": "python",
+
+        "c": "c",
+
+        "c++": "cpp",
+
+        "cpp": "cpp",
+
+        "java": "java",
+
+        "javascript": "javascript",
+
+        "js": "javascript"
+
+    };
+
+
+    languageSelect.value =
+        languageMap[language] || "python";
+
+
+    if (question.example_input) {
+
+        document.getElementById("input").value =
+            question.example_input;
+
+    }
+
+
+    document
+        .querySelector(".editor-card")
+        .scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+}
+
+
+document
+    .getElementById("runBtn")
+    .addEventListener("click", async function () {
+
+        const code =
+            document.getElementById("code").value;
+
+        const language =
+            document.getElementById("language").value;
+
+        const input =
+            document.getElementById("input").value;
+
+        const output =
+            document.getElementById("output");
+
+
+        if (!code.trim()) {
+
+            output.textContent =
+                "Please enter some code.";
+
+            return;
+        }
+
+
+        output.textContent =
+            "⏳ Running...";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/run_code",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            code: code,
+                            language: language,
+                            input: input
+                        })
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (data.success) {
+
+                output.textContent =
+                    data.output ||
+                    "Program executed successfully.";
+
+            } else {
+
+                output.textContent =
+                    data.error ||
+                    "Execution failed.";
+
+            }
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            output.textContent =
+                "❌ Unable to connect to compiler.";
+
+        }
+
+    });
+
+
+document
+    .getElementById("clearBtn")
+    .addEventListener("click", function () {
+
+        document.getElementById("code").value = "";
+
+        document.getElementById("input").value = "";
+
+        document.getElementById("output").textContent =
+            "Output will appear here...";
+
+    });
+
+
+function escapeHtml(text) {
+
+    if (
+        text === null ||
+        text === undefined
+    ) {
+        return "";
+    }
+
+    return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+</script>
+
+{% endblock %}
