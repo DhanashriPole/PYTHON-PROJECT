@@ -1,0 +1,664 @@
+{% extends "base1.html" %}
+
+{% block title %}🎉 Fun Quiz Result{% endblock %}
+
+{% block content %}
+
+<div class="result-page">
+
+    <div class="result-card">
+
+        <!-- Celebration -->
+        <div class="celebration">
+            🎉
+        </div>
+
+        <div class="result-badge">
+            🏆 QUIZ COMPLETED
+        </div>
+
+        <h1>Great Job, {{ name }}! 🎊</h1>
+
+        <p class="subtitle">
+            You completed your Fun AI Quiz!
+        </p>
+
+        <!-- Course -->
+        <div class="course-name">
+            📚 {{ course_name or "Fun Quiz" }}
+        </div>
+
+        <!-- Score Circle -->
+        <div class="score-circle">
+            <div class="score-value">
+                {{ percentage }}%
+            </div>
+
+            <div class="score-label">
+                SCORE
+            </div>
+        </div>
+
+        <!-- Score Details -->
+        <div class="score-details">
+
+            <div class="score-box">
+                <div class="score-icon">✅</div>
+                <strong>{{ score }}</strong>
+                <span>Correct</span>
+            </div>
+
+            <div class="score-box">
+                <div class="score-icon">📝</div>
+                <strong>{{ total }}</strong>
+                <span>Total Questions</span>
+            </div>
+
+            <div class="score-box">
+                <div class="score-icon">📊</div>
+                <strong>{{ percentage }}%</strong>
+                <span>Percentage</span>
+            </div>
+
+        </div>
+
+        <!-- Message -->
+        <div class="result-message">
+            {{ message }}
+        </div>
+
+        <!-- Performance -->
+        <div class="performance">
+
+            {% if percentage >= 90 %}
+
+                <div class="performance-icon">🏆</div>
+
+                <div>
+                    <strong>Excellent Performance!</strong>
+                    <p>
+                        Outstanding work! You really know your stuff.
+                    </p>
+                </div>
+
+            {% elif percentage >= 75 %}
+
+                <div class="performance-icon">🌟</div>
+
+                <div>
+                    <strong>Great Performance!</strong>
+                    <p>
+                        Very good job! Keep practicing and aim even higher.
+                    </p>
+                </div>
+
+            {% elif percentage >= 50 %}
+
+                <div class="performance-icon">😊</div>
+
+                <div>
+                    <strong>Good Effort!</strong>
+                    <p>
+                        You are improving. Keep learning and practicing.
+                    </p>
+                </div>
+
+            {% else %}
+
+                <div class="performance-icon">🚀</div>
+
+                <div>
+                    <strong>Keep Practicing!</strong>
+                    <p>
+                        Don't give up. Practice more and you will improve.
+                    </p>
+                </div>
+
+            {% endif %}
+
+        </div>
+
+        <!-- Buttons -->
+        <div class="result-actions">
+
+            <a
+                href="{{ url_for('fun_quiz') }}?new=1"
+                class="btn primary-btn"
+            >
+                🔄 Play Again
+            </a>
+
+            <a
+                href="{{ url_for('fun_quiz') }}"
+                class="btn secondary-btn"
+            >
+                📚 Choose Another Course
+            </a>
+
+            <a
+                href="{{ url_for('home_page') }}"
+                class="btn home-btn"
+            >
+                🏠 Home
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<style>
+
+.result-page {
+    min-height: 90vh;
+    padding: 40px 15px 70px;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    background:
+        radial-gradient(
+            circle at 10% 15%,
+            #fff0b8 0,
+            transparent 25%
+        ),
+        radial-gradient(
+            circle at 90% 10%,
+            #ddd0ff 0,
+            transparent 25%
+        ),
+        radial-gradient(
+            circle at 80% 90%,
+            #c9f1ff 0,
+            transparent 28%
+        ),
+        linear-gradient(
+            135deg,
+            #f8f7ff,
+            #ffffff
+        );
+
+    border-radius: 30px;
+}
+
+
+.result-card {
+    width: 100%;
+    max-width: 760px;
+
+    padding: 40px 35px;
+
+    background: rgba(255,255,255,.98);
+
+    border-radius: 32px;
+
+    text-align: center;
+
+    box-shadow:
+        0 25px 70px rgba(70,50,120,.15);
+
+    animation: resultAppear .5s ease;
+}
+
+
+.celebration {
+    font-size: 65px;
+
+    animation:
+        celebrationBounce 1.5s ease-in-out infinite;
+}
+
+
+.result-badge {
+    display: inline-block;
+
+    margin-top: 8px;
+
+    padding: 8px 17px;
+
+    border-radius: 30px;
+
+    background: #f0eaff;
+
+    color: #7048e8;
+
+    font-size: 12px;
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+}
+
+
+.result-card h1 {
+    margin: 15px 0 5px;
+
+    font-size: clamp(28px, 5vw, 44px);
+
+    font-weight: 900;
+
+    color: #222;
+}
+
+
+.subtitle {
+    margin: 0;
+
+    color: #777;
+
+    font-size: 17px;
+}
+
+
+.course-name {
+    display: inline-block;
+
+    margin-top: 20px;
+
+    padding: 10px 20px;
+
+    border-radius: 30px;
+
+    background: #f8f9fa;
+
+    color: #444;
+
+    font-weight: 800;
+}
+
+
+/* SCORE CIRCLE */
+
+.score-circle {
+
+    width: 190px;
+    height: 190px;
+
+    margin: 30px auto;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #845ef7,
+            #228be6
+        );
+
+    color: white;
+
+    box-shadow:
+        0 15px 35px rgba(132,94,247,.30);
+
+    border: 8px solid #f5f1ff;
+}
+
+
+.score-value {
+    font-size: 48px;
+
+    line-height: 1;
+
+    font-weight: 900;
+}
+
+
+.score-label {
+    margin-top: 7px;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    opacity: .9;
+}
+
+
+/* SCORE DETAILS */
+
+.score-details {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 15px;
+
+    margin-top: 10px;
+}
+
+
+.score-box {
+
+    padding: 18px 10px;
+
+    border-radius: 20px;
+
+    background: #f8f9fa;
+
+    border: 1px solid #eeeeee;
+}
+
+
+.score-icon {
+    font-size: 25px;
+
+    margin-bottom: 5px;
+}
+
+
+.score-box strong {
+    display: block;
+
+    font-size: 25px;
+
+    font-weight: 900;
+
+    color: #333;
+}
+
+
+.score-box span {
+    display: block;
+
+    margin-top: 3px;
+
+    color: #777;
+
+    font-size: 13px;
+
+    font-weight: 700;
+}
+
+
+/* MESSAGE */
+
+.result-message {
+
+    margin-top: 22px;
+
+    padding: 18px;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff3bf,
+            #fff8e1
+        );
+
+    color: #795500;
+
+    font-size: 18px;
+
+    font-weight: 800;
+}
+
+
+/* PERFORMANCE */
+
+.performance {
+
+    margin-top: 18px;
+
+    padding: 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    text-align: left;
+
+    border-radius: 18px;
+
+    background: #f8f9fa;
+}
+
+
+.performance-icon {
+    width: 55px;
+    height: 55px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 16px;
+
+    background: #eee8ff;
+
+    font-size: 28px;
+}
+
+
+.performance strong {
+    display: block;
+
+    font-size: 16px;
+
+    color: #333;
+}
+
+
+.performance p {
+    margin: 4px 0 0;
+
+    color: #777;
+
+    font-size: 14px;
+}
+
+
+/* BUTTONS */
+
+.result-actions {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 12px;
+
+    margin-top: 25px;
+}
+
+
+.btn {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 52px;
+
+    padding: 12px 15px;
+
+    border-radius: 16px;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    font-weight: 900;
+
+    transition: .25s;
+}
+
+
+.btn:hover {
+    transform: translateY(-3px);
+}
+
+
+.primary-btn {
+
+    color: white;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ff922b,
+            #ff6b6b,
+            #845ef7
+        );
+
+    box-shadow:
+        0 10px 25px
+        rgba(132,94,247,.20);
+}
+
+
+.secondary-btn {
+
+    color: #7048e8;
+
+    background: #f0eaff;
+
+    border: 2px solid #e3d9ff;
+}
+
+
+.home-btn {
+
+    color: #1864ab;
+
+    background: #e7f5ff;
+
+    border: 2px solid #c5e5ff;
+}
+
+
+/* ANIMATIONS */
+
+@keyframes resultAppear {
+
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+}
+
+
+@keyframes celebrationBounce {
+
+    0%,100% {
+        transform: translateY(0) rotate(-3deg);
+    }
+
+    50% {
+        transform: translateY(-10px) rotate(3deg);
+    }
+
+}
+
+
+/* MOBILE */
+
+@media(max-width:650px) {
+
+    .result-page {
+        padding: 25px 10px 45px;
+
+        border-radius: 18px;
+    }
+
+
+    .result-card {
+        padding: 28px 17px;
+
+        border-radius: 24px;
+    }
+
+
+    .celebration {
+        font-size: 52px;
+    }
+
+
+    .score-circle {
+        width: 160px;
+        height: 160px;
+    }
+
+
+    .score-value {
+        font-size: 40px;
+    }
+
+
+    .score-details {
+
+        grid-template-columns: 1fr;
+
+        gap: 10px;
+    }
+
+
+    .score-box {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 12px;
+
+        text-align: left;
+    }
+
+
+    .score-icon {
+        margin: 0;
+    }
+
+
+    .score-box strong,
+    .score-box span {
+        display: block;
+    }
+
+
+    .result-actions {
+
+        grid-template-columns: 1fr;
+    }
+
+
+    .performance {
+        align-items: flex-start;
+    }
+
+}
+
+</style>
+
+{% endblock %}

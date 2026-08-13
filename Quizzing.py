@@ -1695,9 +1695,25 @@ def delete_score_history(record_id):
     flash("Record deleted successfully.", "success")
     return redirect(url_for('score_history'))
 
+from functools import wraps
 
+def student_page_required(f):
 
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+
+        student_id = session.get("student_id")
+        
+        if not student_id:
+            flash("Please login first.", "warning")
+            return redirect(url_for("login"))
+
+        
+        return f(*args, **kwargs)
+
+    return decorated_function
 @app.route("/askhub", methods=["GET", "POST"])
+@student_page_required
 def askhub():
 
     if request.method == "POST":
@@ -1794,6 +1810,7 @@ def askhub_add():
     return render_template("askhub_add.html")
 
 @app.route("/exam_roadmap", methods=["GET", "POST"])
+@student_page_required
 def exam_roadmap():
 
     if request.method == "POST":
@@ -2101,10 +2118,29 @@ When JSON is requested:
         "exam_roadmap.html",
         generated=False
     )
+
+
+
+def student_api_required(f):
+
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+
+        if not session.get("student_id") or session.get("role") != "student":
+            return jsonify({
+                "success": False,
+                "error": "Please login as a student to use Code Lab."
+            }), 401
+
+        return f(*args, **kwargs)
+
+    return decorated_function
 @app.route("/code_lab")
+@student_page_required
 def code_lab():
     return render_template("code_lab.html")
 @app.route("/run_code", methods=["POST"])
+@student_api_required
 def run_code():
 
     try:
@@ -2365,169 +2401,669 @@ def run_code():
             "success": False,
             "error": str(e)
         })
-@app.route("/generate_coding_questions", methods=["POST"])
-def generate_coding_questions():
-
-    try:
-
-        data = request.get_json()
-
-        language = data.get("language", "Python")
-        difficulty = data.get("difficulty", "Easy")
-        count = int(data.get("count", 5))
-
-        if count < 1:
-            count = 1
-
-        if count > 10:
-            count = 10
-
-        prompt = f"""
-You are an expert programming problem creator.
-
-Generate {count} coding practice questions.
-
-Language: {language}
-Difficulty: {difficulty}
-
-The questions are for students learning programming.
-
-Each question must contain:
-
-1. title
-2. difficulty
-3. description
-4. input
-5. output
-6. example_input
-7. example_output
-8. constraints
-9. hint
-10. starter_code
-
-IMPORTANT:
+def generate_fun_quiz(course_name, num_questions=10):
+    prompt = f"""
+Create {num_questions} multiple-choice quiz questions for the subject "{course_name}".
 
 Return ONLY valid JSON.
+Do not add markdown.
+Do not add ```json.
+Do not add explanations.
 
-Do not return markdown.
-Do not return ```json.
-Do not add explanations outside JSON.
-
-Use exactly this format:
+The JSON must be an array like this:
 
 [
-    {{
-        "title": "Find Largest Number",
-        "difficulty": "{difficulty}",
-        "description": "Write a program to find the largest number among three numbers.",
-        "input": "Three integers.",
-        "output": "Print the largest number.",
-        "example_input": "10 25 15",
-        "example_output": "25",
-        "constraints": "Numbers can be positive or negative.",
-        "hint": "Compare the numbers using conditions.",
-        "starter_code": "a, b, c = map(int, input().split())"
-    }}
+  {{
+    "Question": "What is ...?",
+    "A": "Option A",
+    "B": "Option B",
+    "C": "Option C",
+    "D": "Option D",
+    "Answer": "A"
+  }}
 ]
 
-Make every question different.
-
-Make the questions suitable for the selected difficulty.
-
-Do not generate duplicate questions.
-
-The starter code must be valid {language} code.
+Rules:
+- Exactly {num_questions} questions.
+- Every question must have A, B, C and D.
+- Answer must contain ONLY A, B, C or D.
+- Questions must be related to {course_name}.
+- Make questions suitable for students.
+- Feel like kids questions.
 """
 
-        api_key = os.environ.get("GROQ_API_KEY")
-
-        if not api_key:
-            raise Exception("GROQ_API_KEY is missing.")
-
-        client = Groq(
-            api_key=api_key
-        )
-
+    try:
         response = client.chat.completions.create(
-            model="llama-3.1-8b-instant",
-
+            model="llama-3.3-70b-versatile",
             messages=[
                 {
                     "role": "system",
-                    "content": """
-You are an expert programming education AI.
-
-Generate high-quality coding problems.
-
-When JSON is requested:
-- Return ONLY valid JSON.
-- Do not use markdown.
-- Do not add explanations.
-- Follow the requested structure exactly.
-"""
+                    "content": "You are a quiz generator. Return only valid JSON."
                 },
                 {
                     "role": "user",
                     "content": prompt
                 }
             ],
-
-            temperature=0.5
+            temperature=0.7,
+            max_tokens=5000
         )
 
-        text = response.choices[0].message.content.strip()
+        content = response.choices[0].message.content.strip()
 
-        text = text.replace("```json", "")
-        text = text.replace("```", "")
-        text = text.strip()
+        print("\n===== FUN QUIZ AI RESPONSE =====")
+        print(content)
+        print("================================\n")
 
-        start = text.find("[")
-        end = text.rfind("]")
+        # Remove markdown if AI accidentally sends it
+        if content.startswith("```"):
+            content = re.sub(r"```(?:json)?", "", content)
+            content = content.replace("```", "").strip()
+
+        # Find JSON array if extra text exists
+        start = content.find("[")
+        end = content.rfind("]")
 
         if start == -1 or end == -1:
-            raise Exception("JSON array not found.")
+            print("FUN QUIZ: JSON ARRAY NOT FOUND")
+            return []
 
-        text = text[start:end + 1]
+        content = content[start:end + 1]
 
-        text = re.sub(
-            r",\s*}",
-            "}",
-            text
+        quizzes = json.loads(content)
+
+        if not isinstance(quizzes, list):
+            print("FUN QUIZ: RESPONSE IS NOT A LIST")
+            return []
+
+        valid_quizzes = []
+
+        for q in quizzes:
+
+            if not isinstance(q, dict):
+                continue
+
+            question = str(q.get("Question", "")).strip()
+            option_a = str(q.get("A", "")).strip()
+            option_b = str(q.get("B", "")).strip()
+            option_c = str(q.get("C", "")).strip()
+            option_d = str(q.get("D", "")).strip()
+
+            answer = str(
+                q.get("Answer", "")
+            ).strip().upper()
+
+            answer = answer.replace(".", "").strip()
+
+            if answer.startswith("OPTION "):
+                answer = answer.replace(
+                    "OPTION ",
+                    "",
+                    1
+                ).strip()
+
+            if answer not in ["A", "B", "C", "D"]:
+                continue
+
+            if not question:
+                continue
+
+            if not option_a or not option_b:
+                continue
+
+            if not option_c or not option_d:
+                continue
+
+            valid_quizzes.append({
+                "Question": question,
+                "A": option_a,
+                "B": option_b,
+                "C": option_c,
+                "D": option_d,
+                "Answer": answer
+            })
+
+        print(
+            "VALID FUN QUIZ QUESTIONS:",
+            len(valid_quizzes)
         )
 
-        text = re.sub(
-            r",\s*]",
-            "]",
-            text
+        return valid_quizzes[:num_questions]
+
+    except json.JSONDecodeError as e:
+
+        print(
+            "FUN QUIZ JSON ERROR:",
+            repr(e)
         )
 
-        questions = json.loads(text)
-
-        if not isinstance(questions, list):
-            raise Exception("Invalid question format.")
-
-        return jsonify({
-            "success": True,
-            "questions": questions
-        })
-
-    except json.JSONDecodeError:
-
-        return jsonify({
-            "success": False,
-            "error": "AI returned invalid question data."
-        })
+        return []
 
     except Exception as e:
 
-        print("Coding question generation error:", e)
+        print(
+            "FUN QUIZ GENERATION ERROR:",
+            repr(e)
+        )
 
-        return jsonify({
-            "success": False,
-            "error": "Unable to generate coding questions."
-        })
+        return []
+@app.route("/fun_quiz", methods=["GET", "POST"])
+@student_page_required
+def fun_quiz():
+
+    student_name = session.get("student_name")
+
+    if not student_name:
+        flash("Please login first.", "warning")
+        return redirect(url_for("login"))
+
+    if request.args.get("new") == "1":
+
+        session.pop("fun_quizzes", None)
+        session.pop("fun_q_index", None)
+        session.pop("fun_answers", None)
+        session.pop("fun_score", None)
+        session.pop("fun_course", None)
+        session.pop("fun_course_id", None)
+        session.pop("fun_voice_message", None)
+
+        return redirect(url_for("fun_quiz"))
+
+    if request.method == "POST":
+
+        action = request.form.get("action", "").strip()
+
+        if action == "start_quiz":
+
+            selected_course_id = request.form.get(
+                "course_id", ""
+            ).strip()
+
+            if not selected_course_id:
+                flash(
+                    "Please select a course first.",
+                    "warning"
+                )
+                return redirect(url_for("fun_quiz"))
+
+            try:
+                course_id = int(selected_course_id)
+            except (ValueError, TypeError):
+                flash(
+                    "Invalid course selected.",
+                    "danger"
+                )
+                return redirect(url_for("fun_quiz"))
+
+            course = Courses.query.filter_by(
+                id=course_id
+            ).first()
+
+            if not course:
+                flash(
+                    "Selected course was not found.",
+                    "danger"
+                )
+                return redirect(url_for("fun_quiz"))
+
+            course_name = course.course_name
+
+            session.pop("fun_quizzes", None)
+            session.pop("fun_q_index", None)
+            session.pop("fun_answers", None)
+            session.pop("fun_score", None)
+            session.pop("fun_voice_message", None)
+
+            try:
+
+                quizzes = generate_fun_quiz(
+                    course_name,
+                    num_questions=10
+                )
+
+            except Exception as e:
+
+                print(
+                    "FUN QUIZ AI ERROR:",
+                    repr(e)
+                )
+
+                flash(
+                    "AI could not generate the quiz. Please try again.",
+                    "danger"
+                )
+
+                return redirect(url_for("fun_quiz"))
+
+            if not quizzes or not isinstance(quizzes, list):
+
+                print(
+                    "FUN QUIZ INVALID RESPONSE:",
+                    quizzes
+                )
+
+                flash(
+                    "AI could not generate questions. Please try again.",
+                    "danger"
+                )
+
+                return redirect(url_for("fun_quiz"))
+
+            valid_quizzes = []
+
+            for q in quizzes:
+
+                if not isinstance(q, dict):
+                    continue
+
+                question = str(
+                    q.get("Question", "")
+                ).strip()
+
+                option_a = str(
+                    q.get("A", "")
+                ).strip()
+
+                option_b = str(
+                    q.get("B", "")
+                ).strip()
+
+                option_c = str(
+                    q.get("C", "")
+                ).strip()
+
+                option_d = str(
+                    q.get("D", "")
+                ).strip()
+
+                answer = str(
+                    q.get("Answer", "")
+                ).strip().upper()
+
+                answer = answer.replace(".", "").strip()
+
+                if answer.startswith("OPTION "):
+                    answer = answer.replace(
+                        "OPTION ",
+                        "",
+                        1
+                    ).strip()
+
+                if answer not in ["A", "B", "C", "D"]:
+                    continue
+
+                if not question:
+                    continue
+
+                if not option_a:
+                    continue
+
+                if not option_b:
+                    continue
+
+                if not option_c:
+                    continue
+
+                if not option_d:
+                    continue
+
+                valid_quizzes.append({
+                    "Question": question,
+                    "A": option_a,
+                    "B": option_b,
+                    "C": option_c,
+                    "D": option_d,
+                    "Answer": answer
+                })
+
+            if not valid_quizzes:
+
+                print(
+                    "NO VALID FUN QUIZ QUESTIONS:",
+                    quizzes
+                )
+
+                flash(
+                    "AI generated invalid questions. Please try again.",
+                    "danger"
+                )
+
+                return redirect(
+                    url_for("fun_quiz")
+                )
+
+            valid_quizzes = valid_quizzes[:10]
+
+            session["fun_quizzes"] = valid_quizzes
+            session["fun_q_index"] = 0
+            session["fun_answers"] = []
+            session["fun_score"] = 0
+            session["fun_course"] = course_name
+            session["fun_course_id"] = course_id
+            session.pop("fun_voice_message", None)
+
+            return redirect(
+                url_for("fun_quiz")
+            )
+
+        elif action == "answer":
+
+            quizzes = session.get(
+                "fun_quizzes",
+                []
+            )
+
+            if not quizzes:
+
+                flash(
+                    "Please start a quiz first.",
+                    "warning"
+                )
+
+                return redirect(
+                    url_for("fun_quiz")
+                )
+
+            idx = session.get(
+                "fun_q_index",
+                0
+            )
+
+            total = len(quizzes)
+
+            if idx < 0 or idx >= total:
+
+                return redirect(
+                    url_for("fun_quiz")
+                )
+
+            answer = str(
+                request.form.get("choice", "")
+            ).strip().upper()
+
+            if answer not in ["A", "B", "C", "D"]:
+
+                flash(
+                    "Please choose an answer.",
+                    "warning"
+                )
+
+                return redirect(
+                    url_for("fun_quiz")
+                )
+
+            current_quiz = quizzes[idx]
+
+            correct_answer = str(
+                current_quiz.get("Answer", "")
+            ).strip().upper()
+
+            correct_answer = correct_answer.replace(
+                ".",
+                ""
+            ).strip()
+
+            if correct_answer.startswith("OPTION "):
+
+                correct_answer = correct_answer.replace(
+                    "OPTION ",
+                    "",
+                    1
+                ).strip()
+
+            print(
+                "QUESTION:",
+                current_quiz.get("Question")
+            )
+
+            print(
+                "USER ANSWER:",
+                answer
+            )
+
+            print(
+                "CORRECT ANSWER:",
+                correct_answer
+            )
+
+            answers = session.get(
+                "fun_answers",
+                []
+            )
+
+            answers.append({
+                "question": current_quiz.get("Question"),
+                "selected": answer,
+                "correct": correct_answer,
+                "is_correct": answer == correct_answer
+            })
+
+            session["fun_answers"] = answers
+
+            if answer == correct_answer:
+
+                session["fun_score"] = (
+                    session.get("fun_score", 0) + 1
+                )
+
+                feedback_message = (
+                    "🎉 Excellent! Correct answer! Keep it up!"
+                )
+
+                voice_message = (
+                    "Excellent! Correct answer! Keep it up!"
+                )
+
+                flash(
+                    feedback_message,
+                    "success"
+                )
+
+            else:
+
+                feedback_message = (
+                    f"😊 Nice try! The correct answer was option {correct_answer}."
+                )
+
+                voice_message = (
+                    f"Nice try! The correct answer was option {correct_answer}."
+                )
+
+                flash(
+                    feedback_message,
+                    "info"
+                )
+
+            session["fun_voice_message"] = voice_message
+
+            idx += 1
+
+            session["fun_q_index"] = idx
+
+            if idx >= total:
+
+                score = session.get(
+                    "fun_score",
+                    0
+                )
+
+                percentage = round(
+                    (score / total) * 100,
+                    1
+                ) if total > 0 else 0
+
+                if percentage >= 90:
+
+                    message = (
+                        "🏆 Amazing! You are a Quiz Superstar!"
+                    )
+
+                elif percentage >= 75:
+
+                    message = (
+                        "🌟 Great job! Keep learning!"
+                    )
+
+                elif percentage >= 50:
+
+                    message = (
+                        "😊 Good effort! You are improving!"
+                    )
+
+                else:
+
+                    message = (
+                        "🚀 Keep practicing! You can do it!"
+                    )
+
+                course_name = session.get(
+                    "fun_course",
+                    "Fun Quiz"
+                )
+
+                course_id = session.get(
+                    "fun_course_id"
+                )
+
+                try:
+                    course_id = int(course_id)
+                except (ValueError, TypeError):
+                    course_id = None
+
+                if course_id:
+
+                    try:
+
+                        update_leaderboard(
+                            student_name,
+                            score,
+                            course_id,
+                            0
+                        )
+
+                    except Exception as e:
+
+                        print(
+                            "LEADERBOARD UPDATE ERROR:",
+                            repr(e)
+                        )
+
+                session["fun_result"] = {
+                    "name": student_name,
+                    "score": score,
+                    "total": total,
+                    "percentage": percentage,
+                    "message": message,
+                    "course_name": course_name
+                }
+
+                session.pop("fun_quizzes", None)
+                session.pop("fun_q_index", None)
+                session.pop("fun_answers", None)
+                session.pop("fun_score", None)
+                session.pop("fun_course", None)
+                session.pop("fun_course_id", None)
+
+                return redirect(
+                    url_for("fun_quiz_result")
+                )
+
+            return redirect(
+                url_for("fun_quiz")
+            )
+
+        else:
+
+            flash(
+                "Invalid quiz request.",
+                "danger"
+            )
+
+            return redirect(
+                url_for("fun_quiz")
+            )
+
+    quizzes = session.get(
+        "fun_quizzes"
+    )
+
+    if quizzes:
+
+        idx = session.get(
+            "fun_q_index",
+            0
+        )
+
+        total = len(quizzes)
+
+        if 0 <= idx < total:
+
+            quiz = quizzes[idx]
+
+            return render_template(
+                "fun_quiz.html",
+                quiz=quiz,
+                idx=idx,
+                total=total,
+                student_name=student_name,
+                course_name=session.get(
+                    "fun_course"
+                ),
+                voice_message=session.get(
+                    "fun_voice_message"
+                )
+            )
+
+    courses = Courses.query.order_by(
+        Courses.course_name.asc()
+    ).all()
+
+    return render_template(
+        "fun_quiz.html",
+        quiz=None,
+        courses=courses,
+        student_name=student_name,
+        course_name=None
+    )
 
 
+@app.route("/fun_quiz_result")
+@student_page_required
+def fun_quiz_result():
+
+    result = session.get("fun_result")
+
+    if not result:
+        return redirect(
+            url_for("fun_quiz")
+        )
+
+    return render_template(
+        "fun_quiz_result.html",
+        name=result.get("name"),
+        score=result.get("score", 0),
+        total=result.get("total", 0),
+        percentage=result.get("percentage", 0),
+        message=result.get("message"),
+        course_name=result.get(
+            "course_name",
+            "Fun Quiz"
+        )
+    )
+
+
+@app.route("/clear_fun_voice", methods=["POST"])
+@student_page_required
+def clear_fun_voice():
+
+    session.pop(
+        "fun_voice_message",
+        None
+    )
+
+    return jsonify({
+        "success": True
+    })
 
 if __name__ == "__main__":
    
