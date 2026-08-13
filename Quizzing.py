@@ -2401,6 +2401,107 @@ def run_code():
             "success": False,
             "error": str(e)
         })
+@app.route("/generate_coding_questions", methods=["POST"])
+@student_api_required
+def generate_coding_questions():
+
+    try:
+        data = request.get_json() or {}
+
+        language = data.get("language", "Python")
+        difficulty = data.get("difficulty", "Easy")
+        count = int(data.get("count", 5))
+
+        # Safety limit
+        count = max(1, min(count, 10))
+
+        prompt = f"""
+Generate {count} high-quality programming practice questions.
+
+Programming Language: {language}
+Difficulty: {difficulty}
+
+Each question MUST contain all of these fields:
+
+- title
+- description
+- input
+- output
+- example_input
+- example_output
+- constraints
+- hint
+
+IMPORTANT:
+1. Never leave any field empty.
+2. example_input must contain a real example.
+3. example_output must contain the correct output for that example.
+4. constraints must contain realistic constraints.
+5. hint must provide a useful hint without giving the complete solution.
+6. The question must be appropriate for the selected programming language.
+7. Return ONLY valid JSON.
+8. Do NOT use markdown code fences.
+
+Return exactly this structure:
+
+[
+    {{
+        "title": "Sum of Numbers in a List",
+        "description": "Write a program to calculate the sum of all numbers in a given list.",
+        "input": "A list of integers.",
+        "output": "The sum of all integers in the list.",
+        "example_input": "[1, 2, 3, 4, 5]",
+        "example_output": "15",
+        "constraints": "1 <= n <= 1000",
+        "hint": "Use a loop or the built-in sum function."
+    }}
+]
+"""
+
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are an expert programming question generator."
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ],
+            temperature=0.7
+        )
+
+        ai_response = response.choices[0].message.content.strip()
+
+       
+        if ai_response.startswith("```json"):
+            ai_response = ai_response[7:]
+
+        if ai_response.startswith("```"):
+            ai_response = ai_response[3:]
+
+        if ai_response.endswith("```"):
+            ai_response = ai_response[:-3]
+
+        ai_response = ai_response.strip()
+
+        questions = json.loads(ai_response)
+
+        return jsonify({
+            "success": True,
+            "questions": questions
+        })
+
+    except Exception as e:
+
+        print("Coding Question Generation Error:", repr(e))
+
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
 def generate_fun_quiz(course_name, num_questions=10):
     prompt = f"""
 Create {num_questions} multiple-choice quiz questions for the subject "{course_name}".
@@ -2455,12 +2556,12 @@ Rules:
         print(content)
         print("================================\n")
 
-        # Remove markdown if AI accidentally sends it
+        
         if content.startswith("```"):
             content = re.sub(r"```(?:json)?", "", content)
             content = content.replace("```", "").strip()
 
-        # Find JSON array if extra text exists
+       
         start = content.find("[")
         end = content.rfind("]")
 
