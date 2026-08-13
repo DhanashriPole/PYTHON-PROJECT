@@ -1,0 +1,1802 @@
+{% extends "base1.html" %}
+
+{% block title %}🎮 Fun Quiz Arena{% endblock %}
+
+{% block content %}
+
+<div class="fun-page">
+
+    
+    <div class="floating f1">⭐</div>
+    <div class="floating f2">🎈</div>
+    <div class="floating f3">🚀</div>
+    <div class="floating f4">🧠</div>
+    <div class="floating f5">✨</div>
+
+
+   
+    <div class="fun-hero">
+
+        <div class="hero-badge">
+            🤖 AI POWERED FUN QUIZ
+        </div>
+
+        <div class="hero-game-icon">
+            🎮
+        </div>
+
+        <h1>Fun Quiz Learning</h1>
+
+        <p>
+            Learn • Play • Think • Win 🏆
+        </p>
+
+    </div>
+
+
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            <div class="flash-area">
+
+                {% for category, message in messages %}
+
+                    <div class="fun-alert {{ category }}">
+
+                        <span class="alert-icon">
+
+                            {% if category == "success" %}
+                                🎉
+                            {% elif category == "danger" %}
+                                ⚠️
+                            {% elif category == "warning" %}
+                                😊
+                            {% else %}
+                                💡
+                            {% endif %}
+
+                        </span>
+
+                        <span>{{ message }}</span>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    
+    {% if not quiz %}
+
+    <div class="start-card">
+
+        <div class="start-emoji">
+            🎯
+        </div>
+
+        <div class="mini-label">
+            READY TO PLAY?
+        </div>
+
+        <h2>
+            Choose Your Challenge
+        </h2>
+
+        <p class="start-description">
+            Select a course and our AI will generate
+            a fresh quiz specially for you.
+        </p>
+
+
+        <form
+            method="POST"
+            action="{{ url_for('fun_quiz') }}"
+        >
+
+            <input
+                type="hidden"
+                name="action"
+                value="start_quiz"
+            >
+
+
+            <div class="section-title">
+                📚 Select Your Course
+            </div>
+
+
+            <div class="course-grid">
+
+                {% for course in courses %}
+
+                <label class="course-option">
+
+                    <input
+                        type="radio"
+                        name="course_id"
+                        value="{{ course.id }}"
+                        data-course-name="{{ course.course_name }}"
+                        required
+                    >
+
+                    <div class="course-box">
+
+                        <div class="course-icon">
+
+                            {% if loop.index % 5 == 1 %}
+                                🐍
+                            {% elif loop.index % 5 == 2 %}
+                                🌐
+                            {% elif loop.index % 5 == 3 %}
+                                📊
+                            {% elif loop.index % 5 == 4 %}
+                                💻
+                            {% else %}
+                                🧠
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="course-info">
+
+                            <strong>
+                                {{ course.course_name }}
+                            </strong>
+
+                            <small>
+                                🤖 AI Fun Challenge
+                            </small>
+
+                        </div>
+
+
+                        <div class="course-check">
+                            ✓
+                        </div>
+
+                    </div>
+
+                </label>
+
+                {% else %}
+
+                <div class="no-course">
+                    📚 No courses available.
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+
+            <div
+                id="selectedCourse"
+                class="selected-course"
+            >
+                🎓 Please select a course
+            </div>
+
+
+            <button
+                type="submit"
+                class="start-button"
+                id="startButton"
+            >
+
+                <span>🚀</span>
+
+                Generate My Quiz
+
+                <span>✨</span>
+
+            </button>
+
+        </form>
+
+
+        <div class="ai-info">
+
+            <div class="ai-robot">
+                🤖
+            </div>
+
+            <div>
+
+                <strong>
+                    Powered by Groq AI
+                </strong>
+
+                <small>
+                    Fresh questions are generated for every quiz.
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    
+
+    {% else %}
+
+    <div class="quiz-wrapper">
+
+
+        <!-- QUIZ STATUS -->
+
+        <div class="quiz-status">
+
+            <div class="subject-pill">
+                📚 {{ course_name or "Fun Quiz" }}
+            </div>
+
+
+            <div class="progress-area">
+
+                <div class="progress-text">
+                    Question {{ idx + 1 }} of {{ total }}
+                </div>
+
+                <div class="progress-bar">
+
+                    <div
+                        class="progress-fill"
+                        style="width: {{ ((idx + 1) / total * 100)|round }}%;"
+                    ></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- QUESTION CARD -->
+
+        <div class="question-card">
+
+
+            <div class="thinking">
+                🤖✨
+            </div>
+
+
+            <div class="question-number">
+                QUESTION {{ idx + 1 }}
+            </div>
+
+
+            <!-- IMPORTANT:
+                 Use .get() so missing keys do not cause
+                 Undefined / JSON errors.
+            -->
+
+            <h2 id="questionText">
+                {{ quiz.get("Question", "Question unavailable") }}
+            </h2>
+
+
+            <button
+                type="button"
+                class="read-button"
+                onclick="speakQuiz()"
+            >
+                🔊 Read Question
+            </button>
+
+
+            <form
+                method="POST"
+                action="{{ url_for('fun_quiz') }}"
+                id="answerForm"
+            >
+
+                <input
+                    type="hidden"
+                    name="action"
+                    value="answer"
+                >
+
+
+                <div class="answer-grid">
+
+
+                    <!-- A -->
+
+                    <button
+                        type="submit"
+                        name="choice"
+                        value="A"
+                        class="answer answer-a"
+                    >
+
+                        <span>A</span>
+
+                        <div>
+                            {{ quiz.get("A", "Option unavailable") }}
+                        </div>
+
+                    </button>
+
+
+                    <!-- B -->
+
+                    <button
+                        type="submit"
+                        name="choice"
+                        value="B"
+                        class="answer answer-b"
+                    >
+
+                        <span>B</span>
+
+                        <div>
+                            {{ quiz.get("B", "Option unavailable") }}
+                        </div>
+
+                    </button>
+
+
+                    <!-- C -->
+
+                    <button
+                        type="submit"
+                        name="choice"
+                        value="C"
+                        class="answer answer-c"
+                    >
+
+                        <span>C</span>
+
+                        <div>
+                            {{ quiz.get("C", "Option unavailable") }}
+                        </div>
+
+                    </button>
+
+
+                    <!-- D -->
+
+                    <button
+                        type="submit"
+                        name="choice"
+                        value="D"
+                        class="answer answer-d"
+                    >
+
+                        <span>D</span>
+
+                        <div>
+                            {{ quiz.get("D", "Option unavailable") }}
+                        </div>
+
+                    </button>
+
+
+                </div>
+
+            </form>
+
+
+            <div class="quiz-bottom">
+
+                <span>
+                    💡 Think carefully before answering
+                </span>
+
+                <span>
+                    🎯 {{ total - idx - 1 }} questions left
+                </span>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+<style>
+
+/* =========================================================
+   MAIN PAGE
+   ========================================================= */
+
+.fun-page {
+
+    min-height: 90vh;
+
+    padding: 35px 18px 70px;
+
+    position: relative;
+
+    overflow: hidden;
+
+    color: #222 !important;
+
+    background:
+        radial-gradient(
+            circle at 10% 15%,
+            #ffe8a3 0,
+            transparent 25%
+        ),
+        radial-gradient(
+            circle at 90% 10%,
+            #dccbff 0,
+            transparent 27%
+        ),
+        radial-gradient(
+            circle at 80% 90%,
+            #c4efff 0,
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #f8f7ff,
+            #ffffff
+        );
+
+    border-radius: 30px;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.fun-hero {
+
+    text-align: center;
+
+    position: relative;
+
+    z-index: 2;
+
+    margin-bottom: 30px;
+}
+
+
+.hero-badge {
+
+    display: inline-flex;
+
+    padding: 9px 18px;
+
+    border-radius: 50px;
+
+    background: #ffffff;
+
+    color: #5b2bbf !important;
+
+    font-size: 12px;
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.08);
+}
+
+
+.hero-game-icon {
+
+    font-size: 60px;
+
+    margin-top: 12px;
+
+    animation:
+        floatGame 2s ease-in-out infinite;
+}
+
+
+.fun-hero h1 {
+
+    margin: 5px 0;
+
+    font-size:
+        clamp(38px, 6vw, 65px);
+
+    font-weight: 900;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ff6b6b,
+            #845ef7,
+            #228be6
+        );
+
+    -webkit-background-clip: text;
+
+    background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+}
+
+
+.fun-hero p {
+
+    margin: 0;
+
+    color: #444 !important;
+
+    font-size: 18px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   FLASH
+   ========================================================= */
+
+.flash-area {
+
+    max-width: 850px;
+
+    margin: 0 auto 20px;
+
+    position: relative;
+
+    z-index: 5;
+}
+
+
+.fun-alert {
+
+    padding: 15px 18px;
+
+    border-radius: 16px;
+
+    margin-bottom: 10px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    font-weight: 700;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.08);
+}
+
+
+.fun-alert.success {
+
+    background: #d3f9d8;
+
+    color: #176b2c !important;
+}
+
+
+.fun-alert.info {
+
+    background: #d0ebff;
+
+    color: #15558a !important;
+}
+
+
+.fun-alert.warning {
+
+    background: #fff3bf;
+
+    color: #795500 !important;
+}
+
+
+.fun-alert.danger {
+
+    background: #ffe3e3;
+
+    color: #9b1c1c !important;
+}
+
+
+/* =========================================================
+   START CARD
+   ========================================================= */
+
+.start-card {
+
+    max-width: 850px;
+
+    margin: auto;
+
+    padding: 38px;
+
+    background: #ffffff !important;
+
+    color: #222 !important;
+
+    border-radius: 32px;
+
+    box-shadow:
+        0 25px 70px rgba(70,50,120,.15);
+
+    position: relative;
+
+    z-index: 2;
+
+    text-align: center;
+}
+
+
+.start-emoji {
+
+    width: 85px;
+
+    height: 85px;
+
+    margin: 0 auto 15px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 25px;
+
+    background: #fff3bf;
+
+    font-size: 48px;
+
+    animation:
+        floatGame 2s ease-in-out infinite;
+}
+
+
+.mini-label {
+
+    color: #7048e8 !important;
+
+    font-size: 12px;
+
+    font-weight: 900;
+
+    letter-spacing: 1.5px;
+}
+
+
+.start-card h2 {
+
+    margin: 6px 0;
+
+    color: #171717 !important;
+
+    font-size: 30px;
+
+    font-weight: 900;
+}
+
+
+.start-description {
+
+    color: #555555 !important;
+
+    max-width: 600px;
+
+    margin: 0 auto 28px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   COURSE SECTION
+   ========================================================= */
+
+.section-title {
+
+    text-align: left;
+
+    color: #222 !important;
+
+    font-size: 17px;
+
+    font-weight: 900;
+
+    margin-bottom: 14px;
+}
+
+
+.course-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 15px;
+}
+
+
+.course-option {
+
+    display: block;
+
+    margin: 0;
+}
+
+
+.course-option input {
+
+    display: none;
+}
+
+
+.course-box {
+
+    min-height: 95px;
+
+    padding: 16px;
+
+    border: 2px solid #e5e5e5;
+
+    border-radius: 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    cursor: pointer;
+
+    background: #ffffff !important;
+
+    color: #222222 !important;
+
+    transition: .25s;
+
+    text-align: left;
+}
+
+
+.course-box:hover {
+
+    transform:
+        translateY(-4px);
+
+    border-color: #845ef7;
+
+    box-shadow:
+        0 12px 25px
+        rgba(132,94,247,.12);
+}
+
+
+.course-option input:checked
++ .course-box {
+
+    border-color: #7048e8;
+
+    background: #f4efff !important;
+
+    box-shadow:
+        0 10px 25px
+        rgba(132,94,247,.16);
+}
+
+
+.course-icon {
+
+    width: 55px;
+
+    height: 55px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 17px;
+
+    background: #f1f3f5;
+
+    font-size: 28px;
+}
+
+
+.course-info {
+
+    flex: 1;
+
+    min-width: 0;
+}
+
+
+.course-info strong {
+
+    display: block;
+
+    color: #171717 !important;
+
+    font-size: 16px;
+
+    font-weight: 800 !important;
+
+    opacity: 1 !important;
+}
+
+
+.course-info small {
+
+    display: block;
+
+    margin-top: 5px;
+
+    color: #666666 !important;
+
+    font-size: 13px;
+
+    opacity: 1 !important;
+}
+
+
+.course-check {
+
+    width: 28px;
+
+    height: 28px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #7048e8;
+
+    color: #ffffff !important;
+
+    font-weight: 900;
+
+    opacity: 0;
+
+    transform: scale(.5);
+
+    transition: .2s;
+}
+
+
+.course-option input:checked
++ .course-box
+.course-check {
+
+    opacity: 1;
+
+    transform: scale(1);
+}
+
+
+/* =========================================================
+   SELECTED COURSE
+   ========================================================= */
+
+.selected-course {
+
+    margin-top: 18px;
+
+    padding: 12px;
+
+    border-radius: 14px;
+
+    background: #f3f3f3 !important;
+
+    color: #444444 !important;
+
+    font-size: 14px;
+
+    font-weight: 700;
+}
+
+
+.selected-course strong {
+
+    color: #5b2bbf !important;
+}
+
+
+/* =========================================================
+   START BUTTON
+   ========================================================= */
+
+.start-button {
+
+    width: 100%;
+
+    margin-top: 20px;
+
+    border: none;
+
+    border-radius: 18px;
+
+    padding: 17px;
+
+    font-size: 18px;
+
+    font-weight: 900;
+
+    color: #ffffff !important;
+
+    cursor: pointer;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ff922b,
+            #ff6b6b,
+            #845ef7
+        );
+
+    box-shadow:
+        0 12px 25px
+        rgba(132,94,247,.22);
+
+    transition: .25s;
+}
+
+
+.start-button:hover {
+
+    transform:
+        translateY(-3px);
+
+    box-shadow:
+        0 18px 35px
+        rgba(132,94,247,.3);
+}
+
+
+/* =========================================================
+   AI INFO
+   ========================================================= */
+
+.ai-info {
+
+    margin-top: 20px;
+
+    padding: 15px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    border-radius: 17px;
+
+    background: #f5f5f5 !important;
+
+    color: #222 !important;
+
+    text-align: left;
+}
+
+
+.ai-robot {
+
+    font-size: 30px;
+}
+
+
+.ai-info strong {
+
+    display: block;
+
+    color: #222222 !important;
+}
+
+
+.ai-info small {
+
+    display: block;
+
+    color: #555555 !important;
+
+    margin-top: 3px;
+}
+
+
+.no-course {
+
+    grid-column: 1 / -1;
+
+    padding: 25px;
+
+    border-radius: 18px;
+
+    background: #fff3bf;
+
+    color: #795500 !important;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   QUIZ WRAPPER
+   ========================================================= */
+
+.quiz-wrapper {
+
+    max-width: 850px;
+
+    margin: auto;
+
+    position: relative;
+
+    z-index: 2;
+
+    color: #222 !important;
+}
+
+
+/* =========================================================
+   QUIZ STATUS
+   ========================================================= */
+
+.quiz-status {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 20px;
+
+    margin-bottom: 15px;
+}
+
+
+.subject-pill {
+
+    background: #ffffff !important;
+
+    color: #222222 !important;
+
+    padding: 11px 18px;
+
+    border-radius: 30px;
+
+    font-weight: 800;
+
+    box-shadow:
+        0 8px 20px
+        rgba(0,0,0,.07);
+}
+
+
+.progress-area {
+
+    width: 270px;
+}
+
+
+.progress-text {
+
+    color: #444444 !important;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    margin-bottom: 6px;
+}
+
+
+.progress-bar {
+
+    height: 9px;
+
+    background: #e8e8e8;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+}
+
+
+.progress-fill {
+
+    height: 100%;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ff922b,
+            #845ef7
+        );
+
+    transition:
+        width .4s;
+}
+
+
+/* =========================================================
+   QUESTION CARD
+   ========================================================= */
+
+.question-card {
+
+    padding: 40px;
+
+    background: #ffffff !important;
+
+    color: #222222 !important;
+
+    border-radius: 30px;
+
+    text-align: center;
+
+    box-shadow:
+        0 25px 70px
+        rgba(70,50,120,.14);
+}
+
+
+.thinking {
+
+    font-size: 52px;
+
+    animation:
+        floatGame 2s ease-in-out infinite;
+}
+
+
+.question-number {
+
+    margin-top: 8px;
+
+    font-size: 12px;
+
+    font-weight: 900;
+
+    letter-spacing: 2px;
+
+    color: #7048e8 !important;
+}
+
+
+/* MOST IMPORTANT QUESTION FIX */
+
+.question-card h2 {
+
+    margin: 18px auto 18px;
+
+    max-width: 700px;
+
+    font-size:
+        clamp(22px,4vw,34px);
+
+    line-height: 1.4;
+
+    color: #111111 !important;
+
+    font-weight: 800 !important;
+
+    opacity: 1 !important;
+
+    text-shadow: none !important;
+}
+
+
+/* =========================================================
+   READ BUTTON
+   ========================================================= */
+
+.read-button {
+
+    border: none;
+
+    padding: 11px 20px;
+
+    border-radius: 30px;
+
+    background: #eee9ff !important;
+
+    color: #5b2bbf !important;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    margin-bottom: 28px;
+
+    transition: .2s;
+}
+
+
+.read-button:hover {
+
+    background: #e1d7ff !important;
+
+    transform:
+        translateY(-2px);
+}
+
+
+/* =========================================================
+   ANSWERS
+   ========================================================= */
+
+.answer-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 15px;
+}
+
+
+.answer {
+
+    min-height: 78px;
+
+    border: 2px solid #e2e2e2;
+
+    background: #ffffff !important;
+
+    color: #222222 !important;
+
+    border-radius: 20px;
+
+    padding: 15px;
+
+    display: flex;
+
+    align-items: center;
+
+    text-align: left;
+
+    gap: 10px;
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+
+.answer div {
+
+    color: #222222 !important;
+
+    font-weight: 700 !important;
+
+    opacity: 1 !important;
+
+    line-height: 1.4;
+}
+
+
+.answer span {
+
+    width: 40px;
+
+    height: 40px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: #eeeeee !important;
+
+    color: #222222 !important;
+
+    font-weight: 900;
+}
+
+
+.answer:hover {
+
+    transform:
+        translateY(-4px);
+
+    box-shadow:
+        0 12px 25px
+        rgba(0,0,0,.08);
+}
+
+
+.answer-a:hover {
+
+    border-color: #ff6b6b;
+}
+
+
+.answer-b:hover {
+
+    border-color: #228be6;
+}
+
+
+.answer-c:hover {
+
+    border-color: #40c057;
+}
+
+
+.answer-d:hover {
+
+    border-color: #845ef7;
+}
+
+
+/* =========================================================
+   QUIZ BOTTOM
+   ========================================================= */
+
+.quiz-bottom {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-top: 20px;
+
+    color: #555555 !important;
+
+    font-size: 14px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   FLOATING
+   ========================================================= */
+
+.floating {
+
+    position: absolute;
+
+    font-size: 30px;
+
+    opacity: .55;
+
+    animation:
+        floatAround 5s
+        ease-in-out infinite;
+
+    z-index: 1;
+}
+
+
+.f1 {
+    top: 10%;
+    left: 5%;
+}
+
+.f2 {
+    top: 25%;
+    right: 5%;
+}
+
+.f3 {
+    bottom: 15%;
+    left: 7%;
+}
+
+.f4 {
+    bottom: 10%;
+    right: 8%;
+}
+
+.f5 {
+    top: 50%;
+    left: 2%;
+}
+
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes floatGame {
+
+    0%,100% {
+
+        transform:
+            translateY(0)
+            rotate(-3deg);
+    }
+
+    50% {
+
+        transform:
+            translateY(-10px)
+            rotate(3deg);
+    }
+
+}
+
+
+@keyframes floatAround {
+
+    0%,100% {
+
+        transform:
+            translateY(0);
+    }
+
+    50% {
+
+        transform:
+            translateY(-20px);
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media(max-width:650px) {
+
+    .fun-page {
+
+        padding:
+            25px
+            10px
+            45px;
+
+        border-radius: 18px;
+    }
+
+
+    .start-card,
+    .question-card {
+
+        padding:
+            24px
+            16px;
+
+        border-radius: 22px;
+    }
+
+
+    .course-grid,
+    .answer-grid {
+
+        grid-template-columns: 1fr;
+    }
+
+
+    .quiz-status {
+
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+
+    .progress-area {
+
+        width: 100%;
+    }
+
+
+    .quiz-bottom {
+
+        flex-direction: column;
+
+        gap: 7px;
+    }
+
+
+    .floating {
+
+        display: none;
+    }
+
+
+    .question-card h2 {
+
+        font-size: 22px;
+
+        color: #111111 !important;
+    }
+
+}
+
+
+/* =========================================================
+   FORCE VISIBILITY AGAINST base1.html
+   ========================================================= */
+
+.fun-page *,
+.start-card *,
+.question-card * {
+
+    text-shadow: none;
+}
+
+
+.course-info strong,
+.question-card h2,
+.answer div {
+
+    -webkit-text-fill-color: initial !important;
+}
+
+</style>
+
+
+<script>
+
+/* =========================================================
+   COURSE SELECTION
+   ========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const courseInputs =
+            document.querySelectorAll(
+                'input[name="course_id"]'
+            );
+
+        const selectedCourse =
+            document.getElementById(
+                "selectedCourse"
+            );
+
+
+        courseInputs.forEach(
+            function (input) {
+
+                input.addEventListener(
+                    "change",
+                    function () {
+
+                        const name =
+                            this.getAttribute(
+                                "data-course-name"
+                            );
+
+
+                        if (
+                            selectedCourse &&
+                            name
+                        ) {
+
+                            selectedCourse.innerHTML =
+                                "🎓 Selected: <strong>" +
+                                name +
+                                "</strong> • Ready to play! 🚀";
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+    }
+);
+
+
+/* =========================================================
+   VOICE READING
+   ========================================================= */
+
+function speakQuiz() {
+
+    const questionElement =
+        document.getElementById(
+            "questionText"
+        );
+
+
+    if (!questionElement) {
+
+        return;
+
+    }
+
+
+    if (
+        !("speechSynthesis" in window)
+    ) {
+
+        alert(
+            "Voice reading is not supported in this browser."
+        );
+
+        return;
+
+    }
+
+
+    const question =
+        questionElement.innerText.trim();
+
+
+    const options = [];
+
+
+    document
+        .querySelectorAll(".answer")
+        .forEach(
+            function (button) {
+
+                const letter =
+                    button.querySelector(
+                        "span"
+                    );
+
+
+                const text =
+                    button.innerText
+                        .replace(
+                            letter
+                                ? letter.innerText
+                                : "",
+                            ""
+                        )
+                        .trim();
+
+
+                options.push(
+                    (
+                        letter
+                            ? letter.innerText
+                            : ""
+                    ) +
+                    ". " +
+                    text
+                );
+
+            }
+        );
+
+
+    const fullText =
+        "Question. " +
+        question +
+        ". Your options are. " +
+        options.join(". ");
+
+
+    window.speechSynthesis.cancel();
+
+
+    const speech =
+        new SpeechSynthesisUtterance(
+            fullText
+        );
+
+
+    speech.rate = 0.82;
+
+    speech.pitch = 1.08;
+
+    speech.volume = 1;
+
+
+    const voices =
+        window.speechSynthesis.getVoices();
+
+
+    const englishVoice =
+        voices.find(
+            function (voice) {
+
+                return (
+                    voice.lang &&
+                    voice.lang
+                        .toLowerCase()
+                        .startsWith("en")
+                );
+
+            }
+        );
+
+
+    if (englishVoice) {
+
+        speech.voice =
+            englishVoice;
+
+    }
+
+
+    window.speechSynthesis.speak(
+        speech
+    );
+
+}
+
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const voiceMessage = {{ session.get("fun_voice_message", "")|tojson }};
+
+    if (!voiceMessage) {
+        return;
+    }
+
+    if (!("speechSynthesis" in window)) {
+        return;
+    }
+
+    // Clear it so it doesn't speak again on refresh
+    fetch("{{ url_for('clear_fun_voice') }}", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+
+    window.speechSynthesis.cancel();
+
+    const speech = new SpeechSynthesisUtterance(voiceMessage);
+
+    speech.rate = 0.85;
+    speech.pitch = 1.05;
+    speech.volume = 1;
+
+    const voices = window.speechSynthesis.getVoices();
+
+    const englishVoice = voices.find(function (voice) {
+        return voice.lang &&
+               voice.lang.toLowerCase().startsWith("en");
+    });
+
+    if (englishVoice) {
+        speech.voice = englishVoice;
+    }
+
+    window.speechSynthesis.speak(speech);
+
+});
+
+
+
+</script>
+
+{% endblock %}
