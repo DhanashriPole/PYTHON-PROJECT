@@ -1,0 +1,2156 @@
+{% extends "base1.html" %}
+
+{% block title %}AI Mock Interview | Study Quiz Hub{% endblock %}
+
+{% block content %}
+
+<style>
+
+
+
+.ai-interview-page {
+    min-height: calc(100vh - 70px);
+    padding: 35px 18px 55px;
+    background:
+        radial-gradient(circle at 10% 10%, rgba(99,102,241,.13), transparent 28%),
+        radial-gradient(circle at 90% 15%, rgba(6,182,212,.12), transparent 25%),
+        radial-gradient(circle at 50% 100%, rgba(139,92,246,.08), transparent 30%),
+        #f6f8fc;
+}
+
+.ai-container {
+    max-width: 1250px;
+    margin: auto;
+}
+
+
+
+
+.setup-card {
+    max-width: 900px;
+    margin: 20px auto;
+    background: rgba(255,255,255,.94);
+    border: 1px solid rgba(255,255,255,.8);
+    border-radius: 32px;
+    box-shadow: 0 25px 70px rgba(15,23,42,.12);
+    overflow: hidden;
+}
+
+.setup-hero {
+    position: relative;
+    padding: 55px 35px 48px;
+    text-align: center;
+    color: white;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,.18), transparent 22%),
+        radial-gradient(circle at 85% 80%, rgba(255,255,255,.12), transparent 25%),
+        linear-gradient(135deg,#312e81,#4f46e5,#0891b2);
+}
+
+.setup-hero::before,
+.setup-hero::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,.12);
+}
+
+.setup-hero::before {
+    width: 250px;
+    height: 250px;
+    top: -120px;
+    right: -80px;
+}
+
+.setup-hero::after {
+    width: 180px;
+    height: 180px;
+    bottom: -100px;
+    left: -50px;
+}
+
+.hero-ai {
+    width: 92px;
+    height: 92px;
+    margin: 0 auto 20px;
+    border-radius: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 45px;
+    background: rgba(255,255,255,.14);
+    border: 1px solid rgba(255,255,255,.25);
+    box-shadow: 0 15px 40px rgba(0,0,0,.15);
+    backdrop-filter: blur(10px);
+}
+
+.setup-hero h1 {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    font-size: clamp(30px,5vw,48px);
+    font-weight: 900;
+    letter-spacing: -1.5px;
+}
+
+.setup-hero p {
+    position: relative;
+    z-index: 2;
+    max-width: 620px;
+    margin: 14px auto 0;
+    color: rgba(255,255,255,.84);
+    line-height: 1.7;
+    font-size: 15px;
+}
+
+.practice-pills {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 25px;
+}
+
+.practice-pill {
+    padding: 8px 13px;
+    border-radius: 30px;
+    background: rgba(255,255,255,.11);
+    border: 1px solid rgba(255,255,255,.18);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+
+
+.setup-content {
+    padding: 35px;
+}
+
+.setup-grid {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 22px;
+}
+
+.form-group {
+    position: relative;
+}
+
+.form-group.full {
+    grid-column: 1 / -1;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 9px;
+    font-size: 13px;
+    font-weight: 800;
+    color: #374151;
+}
+
+.form-label span {
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.custom-select {
+    width: 100%;
+    border: 1px solid #dbe1ea;
+    border-radius: 14px;
+    padding: 14px 16px;
+    background: #fff;
+    color: #1f2937;
+    font-size: 14px;
+    font-weight: 600;
+    outline: none;
+    transition: .2s;
+}
+
+.custom-select:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 4px rgba(99,102,241,.10);
+}
+
+
+
+
+.difficulty-options {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 10px;
+}
+
+.difficulty-option {
+    position: relative;
+}
+
+.difficulty-option input {
+    display: none;
+}
+
+.difficulty-option label {
+    display: block;
+    padding: 13px 10px;
+    text-align: center;
+    border: 1px solid #e1e5eb;
+    border-radius: 13px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 700;
+    color: #6b7280;
+    transition: .2s;
+}
+
+.difficulty-option input:checked + label {
+    background: #eef2ff;
+    border-color: #6366f1;
+    color: #4f46e5;
+}
+
+
+
+.start-interview-btn {
+    width: 100%;
+    margin-top: 30px;
+    border: none;
+    border-radius: 16px;
+    padding: 16px;
+    background: linear-gradient(135deg,#4f46e5,#0891b2);
+    color: white;
+    font-size: 16px;
+    font-weight: 900;
+    cursor: pointer;
+    box-shadow: 0 12px 30px rgba(79,70,229,.24);
+    transition: .25s;
+}
+
+.start-interview-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 17px 35px rgba(79,70,229,.30);
+}
+
+.setup-note {
+    margin-top: 18px;
+    text-align: center;
+    font-size: 12px;
+    color: #6b7280;
+}
+
+
+
+
+.interview-room {
+    display: none;
+    background: #fff;
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: 0 25px 70px rgba(15,23,42,.13);
+    border: 1px solid #e8ebf0;
+}
+
+
+
+
+.interview-topbar {
+    min-height: 76px;
+    padding: 15px 24px;
+    border-bottom: 1px solid #e8ebf0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.interview-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 14px;
+    background: linear-gradient(135deg,#4f46e5,#06b6d4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 22px;
+    box-shadow: 0 7px 20px rgba(79,70,229,.22);
+}
+
+.brand-title {
+    font-size: 15px;
+    font-weight: 900;
+    color: #111827;
+}
+
+.brand-subtitle {
+    color: #8a94a6;
+    font-size: 11px;
+    margin-top: 2px;
+}
+
+.room-status {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 13px;
+    background: #ecfdf5;
+    color: #047857;
+    border-radius: 30px;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 0 5px rgba(16,185,129,.10);
+}
+
+
+.room-body {
+    display: grid;
+    grid-template-columns: 330px 1fr;
+    min-height: 690px;
+}
+
+
+
+
+.interviewer-side {
+    position: relative;
+    padding: 32px 24px;
+    color: white;
+    text-align: center;
+    background:
+        radial-gradient(circle at 50% 25%, rgba(99,102,241,.25), transparent 30%),
+        linear-gradient(180deg,#111827,#172033);
+    overflow: hidden;
+}
+
+.interviewer-side::before {
+    content: "";
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,.05);
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.interviewer-avatar-wrap {
+    position: relative;
+    width: 155px;
+    height: 155px;
+    margin: 15px auto 25px;
+}
+
+.interviewer-avatar {
+    position: absolute;
+    inset: 12px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 65px;
+    background: linear-gradient(135deg,#6366f1,#06b6d4);
+    box-shadow:
+        0 0 0 8px rgba(99,102,241,.08),
+        0 0 50px rgba(99,102,241,.35);
+    z-index: 2;
+}
+
+.avatar-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid rgba(99,102,241,.35);
+    animation: ringPulse 2.5s infinite;
+}
+
+@keyframes ringPulse {
+    0% {
+        transform: scale(.94);
+        opacity: .8;
+    }
+
+    70% {
+        transform: scale(1.08);
+        opacity: .1;
+    }
+
+    100% {
+        transform: scale(.94);
+        opacity: .8;
+    }
+}
+
+.interviewer-avatar.speaking {
+    animation: speaking 1s infinite alternate;
+}
+
+@keyframes speaking {
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.045);
+    }
+}
+
+.interviewer-name {
+    position: relative;
+    font-size: 23px;
+    font-weight: 900;
+}
+
+.interviewer-role {
+    position: relative;
+    color: #94a3b8;
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+.room-details {
+    position: relative;
+    margin-top: 35px;
+    text-align: left;
+}
+
+.detail-card {
+    padding: 13px 14px;
+    margin-bottom: 10px;
+    border-radius: 14px;
+    background: rgba(255,255,255,.055);
+    border: 1px solid rgba(255,255,255,.07);
+}
+
+.detail-label {
+    color: #7f8da4;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    font-size: 9px;
+    font-weight: 800;
+}
+
+.detail-value {
+    margin-top: 4px;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+
+
+
+.chat-side {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    background: #fff;
+}
+
+.chat-header {
+    padding: 19px 25px;
+    border-bottom: 1px solid #edf0f4;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-heading {
+    font-size: 14px;
+    font-weight: 900;
+    color: #111827;
+}
+
+.chat-subheading {
+    color: #9ca3af;
+    font-size: 11px;
+    margin-top: 3px;
+}
+
+.conversation {
+    flex: 1;
+    padding: 28px;
+    overflow-y: auto;
+    min-height: 400px;
+    max-height: 495px;
+    scroll-behavior: smooth;
+}
+
+.welcome-message {
+    padding: 50px 20px;
+    text-align: center;
+    color: #6b7280;
+}
+
+.welcome-message-icon {
+    width: 65px;
+    height: 65px;
+    border-radius: 20px;
+    background: #eef2ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    font-size: 30px;
+}
+
+.welcome-message h3 {
+    margin-top: 18px;
+    color: #1f2937;
+    font-weight: 900;
+}
+
+.welcome-message p {
+    max-width: 460px;
+    margin: 8px auto;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+
+
+
+.message {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 22px;
+    animation: messageIn .25s ease;
+}
+
+@keyframes messageIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message.user {
+    justify-content: flex-end;
+}
+
+.message-avatar {
+    width: 37px;
+    height: 37px;
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 16px;
+}
+
+.ai-message-avatar {
+    background: #eef2ff;
+}
+
+.user-message-avatar {
+    background: #e0f2fe;
+}
+
+.bubble {
+    max-width: min(72%,620px);
+    padding: 13px 16px;
+    border-radius: 17px;
+    font-size: 13px;
+    line-height: 1.65;
+    white-space: pre-wrap;
+}
+
+.ai-bubble {
+    color: #1f2937;
+    background: #f4f6f9;
+    border-top-left-radius: 5px;
+}
+
+.user-bubble {
+    color: white;
+    background: linear-gradient(135deg,#4f46e5,#6366f1);
+    border-top-right-radius: 5px;
+}
+
+
+
+
+.typing {
+    display: inline-flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.typing span {
+    width: 6px;
+    height: 6px;
+    background: #9ca3af;
+    border-radius: 50%;
+    animation: typing .8s infinite alternate;
+}
+
+.typing span:nth-child(2) {
+    animation-delay: .2s;
+}
+
+.typing span:nth-child(3) {
+    animation-delay: .4s;
+}
+
+@keyframes typing {
+    from {
+        transform: translateY(0);
+        opacity: .4;
+    }
+
+    to {
+        transform: translateY(-4px);
+        opacity: 1;
+    }
+}
+
+
+
+
+.voice-area {
+    border-top: 1px solid #edf0f4;
+    padding: 19px 25px 23px;
+    background: #fbfcfe;
+}
+
+.voice-status {
+    height: 22px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #7b8494;
+    margin-bottom: 7px;
+}
+
+.voice-status.listening {
+    color: #ef4444;
+}
+
+.voice-status.speaking {
+    color: #4f46e5;
+}
+
+.mic-button-wrap {
+    position: relative;
+    width: 78px;
+    height: 78px;
+    margin: auto;
+}
+
+.mic-button {
+    position: relative;
+    z-index: 3;
+    width: 78px;
+    height: 78px;
+    border: none;
+    border-radius: 50%;
+    background: linear-gradient(135deg,#4f46e5,#06b6d4);
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+    box-shadow: 0 12px 28px rgba(79,70,229,.25);
+    transition: .25s;
+}
+
+.mic-button:hover:not(:disabled) {
+    transform: scale(1.05);
+}
+
+.mic-button:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+}
+
+.mic-button.listening {
+    background: #ef4444;
+    animation: micPulse 1.2s infinite;
+}
+
+@keyframes micPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(239,68,68,.35);
+    }
+
+    70% {
+        box-shadow: 0 0 0 22px rgba(239,68,68,0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(239,68,68,0);
+    }
+}
+
+.voice-hint {
+    text-align: center;
+    color: #9ca3af;
+    font-size: 10px;
+    margin-top: 9px;
+}
+
+.end-interview {
+    display: block;
+    margin: 13px auto 0;
+    border: none;
+    background: transparent;
+    color: #ef4444;
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+
+
+
+.finish-screen {
+    display: none;
+    max-width: 650px;
+    margin: 70px auto;
+    padding: 45px 30px;
+    text-align: center;
+    background: white;
+    border-radius: 30px;
+    box-shadow: 0 25px 70px rgba(15,23,42,.12);
+}
+
+.finish-icon {
+    width: 90px;
+    height: 90px;
+    border-radius: 28px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ecfdf5;
+    font-size: 42px;
+}
+
+.finish-screen h2 {
+    margin-top: 22px;
+    color: #111827;
+    font-weight: 900;
+}
+
+.finish-screen p {
+    color: #6b7280;
+    line-height: 1.7;
+    font-size: 14px;
+}
+
+.finish-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+.finish-btn {
+    border: none;
+    padding: 12px 20px;
+    border-radius: 13px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.primary-btn {
+    background: #4f46e5;
+    color: white;
+}
+
+.secondary-btn {
+    background: #eef2f7;
+    color: #374151;
+}
+
+
+
+
+@media(max-width: 850px) {
+
+    .setup-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group.full {
+        grid-column: auto;
+    }
+
+    .room-body {
+        grid-template-columns: 1fr;
+    }
+
+    .interviewer-side {
+        padding: 25px;
+    }
+
+    .interviewer-avatar-wrap {
+        width: 110px;
+        height: 110px;
+    }
+
+    .interviewer-avatar {
+        font-size: 45px;
+    }
+
+    .room-details {
+        display: none;
+    }
+
+    .conversation {
+        max-height: 450px;
+    }
+
+}
+
+@media(max-width: 520px) {
+
+    .ai-interview-page {
+        padding: 15px 10px 35px;
+    }
+
+    .setup-content {
+        padding: 22px;
+    }
+
+    .setup-hero {
+        padding: 40px 20px;
+    }
+
+    .setup-hero h1 {
+        font-size: 30px;
+    }
+
+    .interview-topbar {
+        padding: 12px 15px;
+    }
+
+    .room-status {
+        display: none;
+    }
+
+    .conversation {
+        padding: 20px 14px;
+    }
+
+    .voice-area {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .bubble {
+        max-width: 82%;
+    }
+
+}
+
+</style>
+
+
+<div class="ai-interview-page">
+
+<div class="ai-container">
+
+
+
+
+<div id="setupScreen" class="setup-card">
+
+    <div class="setup-hero">
+
+        <div class="hero-ai">
+            🤖
+        </div>
+
+        <h1>
+            AI Mock Interview
+        </h1>
+
+        <p>
+            Practice real interview conversations with an
+            AI interviewer. Speak naturally, explore questions,
+            learn from your answers and build confidence.
+        </p>
+
+        <div class="practice-pills">
+
+            <div class="practice-pill">
+                🎙️ Voice Powered
+            </div>
+
+            <div class="practice-pill">
+                🤖 AI Interviewer
+            </div>
+
+            <div class="practice-pill">
+                📚 Learning Focused
+            </div>
+
+            <div class="practice-pill">
+                🏆 No Leaderboard
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="setup-content">
+
+        <div class="setup-grid">
+
+
+            <!-- INTERVIEW MODE -->
+
+            <div class="form-group">
+
+                <label class="form-label">
+                    Interview Mode
+                </label>
+
+                <select
+                    id="interviewMode"
+                    class="custom-select">
+
+                    {% for mode in interview_modes %}
+
+                    <option value="{{ mode }}">
+                        {{ mode }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- SUBJECT -->
+
+            <div class="form-group">
+
+                <label class="form-label">
+                    Computer Engineering Subject
+                </label>
+
+                <select
+                    id="interviewSubject"
+                    class="custom-select">
+
+                    {% for subject in subjects %}
+
+                    <option value="{{ subject }}">
+                        {{ subject }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- ROLE -->
+
+            <div class="form-group full">
+
+                <label class="form-label">
+                    Interview Role
+                    <span>
+                        — choose the role you want to practice
+                    </span>
+                </label>
+
+                <select
+                    id="interviewRole"
+                    class="custom-select">
+
+                    <option>
+                        Computer Engineering Student
+                    </option>
+
+                    <option>
+                        Software Developer
+                    </option>
+
+                    <option>
+                        Python Developer
+                    </option>
+
+                    <option>
+                        Web Developer
+                    </option>
+
+                    <option>
+                        Java Developer
+                    </option>
+
+                    <option>
+                        C/C++ Developer
+                    </option>
+
+                    <option>
+                        Junior Software Engineer
+                    </option>
+
+                    <option>
+                        Technical Intern
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- DIFFICULTY -->
+
+            <div class="form-group full">
+
+                <label class="form-label">
+                    Interview Level
+                </label>
+
+                <div class="difficulty-options">
+
+                    <div class="difficulty-option">
+
+                        <input
+                            type="radio"
+                            name="difficulty"
+                            id="beginner"
+                            value="Beginner"
+                            checked>
+
+                        <label for="beginner">
+                            🌱 Beginner
+                        </label>
+
+                    </div>
+
+                    <div class="difficulty-option">
+
+                        <input
+                            type="radio"
+                            name="difficulty"
+                            id="medium"
+                            value="Intermediate">
+
+                        <label for="medium">
+                            ⚡ Intermediate
+                        </label>
+
+                    </div>
+
+                    <div class="difficulty-option">
+
+                        <input
+                            type="radio"
+                            name="difficulty"
+                            id="advanced"
+                            value="Advanced">
+
+                        <label for="advanced">
+                            🚀 Advanced
+                        </label>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="start-interview-btn"
+            onclick="startInterview()">
+
+            🎙️ &nbsp; Start AI Interview
+
+        </button>
+
+        <div class="setup-note">
+
+            🔒 Practice only • No marks • No leaderboard • No permanent history
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+<div id="interviewRoom" class="interview-room">
+
+
+    <!-- TOP BAR -->
+
+    <div class="interview-topbar">
+
+        <div class="interview-brand">
+
+            <div class="brand-avatar">
+                🤖
+            </div>
+
+            <div>
+
+                <div class="brand-title">
+                    AI Interview Room
+                </div>
+
+                <div class="brand-subtitle">
+                    Live practice session
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="room-status">
+
+            <span class="status-dot"></span>
+
+            LIVE INTERVIEW
+
+        </div>
+
+    </div>
+
+
+    <!-- ROOM BODY -->
+
+    <div class="room-body">
+
+
+       
+
+        <div class="interviewer-side">
+
+            <div class="interviewer-avatar-wrap">
+
+                <div class="avatar-ring"></div>
+
+                <div
+                    id="interviewerAvatar"
+                    class="interviewer-avatar">
+
+                    🤖
+
+                </div>
+
+            </div>
+
+
+            <div class="interviewer-name">
+                Alex
+            </div>
+
+            <div class="interviewer-role">
+                AI Interviewer
+            </div>
+
+
+            <div class="room-details">
+
+
+                <div class="detail-card">
+
+                    <div class="detail-label">
+                        Candidate
+                    </div>
+
+                    <div class="detail-value">
+                        {{ student_name }}
+                    </div>
+
+                </div>
+
+
+                <div class="detail-card">
+
+                    <div class="detail-label">
+                        Subject
+                    </div>
+
+                    <div
+                        id="roomSubject"
+                        class="detail-value">
+
+                        —
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail-card">
+
+                    <div class="detail-label">
+                        Mode
+                    </div>
+
+                    <div
+                        id="roomMode"
+                        class="detail-value">
+
+                        —
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail-card">
+
+                    <div class="detail-label">
+                        Level
+                    </div>
+
+                    <div
+                        id="roomDifficulty"
+                        class="detail-value">
+
+                        —
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        
+
+        <div class="chat-side">
+
+
+            <div class="chat-header">
+
+                <div>
+
+                    <div class="chat-heading">
+                        Interview Conversation
+                    </div>
+
+                    <div class="chat-subheading">
+                        Speak naturally — the AI will listen.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="conversation"
+                class="conversation">
+
+                <div
+                    id="welcomeMessage"
+                    class="welcome-message">
+
+                    <div class="welcome-message-icon">
+                        🎤
+                    </div>
+
+                    <h3>
+                        Your interview is starting...
+                    </h3>
+
+                    <p>
+                        Your AI interviewer will ask the first
+                        question. Listen carefully, then press
+                        the microphone and answer naturally.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            
+
+            <div class="voice-area">
+
+                <div
+                    id="voiceStatus"
+                    class="voice-status">
+
+                    Preparing your interview...
+
+                </div>
+
+
+                <div class="mic-button-wrap">
+
+                    <button
+                        id="voiceButton"
+                        class="mic-button"
+                        onclick="toggleListening()"
+                        disabled>
+
+                        🎙️
+
+                    </button>
+
+                </div>
+
+
+                <div class="voice-hint">
+                    Tap the microphone to answer
+                </div>
+
+
+                <button
+                    class="end-interview"
+                    onclick="endInterview()">
+
+                    End Interview
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+<div
+    id="finishScreen"
+    class="finish-screen">
+
+    <div class="finish-icon">
+        🎉
+    </div>
+
+    <h2>
+        Great Practice Session!
+    </h2>
+
+    <p>
+        You completed your AI interview practice.
+        Keep practicing different subjects and interview
+        styles to become more confident.
+    </p>
+
+    <div class="finish-actions">
+
+        <button
+            class="finish-btn primary-btn"
+            onclick="location.reload()">
+
+            🎙️ Practice Again
+
+        </button>
+
+        <button
+            class="finish-btn secondary-btn"
+
+            onclick="window.location.href='{{ url_for('home_page') }}'">
+
+            🏠 Home
+
+        </button>
+
+    </div>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+<script>
+
+
+
+let recognition = null;
+let listening = false;
+let interviewStarted = false;
+let aiSpeaking = false;
+
+let selectedSubject = "";
+let selectedMode = "";
+let selectedRole = "";
+let selectedDifficulty = "";
+
+
+
+
+const setupScreen =
+    document.getElementById("setupScreen");
+
+const interviewRoom =
+    document.getElementById("interviewRoom");
+
+const finishScreen =
+    document.getElementById("finishScreen");
+
+const conversation =
+    document.getElementById("conversation");
+
+const voiceButton =
+    document.getElementById("voiceButton");
+
+const voiceStatus =
+    document.getElementById("voiceStatus");
+
+const interviewerAvatar =
+    document.getElementById("interviewerAvatar");
+
+
+
+
+function setupSpeechRecognition() {
+
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+
+        voiceStatus.innerText =
+            "Voice recognition is not supported in this browser.";
+
+        voiceButton.disabled = true;
+
+        return false;
+    }
+
+
+    recognition =
+        new SpeechRecognition();
+
+    recognition.lang = "en-IN";
+
+    recognition.continuous = false;
+
+    recognition.interimResults = true;
+
+
+    recognition.onstart = function() {
+
+        listening = true;
+
+        voiceButton.classList.add("listening");
+
+        voiceButton.innerHTML = "⏹️";
+
+        voiceStatus.innerText =
+            "Listening... Speak naturally.";
+
+        voiceStatus.classList.add("listening");
+    };
+
+
+    recognition.onresult =
+        function(event) {
+
+            let finalText = "";
+
+            for (
+                let i = event.resultIndex;
+                i < event.results.length;
+                i++
+            ) {
+
+                if (
+                    event.results[i].isFinal
+                ) {
+
+                    finalText +=
+                        event.results[i][0]
+                        .transcript;
+                }
+            }
+
+
+            if (finalText.trim()) {
+
+                sendAnswer(
+                    finalText.trim()
+                );
+            }
+
+        };
+
+
+    recognition.onerror =
+        function(event) {
+
+            console.log(
+                "Speech recognition error:",
+                event.error
+            );
+
+            stopListening();
+
+            if (
+                event.error === "not-allowed"
+            ) {
+
+                voiceStatus.innerText =
+                    "Microphone permission is required.";
+
+            } else {
+
+                voiceStatus.innerText =
+                    "I couldn't hear you. Try again.";
+            }
+
+        };
+
+
+    recognition.onend =
+        function() {
+
+            stopListening();
+
+        };
+
+
+    return true;
+}
+
+
+
+
+async function startInterview() {
+
+    selectedSubject =
+        document.getElementById(
+            "interviewSubject"
+        ).value;
+
+    selectedMode =
+        document.getElementById(
+            "interviewMode"
+        ).value;
+
+    selectedRole =
+        document.getElementById(
+            "interviewRole"
+        ).value;
+
+    selectedDifficulty =
+        document.querySelector(
+            'input[name="difficulty"]:checked'
+        ).value;
+
+
+    document.getElementById(
+        "roomSubject"
+    ).innerText = selectedSubject;
+
+
+    document.getElementById(
+        "roomMode"
+    ).innerText = selectedMode;
+
+
+    document.getElementById(
+        "roomDifficulty"
+    ).innerText = selectedDifficulty;
+
+
+    setupScreen.style.display = "none";
+
+    interviewRoom.style.display = "block";
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+
+    addThinking();
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/ai_interview",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        action: "start",
+
+                        subject:
+                            selectedSubject,
+
+                        mode:
+                            selectedMode,
+
+                        role:
+                            selectedRole,
+
+                        difficulty:
+                            selectedDifficulty
+
+                    })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        removeThinking();
+
+
+        if (!data.success) {
+
+            voiceStatus.innerText =
+                data.error ||
+                "Unable to start interview.";
+
+            return;
+        }
+
+
+        interviewStarted = true;
+
+        const welcome =
+            document.getElementById(
+                "welcomeMessage"
+            );
+
+        if (welcome) {
+            welcome.remove();
+        }
+
+
+        addAIMessage(
+            data.message
+        );
+
+
+        setupSpeechRecognition();
+
+        speakAI(
+            data.message
+        );
+
+
+    } catch (error) {
+
+        removeThinking();
+
+        voiceStatus.innerText =
+            "Connection problem. Please try again.";
+
+        console.error(error);
+    }
+}
+
+
+
+
+function toggleListening() {
+
+    if (!recognition) {
+
+        voiceStatus.innerText =
+            "Voice recognition is unavailable.";
+
+        return;
+    }
+
+
+    if (aiSpeaking) {
+
+        voiceStatus.innerText =
+            "Please wait until the AI finishes speaking.";
+
+        return;
+    }
+
+
+    if (listening) {
+
+        recognition.stop();
+
+    } else {
+
+        try {
+
+            recognition.start();
+
+        } catch (error) {
+
+            console.log(error);
+
+        }
+
+    }
+}
+
+
+
+
+function stopListening() {
+
+    listening = false;
+
+    voiceButton.classList.remove(
+        "listening"
+    );
+
+    voiceButton.innerHTML = "🎙️";
+
+    voiceStatus.classList.remove(
+        "listening"
+    );
+}
+
+
+
+
+async function sendAnswer(answer) {
+
+    stopListening();
+
+    addUserMessage(answer);
+
+    voiceButton.disabled = true;
+
+    voiceStatus.innerText =
+        "🤖 AI is thinking...";
+
+
+    addThinking();
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/ai_interview",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        action: "answer",
+
+                        answer: answer,
+
+                        input_type: "voice"
+
+                    })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        removeThinking();
+
+
+        if (!data.success) {
+
+            voiceStatus.innerText =
+                data.error ||
+                "Unable to process answer.";
+
+            voiceButton.disabled = false;
+
+            return;
+        }
+
+
+        addAIMessage(
+            data.message
+        );
+
+
+        speakAI(
+            data.message
+        );
+
+
+    } catch (error) {
+
+        removeThinking();
+
+        voiceStatus.innerText =
+            "Connection problem.";
+
+        console.error(error);
+
+    } finally {
+
+        voiceButton.disabled = false;
+    }
+}
+
+
+
+
+function addAIMessage(text) {
+
+    const message =
+        document.createElement("div");
+
+    message.className =
+        "message";
+
+
+    const avatar =
+        document.createElement("div");
+
+    avatar.className =
+        "message-avatar ai-message-avatar";
+
+    avatar.innerHTML =
+        "🤖";
+
+
+    const bubble =
+        document.createElement("div");
+
+    bubble.className =
+        "bubble ai-bubble";
+
+    bubble.innerText =
+        text;
+
+
+    message.appendChild(avatar);
+
+    message.appendChild(bubble);
+
+    conversation.appendChild(message);
+
+
+    scrollConversation();
+}
+
+
+
+
+function addUserMessage(text) {
+
+    const message =
+        document.createElement("div");
+
+    message.className =
+        "message user";
+
+
+    const bubble =
+        document.createElement("div");
+
+    bubble.className =
+        "bubble user-bubble";
+
+    bubble.innerText =
+        text;
+
+
+    const avatar =
+        document.createElement("div");
+
+    avatar.className =
+        "message-avatar user-message-avatar";
+
+    avatar.innerHTML =
+        "👤";
+
+
+    message.appendChild(bubble);
+
+    message.appendChild(avatar);
+
+    conversation.appendChild(message);
+
+
+    scrollConversation();
+}
+
+
+
+
+function addThinking() {
+
+    removeThinking();
+
+
+    const message =
+        document.createElement("div");
+
+    message.id =
+        "thinkingMessage";
+
+    message.className =
+        "message";
+
+
+    message.innerHTML = `
+
+        <div class="message-avatar ai-message-avatar">
+            🤖
+        </div>
+
+        <div class="bubble ai-bubble">
+
+            <div class="typing">
+
+                <span></span>
+                <span></span>
+                <span></span>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    conversation.appendChild(
+        message
+    );
+
+    scrollConversation();
+}
+
+
+function removeThinking() {
+
+    const thinking =
+        document.getElementById(
+            "thinkingMessage"
+        );
+
+    if (thinking) {
+        thinking.remove();
+    }
+}
+
+
+
+function speakAI(text) {
+
+    if (
+        !("speechSynthesis" in window)
+    ) {
+
+        voiceStatus.innerText =
+            "Your turn — press the microphone.";
+
+        voiceButton.disabled = false;
+
+        return;
+    }
+
+
+    speechSynthesis.cancel();
+
+
+    const speech =
+        new SpeechSynthesisUtterance(
+            text
+        );
+
+
+    speech.lang = "en-IN";
+
+    speech.rate = 0.92;
+
+    speech.pitch = 1;
+
+
+    speech.onstart =
+        function() {
+
+            aiSpeaking = true;
+
+            interviewerAvatar
+                .classList.add(
+                    "speaking"
+                );
+
+            voiceStatus.innerText =
+                "🔊 Alex is speaking...";
+
+            voiceStatus.classList.add(
+                "speaking"
+            );
+
+            voiceButton.disabled = true;
+        };
+
+
+    speech.onend =
+        function() {
+
+            aiSpeaking = false;
+
+            interviewerAvatar
+                .classList.remove(
+                    "speaking"
+                );
+
+            voiceStatus.innerText =
+                "🎙️ Your turn — speak your answer.";
+
+            voiceStatus.classList.remove(
+                "speaking"
+            );
+
+            voiceButton.disabled = false;
+        };
+
+
+    speech.onerror =
+        function() {
+
+            aiSpeaking = false;
+
+            interviewerAvatar
+                .classList.remove(
+                    "speaking"
+                );
+
+            voiceButton.disabled = false;
+        };
+
+
+    speechSynthesis.speak(
+        speech
+    );
+}
+
+
+
+async function endInterview() {
+
+    speechSynthesis.cancel();
+
+    aiSpeaking = false;
+
+
+    if (
+        recognition &&
+        listening
+    ) {
+
+        recognition.stop();
+
+    }
+
+
+    try {
+
+        await fetch(
+            "/ai_interview",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    action: "end"
+
+                })
+            }
+        );
+
+    } catch (error) {
+
+        console.log(error);
+
+    }
+
+
+    interviewRoom.style.display =
+        "none";
+
+    finishScreen.style.display =
+        "block";
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+
+
+function scrollConversation() {
+
+    conversation.scrollTop =
+        conversation.scrollHeight;
+}
+
+
+
+window.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        
+        setupSpeechRecognition();
+
+    }
+);
+
+</script>
+
+{% endblock %}
