@@ -3165,7 +3165,467 @@ def clear_fun_voice():
     return jsonify({
         "success": True
     })
+@app.route("/ai_interview", methods=["GET", "POST"])
+@student_page_required
+def ai_interview():
 
+    student_name = session.get("student_name")
+
+    if not student_name:
+        flash("Please login first.", "warning")
+        return redirect(url_for("login"))
+
+    
+
+    if request.args.get("new") == "1":
+
+        session.pop("ai_interview_messages", None)
+        session.pop("ai_interview_subject", None)
+        session.pop("ai_interview_role", None)
+        session.pop("ai_interview_mode", None)
+        session.pop("ai_interview_started", None)
+
+        return redirect(url_for("ai_interview"))
+
+    
+
+    if request.method == "POST":
+
+        data = request.get_json(silent=True) or {}
+
+        action = data.get("action")
+
+        
+
+        if action == "start":
+
+            subject = data.get(
+                "subject",
+                "Mixed Computer Engineering"
+            )
+
+            role = data.get(
+                "role",
+                "Computer Engineering Student"
+            )
+
+            mode = data.get(
+                "mode",
+                "Technical Interview"
+            )
+
+            session["ai_interview_subject"] = subject
+            session["ai_interview_role"] = role
+            session["ai_interview_mode"] = mode
+            session["ai_interview_started"] = True
+            session["ai_interview_messages"] = []
+
+            system_prompt = f"""
+You are a realistic professional AI interviewer.
+
+You are interviewing a Computer Engineering student.
+
+INTERVIEW DETAILS
+
+Role:
+{role}
+
+Subject:
+{subject}
+
+Interview Mode:
+{mode}
+
+
+YOUR BEHAVIOR
+
+You are an interviewer, not a teacher.
+
+This is a practice interview for learning and confidence.
+
+Rules:
+
+1. Ask only ONE question at a time.
+
+2. Start naturally.
+
+3. Begin with an easy question.
+
+4. Gradually increase difficulty.
+
+5. Adapt questions according to the student's answers.
+
+6. Do not give marks.
+
+7. Do not give numerical scores.
+
+8. Do not mention leaderboards.
+
+9. Do not create a final ranking.
+
+10. Do not save interview history.
+
+11. Give short natural feedback after an answer.
+
+12. If the answer is correct:
+   briefly acknowledge it.
+
+13. If the answer is partially correct:
+   explain what is missing in one or two sentences.
+
+14. If the answer is incorrect:
+   do not embarrass the student.
+   Give a small hint and continue.
+
+15. Occasionally ask practical questions.
+
+16. For programming subjects, ask conceptual,
+    debugging and real-world questions.
+
+17. For project interviews, ask about:
+    project purpose,
+    technologies,
+    student's contribution,
+    challenges,
+    database,
+    testing and deployment.
+
+18. For HR interviews, ask realistic student-level
+    questions about communication, goals, teamwork
+    and problem solving.
+
+19. Keep responses suitable for being spoken aloud.
+
+20. Do not write long paragraphs.
+
+21. Never repeat a question that has already been asked.
+
+Start the interview.
+
+Introduce yourself briefly and ask the first question.
+"""
+
+            try:
+
+                response = client.chat.completions.create(
+
+                    model="llama-3.3-70b-versatile",
+
+                    messages=[
+                        {
+                            "role": "system",
+                            "content": system_prompt
+                        }
+                    ],
+
+                    temperature=0.7,
+                    max_tokens=300
+                )
+
+                ai_response = (
+                    response.choices[0]
+                    .message.content
+                    .strip()
+                )
+
+                session["ai_interview_messages"] = [
+                    {
+                        "role": "assistant",
+                        "content": ai_response
+                    }
+                ]
+
+                session.modified = True
+
+                return jsonify({
+                    "success": True,
+                    "message": ai_response
+                })
+
+            except Exception as e:
+
+                print("AI INTERVIEW START ERROR:", e)
+
+                return jsonify({
+                    "success": False,
+                    "error":
+                    "AI interviewer is temporarily unavailable."
+                }), 500
+
+        
+
+        elif action == "answer":
+
+            answer = data.get("answer", "").strip()
+
+            input_type = data.get(
+                "input_type",
+                "voice"
+            )
+
+            if not answer:
+
+                return jsonify({
+                    "success": False,
+                    "error": "No answer detected."
+                }), 400
+
+            messages = session.get(
+                "ai_interview_messages",
+                []
+            )
+
+            subject = session.get(
+                "ai_interview_subject",
+                "Mixed Computer Engineering"
+            )
+
+            role = session.get(
+                "ai_interview_role",
+                "Computer Engineering Student"
+            )
+
+            mode = session.get(
+                "ai_interview_mode",
+                "Technical Interview"
+            )
+
+           
+
+            system_prompt = f"""
+You are conducting a realistic Computer Engineering
+mock interview.
+
+Role:
+{role}
+
+Subject:
+{subject}
+
+Mode:
+{mode}
+
+
+The student's latest answer was obtained through
+microphone speech recognition.
+
+The text may contain:
+
+- minor grammar mistakes
+- repeated words
+- incomplete sentences
+- speech recognition mistakes
+
+Understand the student's intended meaning instead of
+judging grammar harshly.
+
+
+INTERVIEW RULES
+
+- Speak naturally.
+- Be professional but friendly.
+- Ask ONE question at a time.
+- Do not give marks.
+- Do not give numerical scores.
+- Do not mention leaderboards.
+- Do not save history.
+- Do not produce a final score.
+- Give brief feedback.
+- Ask the next relevant question.
+- Adapt difficulty based on the student's response.
+- Do not repeat questions.
+- Keep answers short enough to be spoken aloud.
+
+If the answer is good:
+
+Briefly acknowledge it and continue.
+
+If partially correct:
+
+Say what was missing and ask a related question.
+
+If incorrect:
+
+Politely explain the basic concept briefly,
+then continue with another suitable question.
+
+The goal is practice, confidence and learning.
+"""
+
+            conversation = [
+
+                {
+                    "role": "system",
+                    "content": system_prompt
+                }
+
+            ]
+
+            
+            conversation.extend(messages)
+
+            conversation.append({
+
+                "role": "user",
+
+                "content": (
+                    "[Student answered using microphone]\n\n"
+                    + answer
+                )
+
+            })
+
+            try:
+
+                response = client.chat.completions.create(
+
+                    model="llama-3.3-70b-versatile",
+
+                    messages=conversation,
+
+                    temperature=0.7,
+
+                    max_tokens=350
+                )
+
+                ai_response = (
+                    response.choices[0]
+                    .message.content
+                    .strip()
+                )
+
+                
+                messages.append({
+
+                    "role": "user",
+
+                    "content": (
+                        "[Voice Answer]\n" + answer
+                    )
+
+                })
+
+                messages.append({
+
+                    "role": "assistant",
+
+                    "content": ai_response
+                })
+
+                session[
+                    "ai_interview_messages"
+                ] = messages
+
+                session.modified = True
+
+                return jsonify({
+
+                    "success": True,
+
+                    "message": ai_response,
+
+                    "input_type": input_type
+                })
+
+            except Exception as e:
+
+                print(
+                    "AI INTERVIEW ANSWER ERROR:",
+                    e
+                )
+
+                return jsonify({
+
+                    "success": False,
+
+                    "error":
+                    "Unable to process your answer."
+                }), 500
+
+        
+
+        elif action == "end":
+
+            session.pop(
+                "ai_interview_messages",
+                None
+            )
+
+            session.pop(
+                "ai_interview_subject",
+                None
+            )
+
+            session.pop(
+                "ai_interview_role",
+                None
+            )
+
+            session.pop(
+                "ai_interview_mode",
+                None
+            )
+
+            session.pop(
+                "ai_interview_started",
+                None
+            )
+
+            return jsonify({
+
+                "success": True,
+
+                "message":
+                "Great practice! 🚀"
+            })
+
+        return jsonify({
+
+            "success": False,
+
+            "error":
+            "Invalid interview action."
+
+        }), 400
+
+   
+
+    subjects = [
+        "Python",
+        "C Programming",
+        "C++",
+        "Java",
+        "HTML & CSS",
+        "JavaScript",
+        "Web Development",
+        "SQL & DBMS",
+        "Data Structures & Algorithms",
+        "Computer Networks",
+        "Operating Systems",
+        "Digital Electronics",
+        "Microprocessors & Microcontrollers",
+        "Computer Architecture",
+        "Cyber Security Basics",
+        "Artificial Intelligence & ML Basics",
+        "Linux",
+        "Git & GitHub",
+        "Mixed Computer Engineering"
+    ]
+
+    interview_modes = [
+        "Technical Interview",
+        "HR Interview",
+        "Rapid Fire",
+        "Project Interview",
+        "Mixed Interview"
+    ]
+
+    return render_template(
+        "ai_interview.html",
+        student_name=student_name,
+        subjects=subjects,
+        interview_modes=interview_modes
+    )
 if __name__ == "__main__":
    
     

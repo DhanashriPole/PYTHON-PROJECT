@@ -7,91 +7,19 @@
 <style>
 
 /* =========================================================
-   ABOUT PAGE
+   STUDY QUIZ HUB - CINEMATIC ABOUT PAGE
 ========================================================= */
-body{
-    font-family:'Poppins',sans-serif;
-    background:linear-gradient(
-        -45deg,
-        #200a15,
-        #1a0332,
-        #35076c,
-        #10323c,
-        #583102,
-        #3e160e,
-        #012728,
-        #3f0540
-    );
-    background-size:800% 800%;
-    animation:rainbowBG 18s ease infinite;
+
+* {
+    box-sizing: border-box;
 }
 
-@keyframes rainbowBG{
-    0%{background-position:0% 50%;}
-    25%{background-position:100% 50%;}
-    50%{background-position:100% 100%;}
-    75%{background-position:0% 100%;}
-    100%{background-position:0% 50%;}
-}
-
-.glass-card{
-    background:rgba(255,255,255,.12);
-    backdrop-filter:blur(20px);
-    border:1px solid rgba(255,255,255,.15);
-    border-radius:30px;
-    box-shadow:0 20px 50px rgba(0,0,0,.35);
-    animation:
-        floating 4s ease-in-out infinite,
-        cardGlow 6s linear infinite;
-}
-
-@keyframes floating{
-
-0%{
-transform:translateY(0px);
-}
-
-50%{
-transform:translateY(-10px);
-}
-
-100%{
-transform:translateY(0px);
-}
-
-}
-
-
-@keyframes cardGlow{
-
-0%{
-box-shadow:0 0 25px #00d4ff;
-}
-
-25%{
-box-shadow:0 0 35px #ff0080;
-}
-
-50%{
-box-shadow:0 0 35px #00ff88;
-}
-
-75%{
-box-shadow:0 0 35px #ffd700;
-}
-
-100%{
-box-shadow:0 0 25px #00d4ff;
-}
-
-}
-.about-page {
-    padding: 45px 15px;
-    background:
-        radial-gradient(circle at 10% 10%, rgba(255, 23, 68, .08), transparent 30%),
-        radial-gradient(circle at 90% 15%, rgba(124, 77, 255, .10), transparent 30%),
-        radial-gradient(circle at 50% 100%, rgba(0, 176, 255, .08), transparent 35%),
-        linear-gradient(135deg, #f8fbff, #f6f1ff, #eef9ff);
+.about-home {
+    width: 100%;
+    min-height: 100vh;
+    overflow: hidden;
+    background: #080b18;
+    color: white;
 }
 
 
@@ -100,31 +28,457 @@ box-shadow:0 0 25px #00d4ff;
 ========================================================= */
 
 .about-hero {
+    position: relative;
+    min-height: 620px;
 
-    max-width: 1100px;
-    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    padding: 55px 35px;
+    padding: 80px 5%;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 15% 40%,
+            rgba(99,102,241,.28),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 85% 30%,
+            rgba(236,72,153,.22),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #050816,
+            #0b1025,
+            #111638,
+            #090d20
+        );
+}
+
+
+/* glowing background */
+
+.about-hero::before {
+    content: "";
+    position: absolute;
+    width: 550px;
+    height: 550px;
+
+    left: -180px;
+    top: -180px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(56,189,248,.18),
+            transparent 70%
+        );
+
+    animation: heroGlow 7s ease-in-out infinite alternate;
+}
+
+.about-hero::after {
+    content: "";
+    position: absolute;
+    width: 500px;
+    height: 500px;
+
+    right: -150px;
+    bottom: -200px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(168,85,247,.22),
+            transparent 70%
+        );
+
+    animation: heroGlow 8s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes heroGlow {
+
+    from {
+        transform: scale(1);
+        opacity: .6;
+    }
+
+    to {
+        transform: scale(1.25);
+        opacity: 1;
+    }
+}
+
+
+/* =========================================================
+   HERO CONTENT
+========================================================= */
+
+.about-hero-content {
+    position: relative;
+    z-index: 5;
+
+    width: 100%;
+    max-width: 1050px;
 
     text-align: center;
 
-    border-radius: 30px;
-
-    background: rgba(255,255,255,.68);
-
-    backdrop-filter: blur(22px);
-    -webkit-backdrop-filter: blur(22px);
-
-    border: 1px solid rgba(255,255,255,.9);
-
-    box-shadow:
-        0 25px 65px rgba(31,41,55,.12);
-
-    position: relative;
-    overflow: hidden;
+    animation: heroEnter 1s ease both;
 }
 
-.about-hero::before {
+@keyframes heroEnter {
+
+    from {
+        opacity: 0;
+        transform: translateY(35px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+.about-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+    gap: 8px;
+
+    padding: 9px 18px;
+
+    border-radius: 50px;
+
+    color: rgba(255,255,255,.9);
+
+    background: rgba(255,255,255,.06);
+
+    border: 1px solid rgba(255,255,255,.18);
+
+    backdrop-filter: blur(12px);
+
+    font-size: .72rem;
+    font-weight: 900;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 22px;
+}
+
+
+.about-badge-dot {
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #38bdf8;
+
+    box-shadow:
+        0 0 15px #38bdf8;
+
+    animation: pulseDot 2s infinite;
+}
+
+@keyframes pulseDot {
+
+    0%,100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.7);
+        opacity: .55;
+    }
+}
+
+
+.about-hero h1 {
+
+    margin: 0;
+
+    color: white;
+
+    font-size: clamp(
+        3rem,
+        7vw,
+        6.5rem
+    );
+
+    line-height: .98;
+
+    letter-spacing: -4px;
+
+    font-weight: 950;
+
+    text-shadow:
+        0 15px 45px rgba(0,0,0,.5);
+}
+
+
+.about-hero h1 .gradient {
+
+    display: inline-block;
+
+    background:
+        linear-gradient(
+            90deg,
+            #38bdf8,
+            #6366f1,
+            #a855f7,
+            #ec4899,
+            #f59e0b
+        );
+
+    background-size: 300% 100%;
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+
+    animation:
+        rainbowText 5s linear infinite;
+}
+
+@keyframes rainbowText {
+
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+
+.about-hero p {
+
+    max-width: 750px;
+
+    margin: 25px auto 0;
+
+    color: rgba(255,255,255,.68);
+
+    font-size: 1rem;
+
+    line-height: 1.8;
+}
+
+.about-hero p strong {
+    color: white;
+}
+
+
+/* =========================================================
+   HERO FEATURES
+========================================================= */
+
+.about-quick-features {
+
+    display: flex;
+
+    justify-content: center;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    margin-top: 25px;
+}
+
+.about-quick-features span {
+
+    padding: 9px 15px;
+
+    border-radius: 50px;
+
+    background:
+        rgba(255,255,255,.055);
+
+    border:
+        1px solid rgba(255,255,255,.12);
+
+    color:
+        rgba(255,255,255,.85);
+
+    font-size: .72rem;
+
+    font-weight: 800;
+
+    backdrop-filter: blur(10px);
+
+    transition: .3s ease;
+}
+
+.about-quick-features span:hover {
+
+    transform: translateY(-4px);
+
+    background:
+        rgba(255,255,255,.12);
+
+    border-color:
+        rgba(255,255,255,.3);
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+.about-content {
+
+    position: relative;
+
+    padding: 90px 5% 100px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #080b18,
+            #0b1022
+        );
+}
+
+
+/* =========================================================
+   SECTION HEADER
+========================================================= */
+
+.about-section {
+
+    max-width: 1200px;
+
+    margin:
+        0 auto 85px;
+}
+
+.about-section:last-child {
+    margin-bottom: 0;
+}
+
+
+.section-heading {
+
+    text-align: center;
+
+    margin-bottom: 42px;
+}
+
+
+.section-label {
+
+    display: inline-block;
+
+    color: #a78bfa;
+
+    font-size: .68rem;
+
+    font-weight: 900;
+
+    letter-spacing: 2px;
+}
+
+
+.section-heading h2 {
+
+    margin:
+        10px 0;
+
+    color: white;
+
+    font-size:
+        clamp(
+            2rem,
+            4vw,
+            3.1rem
+        );
+
+    font-weight: 950;
+}
+
+
+.section-heading p {
+
+    max-width: 650px;
+
+    margin: auto;
+
+    color:
+        rgba(255,255,255,.55);
+
+    font-size: .84rem;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   GLASS CARDS
+========================================================= */
+
+.about-card {
+
+    position: relative;
+
+    overflow: hidden;
+
+    height: 100%;
+
+    padding: 30px;
+
+    border-radius: 24px;
+
+    background:
+        rgba(255,255,255,.055);
+
+    border:
+        1px solid rgba(255,255,255,.1);
+
+    backdrop-filter: blur(15px);
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.25);
+
+    transition:
+        transform .35s ease,
+        border-color .35s ease,
+        box-shadow .35s ease;
+}
+
+
+.about-card:hover {
+
+    transform:
+        translateY(-8px);
+
+    border-color:
+        rgba(255,255,255,.25);
+
+    box-shadow:
+        0 28px 60px rgba(0,0,0,.35);
+}
+
+
+.about-card::before {
 
     content: "";
 
@@ -132,252 +486,108 @@ box-shadow:0 0 25px #00d4ff;
 
     top: 0;
     left: 0;
-    right: 0;
 
-    height: 6px;
+    width: 100%;
+    height: 3px;
 
     background:
         linear-gradient(
             90deg,
-            #ff1744,
-            #ff9800,
-            #ffee00,
-            #00c853,
-            #00b0ff,
-            #7c4dff,
-            #ff1744
+            #38bdf8,
+            #6366f1,
+            #a855f7,
+            #ec4899
         );
 
     background-size: 300%;
 
-    animation: rainbow 5s linear infinite;
+    animation:
+        rainbowText 5s linear infinite;
 }
 
-@keyframes rainbow {
 
-    100% {
-        background-position: 300%;
-    }
+.about-card h3 {
 
+    color: white;
+
+    font-size: 1.15rem;
+
+    font-weight: 900;
+
+    margin-bottom: 12px;
 }
 
-.about-logo {
 
-    width: 90px;
-    height: 90px;
+.about-card p {
 
-    margin: 0 auto 20px;
+    color:
+        rgba(255,255,255,.58);
+
+    font-size: .82rem;
+
+    line-height: 1.8;
+
+    margin-bottom: 10px;
+}
+
+
+/* =========================================================
+   MISSION / VISION ICON
+========================================================= */
+
+.big-card-icon {
+
+    width: 60px;
+    height: 60px;
 
     display: flex;
+
     align-items: center;
     justify-content: center;
 
-    border-radius: 25px;
+    margin-bottom: 18px;
 
-    font-size: 3rem;
-
-    background:
-        linear-gradient(
-            135deg,
-            #ff1744,
-            #7c4dff
-        );
-
-    box-shadow:
-        0 15px 35px rgba(124,77,255,.25);
-}
-
-.about-hero h1 {
-
-    font-size: 2.7rem;
-
-    font-weight: 900;
-
-    color: #172033;
-}
-
-.about-hero h1 span {
+    border-radius: 18px;
 
     background:
-        linear-gradient(
-            90deg,
-            #ff1744,
-            #c026d3,
-            #6366f1
-        );
-     background-clip: #00b0ff;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-.feature-card{
-
-background:rgba(255,255,255,.12);
-
-backdrop-filter:blur(10px);
-
-border-radius:20px;
-
-color:white;
-
-box-shadow:0 10px 25px rgba(0,0,0,.25);
-
-transition:.5s;
-
-}
-
-.feature-card:hover{
-
-transform:translateY(-12px) scale(1.04);
-
-background:linear-gradient(
-135deg,
-#ff9a9e,
-#fad0c4,
-#fbc2eb,
-#a18cd1,
-#84fab0
-);
-
-}
-.about-hero p {
-
-    max-width: 800px;
-
-    margin: 15px auto 0;
-
-    color: #667085;
-
-    font-size: 1.08rem;
-
-    line-height: 1.8;
-}
-
-/* Profile */
-
-.about-profile-img{
-    width:180px;
-    height:180px;
-    object-fit:cover;
-    border-radius:50%;
-    border:6px solid transparent;
-    background:
-        linear-gradient(white,white) padding-box,
-        linear-gradient(45deg,red,orange,yellow,green,cyan,blue,purple,red) border-box;
-    display:block;
-    margin:auto;
-}
-
-.about-profile-img:hover{
-    transform:scale(1.1);
-}
-
-
-/* =========================================================
-   SECTION
-========================================================= */
-
-
-.about-section {
-
-    max-width: 1100px;
-
-    margin: 55px auto 0;
-}
-
-.section-title {
-
-    text-align: center;
-
-    margin-bottom: 30px;
-}
-
-.section-title span {
-
-    display: inline-block;
-
-    padding: 7px 15px;
-
-    border-radius: 50px;
-
-    background:
-        rgba(124,77,255,.09);
-
-    color: #74658d;
-
-    font-size: .8rem;
-
-    font-weight: 800;
-}
-
-.section-title h2 {
-
-    margin-top: 12px;
-
-    font-size: 2rem;
-
-    font-weight: 900;
-
-    color: #172033;
-}
-
-.section-title p {
-
-    color: #667085;
-}
-
-
-/* =========================================================
-   GLASS CARD
-========================================================= */
-
-.glass-card {
-
-    height: 100%;
-
-    padding: 30px;
-
-    border-radius: 22px;
-
-    background:
-        rgba(255,255,255,.68);
-
-    backdrop-filter: blur(18px);
+        rgba(255,255,255,.08);
 
     border:
-        1px solid rgba(255,255,255,.9);
+        1px solid rgba(255,255,255,.1);
 
-    box-shadow:
-        0 15px 40px rgba(31,41,55,.08);
+    font-size: 1.6rem;
 
-    transition: .3s;
-
-    color: #172033;
+    transition: .35s ease;
 }
 
-.glass-card:hover {
 
-    transform: translateY(-7px);
+.about-card:hover .big-card-icon {
 
-    box-shadow:
-        0 22px 45px rgba(31,41,55,.13);
+    transform:
+        rotate(-7deg)
+        scale(1.1);
 }
 
 
 /* =========================================================
-   TECHNOLOGY
+   TECHNOLOGY CARDS
 ========================================================= */
 
 .tech-card {
 
     text-align: center;
+
+    padding: 27px 20px;
 }
+
 
 .tech-icon {
 
-    width: 65px;
-    height: 65px;
+    width: 62px;
+    height: 62px;
 
-    margin: 0 auto 15px;
+    margin:
+        0 auto 15px;
 
     display: flex;
 
@@ -386,63 +596,104 @@ background:linear-gradient(
 
     border-radius: 18px;
 
-    font-size: 2rem;
-
     background:
-        linear-gradient(
-            135deg,
-            rgba(255,23,68,.10),
-            rgba(124,77,255,.12)
-        );
+        rgba(255,255,255,.07);
+
+    border:
+        1px solid rgba(255,255,255,.1);
+
+    font-size: 1.8rem;
+
+    transition: .35s ease;
 }
+
+
+.tech-card:hover .tech-icon {
+
+    transform:
+        rotate(-8deg)
+        scale(1.12);
+}
+
 
 .tech-card h4 {
 
-    font-weight: 800;
+    color: white;
 
-    color: #172033;
+    font-size: .95rem;
+
+    font-weight: 900;
 
     margin-bottom: 8px;
 }
 
+
 .tech-card p {
 
-    color: #667085;
+    color:
+        rgba(255,255,255,.5);
+
+    font-size: .72rem;
+
+    line-height: 1.6;
 
     margin: 0;
-
-    font-size: .9rem;
 }
 
 
 /* =========================================================
-   FEATURES
+   FEATURE CARDS
 ========================================================= */
 
 .feature-card {
 
     text-align: center;
+
+    padding:
+        28px 22px;
 }
+
 
 .feature-icon {
 
-    font-size: 2.7rem;
+    font-size: 2.4rem;
 
-    margin-bottom: 15px;
+    margin-bottom: 14px;
+
+    transition: .35s ease;
 }
+
+
+.feature-card:hover .feature-icon {
+
+    transform:
+        scale(1.15)
+        rotate(-5deg);
+}
+
 
 .feature-card h4 {
 
-    color: #172033;
+    color: white;
 
-    font-weight: 800;
+    font-size: .95rem;
+
+    font-weight: 900;
+
+    margin-bottom: 9px;
 }
+
 
 .feature-card p {
 
-    color: #4a71c6;
+    color:
+        rgba(255,255,255,.52);
 
-    line-height: 1.6;
+    font-size: .74rem;
+
+    line-height: 1.7;
+
+    margin: 0;
 }
 
 
@@ -456,49 +707,90 @@ background:linear-gradient(
 
     align-items: center;
 
-    gap: 30px;
+    gap: 40px;
+
+    padding: 40px;
 }
 
-.developer-avatar {
 
-    width: 120px;
-    height: 120px;
+.developer-photo-wrapper {
 
-    min-width: 120px;
+    position: relative;
 
-    border-radius: 50%;
+    min-width: 190px;
 
     display: flex;
 
-    align-items: center;
     justify-content: center;
+}
 
-    font-size: 3.5rem;
+
+.about-profile-img {
+
+    width: 180px;
+    height: 180px;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+
+    border: 5px solid transparent;
 
     background:
+        linear-gradient(#111827,#111827) padding-box,
         linear-gradient(
-            135deg,
-            #ff1744,
-            #ff9800,
-            #7c4dff
-        );
+            45deg,
+            #38bdf8,
+            #6366f1,
+            #a855f7,
+            #ec4899,
+            #f59e0b,
+            #38bdf8
+        ) border-box;
 
     box-shadow:
-        0 15px 35px rgba(124,77,255,.20);
+        0 0 35px rgba(99,102,241,.3);
+
+    transition: .4s ease;
 }
+
+
+.about-profile-img:hover {
+
+    transform:
+        scale(1.07);
+
+    box-shadow:
+        0 0 55px rgba(168,85,247,.5);
+}
+
 
 .developer-info h3 {
 
-    color: #172033;
+    color: white;
 
-    font-weight: 900;
+    font-size: 1.6rem;
+
+    font-weight: 950;
+
+    margin-bottom: 12px;
 }
+
 
 .developer-info p {
 
-    color: #667085;
+    color:
+        rgba(255,255,255,.58);
 
-    line-height: 1.7;
+    line-height: 1.8;
+
+    font-size: .85rem;
+}
+
+
+.developer-info strong {
+
+    color: white;
 }
 
 
@@ -514,88 +806,177 @@ background:linear-gradient(
 
     gap: 15px;
 
-    padding: 14px;
+    padding: 15px;
 
     margin-bottom: 12px;
 
-    border-radius: 14px;
+    border-radius: 16px;
 
     background:
-        rgba(255,255,255,.55);
+        rgba(255,255,255,.045);
+
+    border:
+        1px solid rgba(255,255,255,.07);
+
+    transition: .3s ease;
 }
+
+
+.contact-item:hover {
+
+    transform:
+        translateX(5px);
+
+    background:
+        rgba(255,255,255,.08);
+}
+
 
 .contact-icon {
 
-    width: 42px;
-    height: 42px;
+    width: 45px;
+    height: 45px;
 
-    min-width: 42px;
+    min-width: 45px;
 
     display: flex;
 
     align-items: center;
     justify-content: center;
 
-    border-radius: 12px;
+    border-radius: 13px;
 
     background:
-        rgba(124,77,255,.09);
+        rgba(99,102,241,.15);
 
     font-size: 1.2rem;
 }
 
+
 .contact-item strong {
 
-    color: #172033;
+    color: white;
+
+    font-size: .8rem;
 }
+
 
 .contact-item div {
 
-    color: #667085;
+    color:
+        rgba(255,255,255,.55);
+
+    font-size: .75rem;
 }
 
 
 /* =========================================================
-   SOCIAL
+   SOCIAL BUTTONS
 ========================================================= */
 
 .social-links {
 
     display: flex;
 
-    gap: 12px;
-
     flex-wrap: wrap;
+
+    gap: 10px;
 
     margin-top: 20px;
 }
 
+
 .social-btn {
 
-    padding: 10px 17px;
+    padding:
+        10px 16px;
 
-    border-radius: 12px;
+    border-radius: 13px;
 
     text-decoration: none;
 
-    color: #172033;
+    color:
+        rgba(255,255,255,.85);
 
-    background: rgba(255,255,255,.65);
+    background:
+        rgba(255,255,255,.05);
 
-    border: 1px solid rgba(148,163,184,.15);
+    border:
+        1px solid rgba(255,255,255,.1);
 
-    font-weight: 700;
+    font-size: .75rem;
 
-    transition: .3s;
+    font-weight: 800;
+
+    transition: .3s ease;
 }
+
 
 .social-btn:hover {
 
-    transform: translateY(-3px);
+    color: white;
 
-    background: white;
+    text-decoration: none;
 
-    color: #6d28d9;
+    transform:
+        translateY(-4px);
+
+    background:
+        linear-gradient(
+            90deg,
+            #4f46e5,
+            #9333ea,
+            #db2777
+        );
+
+    border-color: transparent;
+}
+
+
+/* =========================================================
+   QUOTE CARD
+========================================================= */
+
+.quote-card {
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    min-height: 100%;
+}
+
+
+.quote-card h3 {
+
+    font-size: 1.35rem;
+}
+
+
+.quote-text {
+
+    font-size: 1rem !important;
+
+    color:
+        rgba(255,255,255,.75) !important;
+
+    line-height: 1.9 !important;
+}
+
+
+.quote-line {
+
+    margin-top: 15px;
+
+    color: #a78bfa;
+
+    font-size: .75rem;
+
+    font-weight: 900;
+
+    letter-spacing: .5px;
 }
 
 
@@ -605,831 +986,931 @@ background:linear-gradient(
 
 .about-footer {
 
-    max-width: 1100px;
+    max-width: 1200px;
 
-    margin: 55px auto 0;
+    margin:
+        80px auto 0;
 
-    padding: 25px;
+    padding: 30px;
 
     text-align: center;
 
-    border-radius: 20px;
+    border-top:
+        1px solid rgba(255,255,255,.08);
 
-    color: #667085;
+    color:
+        rgba(255,255,255,.45);
 
-    background: rgba(255,255,255,.55);
+    font-size: .75rem;
+
+    line-height: 1.8;
 }
+
 
 .about-footer strong {
 
-    color: #6d28d9;
+    color: #a78bfa;
 }
 
 
 /* =========================================================
-   MOBILE
+   RESPONSIVE
 ========================================================= */
 
-@media(max-width:768px) {
-
-    .about-page {
-        padding: 25px 12px;
-    }
-
-    .about-hero {
-        padding: 40px 20px;
-    }
-
-    .about-hero h1 {
-        font-size: 2rem;
-    }
+@media(max-width:900px) {
 
     .developer-card {
+
         flex-direction: column;
 
         text-align: center;
     }
 
-    .social-links {
-        justify-content: center;
+    .developer-info {
+        text-align: center;
     }
 
+}
+
+
+@media(max-width:650px) {
+
+    .about-hero {
+
+        min-height: 600px;
+
+        padding:
+            60px 20px;
+    }
+
+    .about-hero h1 {
+
+        font-size: 3.3rem;
+
+        letter-spacing: -2px;
+    }
+
+    .about-hero p {
+
+        font-size: .82rem;
+    }
+
+    .about-content {
+
+        padding:
+            65px 5% 75px;
+    }
+
+    .developer-card {
+
+        padding: 28px 20px;
+    }
+
+    .about-profile-img {
+
+        width: 150px;
+        height: 150px;
+    }
+
+}
+
+
+@media(prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        animation: none !important;
+
+        transition: none !important;
+    }
 }
 
 </style>
 
 
-<div class="about-page">
+<div class="about-home">
 
 
-    <!-- =====================================================
-         HERO / ABOUT
-    ====================================================== -->
+<!-- =====================================================
+     CINEMATIC ABOUT HERO
+====================================================== -->
 
-    <section class="about-hero">
+<section class="about-hero">
 
-        <div class="about-logo">
-            🎓
+    <div class="about-hero-content">
+
+        <div class="about-badge">
+
+            <span class="about-badge-dot"></span>
+
+            ABOUT STUDY QUIZ HUB
+
         </div>
 
+
         <h1>
-            About <span>Study Quiz Hub</span>
+
+            Learn
+
+            <span class="gradient">
+                Beyond Limits
+            </span>
+
         </h1>
+
 
         <p>
 
-            An interactive learning platform designed to help
-            students <strong>learn smarter, practice quizzes,
-            track performance and improve their knowledge</strong>
-            through technology and AI-powered education.
+            Study Quiz Hub is an interactive learning platform
+            designed to help students
+
+            <strong>
+                learn smarter, practice better and grow faster.
+            </strong>
+
+            Explore quizzes, coding, AI-powered learning,
+            interviews and interactive challenges — all in one place.
 
         </p>
 
-    </section>
 
+        <div class="about-quick-features">
 
-    <!-- =====================================================
-         ABOUT PLATFORM
-    ====================================================== -->
+            <span>📚 Learn</span>
 
-    <section class="about-section">
+            <span>📝 Practice</span>
 
-        <div class="section-title">
+            <span>💻 Code</span>
 
-            <span>📚 OUR PLATFORM</span>
+            <span>🤖 AI</span>
 
-            <h2>
-                Making Learning More Interactive
-            </h2>
+            <span>🎮 Fun</span>
 
-            <p>
-                Everything students need for effective quiz-based learning.
-            </p>
+            <span>📊 Track</span>
 
         </div>
 
+    </div>
 
-        <div class="row g-4">
-
-            <div class="col-lg-6">
-
-                <div class="glass-card">
-
-                    <h3>
-                        🎯 Our Mission
-                    </h3>
-
-                    <p class="mt-3">
-
-                        Study Quiz Hub aims to make education more
-                        engaging and accessible by combining
-                        interactive quizzes, performance tracking,
-                        course-based learning and artificial
-                        intelligence into one platform.
-
-                    </p>
-
-                    <p>
-
-                        Students can practice at their own pace,
-                        understand their performance and continuously
-                        improve their knowledge.
-
-                    </p>
-
-                </div>
-
-            </div>
+</section>
 
 
-            <div class="col-lg-6">
 
-                <div class="glass-card">
+<!-- =====================================================
+     CONTENT
+====================================================== -->
 
-                    <h3>
-                        🚀 Our Vision
-                    </h3>
+<div class="about-content">
 
-                    <p class="mt-3">
 
-                        Our vision is to create a smart learning
-                        environment where students can practice,
-                        analyze and improve their skills using
-                        modern web technologies and AI.
+<!-- =====================================================
+     MISSION / VISION
+====================================================== -->
 
-                    </p>
+<section class="about-section">
 
-                    <p>
+    <div class="section-heading">
 
-                        The platform focuses on making learning
-                        simple, interactive and motivating.
-
-                    </p>
-
-                </div>
-
-            </div>
-
+        <div class="section-label">
+            OUR PURPOSE
         </div>
 
-    </section>
+        <h2>
+            Why Study Quiz Hub? 🚀
+        </h2>
+
+        <p>
+            A smart learning environment designed around
+            continuous practice, exploration and improvement.
+        </p>
+
+    </div>
 
 
-    <!-- =====================================================
-         TECHNOLOGY STACK
-    ====================================================== -->
+    <div class="row g-4">
 
-    <section class="about-section">
+        <div class="col-lg-6">
 
-        <div class="section-title">
+            <div class="about-card">
 
-            <span>💻 TECHNOLOGY STACK</span>
-
-            <h2>
-                Technologies Used
-            </h2>
-
-            <p>
-                Technologies used to design and develop Study Quiz Hub.
-            </p>
-
-        </div>
-
-
-        <div class="row g-4">
-
-
-            <div class="col-6 col-lg-3">
-
-                <div class="glass-card tech-card">
-
-                    <div class="tech-icon">
-                        🐍
-                    </div>
-
-                    <h4>
-                        Python
-                    </h4>
-
-                    <p>
-                        Core programming language
-                        used for application logic.
-                    </p>
-
+                <div class="big-card-icon">
+                    🎯
                 </div>
-
-            </div>
-
-
-            <div class="col-6 col-lg-3">
-
-                <div class="glass-card tech-card">
-
-                    <div class="tech-icon">
-                        🌐
-                    </div>
-
-                    <h4>
-                        Flask
-                    </h4>
-
-                    <p>
-                        Python web framework used
-                        for backend development.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="col-6 col-lg-3">
-
-                <div class="glass-card tech-card">
-
-                    <div class="tech-icon">
-                        🗄️
-                    </div>
-
-                    <h4>
-                        SQLite
-                    </h4>
-
-                    <p>
-                        Database used to store
-                        students, courses and quiz data.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="col-6 col-lg-3">
-
-                <div class="glass-card tech-card">
-
-                    <div class="tech-icon">
-                        🧠
-                    </div>
-
-                    <h4>
-                        SQLAlchemy
-                    </h4>
-
-                    <p>
-                        ORM used for database
-                        management and queries.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="col-6 col-lg-3">
-
-                <div class="glass-card tech-card">
-
-                    <div class="tech-icon">
-                        🎨
-                    </div>
-
-                    <h4>
-                        HTML5
-                    </h4>
-
-                    <p>
-                        Used to structure the
-                        application's web pages.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="col-6 col-lg-3">
-
-                <div class="glass-card tech-card">
-
-                    <div class="tech-icon">
-                        🎨
-                    </div>
-
-                    <h4>
-                        CSS3
-                    </h4>
-
-                    <p>
-                        Used for responsive design,
-                        animations and glassmorphism UI.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="col-6 col-lg-3">
-
-                <div class="glass-card tech-card">
-
-                    <div class="tech-icon">
-                        ⚡
-                    </div>
-
-                    <h4>
-                        JavaScript
-                    </h4>
-
-                    <p>
-                        Adds interactive behaviour,
-                        validation and dynamic UI.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="col-6 col-lg-3">
-
-                <div class="glass-card tech-card">
-
-                    <div class="tech-icon">
-                        🤖
-                    </div>
-
-                    <h4>
-                        Groq AI
-                    </h4>
-
-                    <p>
-                        Powers AI-based assistance,
-                        quiz generation and study support.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-        </div>
-
-    </section>
-
-
-    <!-- =====================================================
-         FEATURES
-    ====================================================== -->
-
-    <section class="about-section">
-
-        <div class="section-title">
-
-            <span>✨ FEATURES</span>
-
-            <h2>
-                What Study Quiz Hub Offers
-            </h2>
-
-            <p>
-                Features designed around the student's learning journey.
-            </p>
-
-        </div>
-
-
-        <div class="row g-4">
-
-
-            <div class="col-md-6 col-lg-4">
-
-                <div class="glass-card feature-card">
-
-                    <div class="feature-icon">
-                        📝
-                    </div>
-
-                    <h4>
-                        Interactive MCQ Quizzes
-                    </h4>
-
-                    <p>
-                        Practice multiple-choice questions
-                        and test your knowledge.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="col-md-6 col-lg-4">
-
-                <div class="glass-card feature-card">
-
-                    <div class="feature-icon">
-                        📊
-                    </div>
-
-                    <h4>
-                        Performance Tracking
-                    </h4>
-
-                    <p>
-                        Track quiz attempts, scores,
-                        percentages and grades.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="col-md-6 col-lg-4">
-
-                <div class="glass-card feature-card">
-
-                    <div class="feature-icon">
-                        🏆
-                    </div>
-
-                    <h4>
-                        Live Leaderboard
-                    </h4>
-
-                    <p>
-                        Compare rankings and stay
-                        motivated to improve.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="col-md-6 col-lg-4">
-
-                <div class="glass-card feature-card">
-
-                    <div class="feature-icon">
-                        🤖
-                    </div>
-
-                    <h4>
-                        AI Study Assistant
-                    </h4>
-
-                    <p>
-                        Ask questions and receive
-                        AI-powered educational assistance.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="col-md-6 col-lg-4">
-
-                <div class="glass-card feature-card">
-
-                    <div class="feature-icon">
-                        📚
-                    </div>
-
-                    <h4>
-                        Multiple Courses
-                    </h4>
-
-                    <p>
-                        Practice different subjects
-                        through course-based quizzes.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="col-md-6 col-lg-4">
-
-                <div class="glass-card feature-card">
-
-                    <div class="feature-icon">
-                        ⚡
-                    </div>
-
-                    <h4>
-                        Instant Results
-                    </h4>
-
-                    <p>
-                        Get immediate feedback after
-                        completing your quiz.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="col-md-6 col-lg-4">
-
-                <div class="glass-card feature-card">
-
-                    <div class="feature-icon">
-                        🔐
-                    </div>
-
-                    <h4>
-                        Secure Login
-                    </h4>
-
-                    <p>
-                        Student accounts use password
-                        hashing and session-based authentication.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="col-md-6 col-lg-4">
-
-                <div class="glass-card feature-card">
-
-                    <div class="feature-icon">
-                        👤
-                    </div>
-
-                    <h4>
-                        Student Profiles
-                    </h4>
-
-                    <p>
-                        Manage student information and
-                        profile photos.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="col-md-6 col-lg-4">
-
-                <div class="glass-card feature-card">
-
-                    <div class="feature-icon">
-                        🔎
-                    </div>
-
-                    <h4>
-                        Search & Filtering
-                    </h4>
-
-                    <p>
-                        Find students and filter information
-                        efficiently through the platform.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-        </div>
-
-    </section>
-
-
-    <!-- =====================================================
-         DEVELOPER
-    ====================================================== -->
-
-    <section class="about-section">
-
-        <div class="section-title">
-
-            <span>👩‍💻 DEVELOPER</span>
-
-            <h2>
-                Meet the Developer
-            </h2>
-
-        </div>
-
-
-        <div class="glass-card developer-card">
-        <div class="col-lg-4 text-center">
-
-<img src="static/uploads/WhatsApp_Image_2026-05-28_at_7.30.37_AM.jpeg"
-class="about-profile-img">
-
-</div>
-
-            <div class="developer-info">
 
                 <h3>
-                    Dhanashri Dattarao Pole
+                    Our Mission
                 </h3>
 
                 <p>
+                    Study Quiz Hub aims to make education more
+                    engaging and accessible by combining
+                    interactive quizzes, performance tracking,
+                    course-based learning and artificial
+                    intelligence into one platform.
+                </p>
 
-                    A Computer Engineering student passionate
-                    about <strong>Education, Artificial Intelligence,
-                    Web Development and innovative technology.</strong>
-
-                    Study Quiz Hub was created with the goal of
-                    making learning more fun, interactive and
-                    accessible for students.
-
+                <p>
+                    Students can practice at their own pace,
+                    understand their performance and continuously
+                    improve their knowledge.
                 </p>
 
             </div>
 
         </div>
 
-    </section>
 
+        <div class="col-lg-6">
 
-    <!-- =====================================================
-         CONTACT
-    ====================================================== -->
+            <div class="about-card">
 
-    <section class="about-section">
-
-        <div class="section-title">
-
-            <span>📞 CONTACT</span>
-
-            <h2>
-                Get In Touch
-            </h2>
-
-        </div>
-
-
-        <div class="row g-4">
-
-
-            <div class="col-lg-7">
-
-                <div class="glass-card">
-
-                    <div class="contact-item">
-
-                        <div class="contact-icon">
-                            📧
-                        </div>
-
-                        <div>
-
-                            <strong>
-                                Email
-                            </strong>
-
-                            <div>
-                                dhanashri@example.com
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="contact-item">
-
-                        <div class="contact-icon">
-                            📱
-                        </div>
-
-                        <div>
-
-                            <strong>
-                                Phone
-                            </strong>
-
-                            <div>
-                                +91 9699809443
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="contact-item">
-
-                        <div class="contact-icon">
-                            📍
-                        </div>
-
-                        <div>
-
-                            <strong>
-                                Location
-                            </strong>
-
-                            <div>
-                                Maharashtra, India
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="social-links">
-
-                        <a
-                            href="#"
-                            class="social-btn"
-                        >
-                            💼 LinkedIn
-                        </a>
-
-                        <a
-                            href="https://github.com/DhanashriPole/PYTHON-PROJECT"
-                            class="social-btn"
-                        >
-                            💻 GitHub
-                        </a>
-
-                        <a
-                            href="#"
-                            class="social-btn"
-                        >
-                            📸 Instagram
-                        </a>
-
-                    </div>
-
+                <div class="big-card-icon">
+                    🚀
                 </div>
+
+                <h3>
+                    Our Vision
+                </h3>
+
+                <p>
+                    Our vision is to create a smart learning
+                    environment where students can practice,
+                    analyze and improve their skills using
+                    modern web technologies and AI.
+                </p>
+
+                <p>
+                    The platform focuses on making learning
+                    simple, interactive and motivating.
+                </p>
 
             </div>
 
-
-            <div class="col-lg-5">
-
-                <div class="glass-card">
-
-                    <h3>
-                        🎓 Study Quiz Hub
-                    </h3>
-
-                    <p class="mt-3">
-
-                        Learn continuously.
-                        Practice regularly.
-                        Track your progress.
-                        Achieve your goals.
-
-                    </p>
-
-                    <div class="mt-4">
-
-                        <strong>
-                            📚 Learn • 📝 Practice • 📊 Track • 🏆 Achieve
-                        </strong>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
         </div>
-
-    </section>
-
-
-    <!-- =====================================================
-         FOOTER
-    ====================================================== -->
-
-    <div class="about-footer">
-
-        © 2026 <strong>Study Quiz Hub</strong>
-
-        <br>
-
-        Designed & Developed by
-        <strong>Dhanashri Dattarao Pole</strong>
-
-        <br>
-
-        <span>
-            🎓 Learn Smarter • 🚀 Grow Faster
-        </span>
 
     </div>
 
+</section>
+
+
+
+<!-- =====================================================
+     TECHNOLOGY
+====================================================== -->
+
+<section class="about-section">
+
+    <div class="section-heading">
+
+        <div class="section-label">
+            TECHNOLOGY STACK
+        </div>
+
+        <h2>
+            Built With Modern Technology 💻
+        </h2>
+
+        <p>
+            Technologies used to design and develop
+            Study Quiz Hub.
+        </p>
+
+    </div>
+
+
+    <div class="row g-4">
+
+
+        <div class="col-6 col-lg-3">
+
+            <div class="about-card tech-card">
+
+                <div class="tech-icon">🐍</div>
+
+                <h4>Python</h4>
+
+                <p>
+                    Core programming language used
+                    for application logic.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-6 col-lg-3">
+
+            <div class="about-card tech-card">
+
+                <div class="tech-icon">🌐</div>
+
+                <h4>Flask</h4>
+
+                <p>
+                    Python web framework used
+                    for backend development.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-6 col-lg-3">
+
+            <div class="about-card tech-card">
+
+                <div class="tech-icon">🗄️</div>
+
+                <h4>SQLite</h4>
+
+                <p>
+                    Database used to store students,
+                    courses and quiz data.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-6 col-lg-3">
+
+            <div class="about-card tech-card">
+
+                <div class="tech-icon">🧠</div>
+
+                <h4>SQLAlchemy</h4>
+
+                <p>
+                    ORM used for database
+                    management and queries.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-6 col-lg-3">
+
+            <div class="about-card tech-card">
+
+                <div class="tech-icon">🎨</div>
+
+                <h4>HTML5</h4>
+
+                <p>
+                    Used to structure the
+                    application's web pages.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-6 col-lg-3">
+
+            <div class="about-card tech-card">
+
+                <div class="tech-icon">✨</div>
+
+                <h4>CSS3</h4>
+
+                <p>
+                    Responsive design, animations
+                    and modern UI.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-6 col-lg-3">
+
+            <div class="about-card tech-card">
+
+                <div class="tech-icon">⚡</div>
+
+                <h4>JavaScript</h4>
+
+                <p>
+                    Interactive behaviour and
+                    dynamic user interfaces.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-6 col-lg-3">
+
+            <div class="about-card tech-card">
+
+                <div class="tech-icon">🤖</div>
+
+                <h4>Groq AI</h4>
+
+                <p>
+                    AI-based assistance, quiz
+                    generation and study support.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FEATURES
+====================================================== -->
+
+<section class="about-section">
+
+    <div class="section-heading">
+
+        <div class="section-label">
+            PLATFORM FEATURES
+        </div>
+
+        <h2>
+            Everything In One Place ✨
+        </h2>
+
+        <p>
+            Features designed around the student's
+            complete learning journey.
+        </p>
+
+    </div>
+
+
+    <div class="row g-4">
+
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="about-card feature-card">
+
+                <div class="feature-icon">📝</div>
+
+                <h4>
+                    Interactive MCQ Quizzes
+                </h4>
+
+                <p>
+                    Practice multiple-choice questions
+                    and test your knowledge.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="about-card feature-card">
+
+                <div class="feature-icon">📊</div>
+
+                <h4>
+                    Performance Tracking
+                </h4>
+
+                <p>
+                    Track attempts, scores,
+                    percentages and grades.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="about-card feature-card">
+
+                <div class="feature-icon">🏆</div>
+
+                <h4>
+                    Live Leaderboard
+                </h4>
+
+                <p>
+                    Compare rankings and stay
+                    motivated to improve.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="about-card feature-card">
+
+                <div class="feature-icon">🤖</div>
+
+                <h4>
+                    AI Study Assistant
+                </h4>
+
+                <p>
+                    Ask questions and receive
+                    AI-powered educational assistance.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="about-card feature-card">
+
+                <div class="feature-icon">💻</div>
+
+                <h4>
+                    Code Lab
+                </h4>
+
+                <p>
+                    Practice programming and
+                    solve coding challenges.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="about-card feature-card">
+
+                <div class="feature-icon">🎙️</div>
+
+                <h4>
+                    AI Interview
+                </h4>
+
+                <p>
+                    Practice interviews with
+                    AI-powered interaction.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="about-card feature-card">
+
+                <div class="feature-icon">🎮</div>
+
+                <h4>
+                    Fun Quiz
+                </h4>
+
+                <p>
+                    Turn learning into an enjoyable
+                    interactive experience.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="about-card feature-card">
+
+                <div class="feature-icon">🗺️</div>
+
+                <h4>
+                    AI Exam Roadmap
+                </h4>
+
+                <p>
+                    Follow a structured learning
+                    path for preparation.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="about-card feature-card">
+
+                <div class="feature-icon">🔐</div>
+
+                <h4>
+                    Secure Login
+                </h4>
+
+                <p>
+                    Student accounts use password
+                    hashing and sessions.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     DEVELOPER
+====================================================== -->
+
+<section class="about-section">
+
+    <div class="section-heading">
+
+        <div class="section-label">
+            THE CREATOR
+        </div>
+
+        <h2>
+            Meet the Developer 👩‍💻
+        </h2>
+
+        <p>
+            The person behind Study Quiz Hub.
+        </p>
+
+    </div>
+
+
+    <div class="about-card developer-card">
+
+        <div class="developer-photo-wrapper">
+
+            <img
+                src="{{ url_for('static', filename='uploads/WhatsApp_Image_2026-05-28_at_7.30.37_AM.jpeg') }}"
+                class="about-profile-img"
+                alt="Study Quiz Hub Developer"
+            >
+
+        </div>
+
+
+        <div class="developer-info">
+
+            <h3>
+                Dhanashri Dattarao Pole
+            </h3>
+
+            <p>
+
+                A Computer Engineering student passionate
+                about
+
+                <strong>
+                    Education, Artificial Intelligence,
+                    Web Development and innovative technology.
+                </strong>
+
+            </p>
+
+            <p>
+
+                Study Quiz Hub was created with the goal of
+                making learning more fun, interactive and
+                accessible for students.
+
+            </p>
+
+            <div class="about-quick-features"
+                 style="justify-content:flex-start;">
+
+                <span>🐍 Python</span>
+                <span>🌐 Flask</span>
+                <span>🤖 AI</span>
+                <span>💻 Web Development</span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     CONTACT
+====================================================== -->
+
+<section class="about-section">
+
+    <div class="section-heading">
+
+        <div class="section-label">
+            CONNECT
+        </div>
+
+        <h2>
+            Get In Touch 📬
+        </h2>
+
+        <p>
+            Have a question or want to connect?
+        </p>
+
+    </div>
+
+
+    <div class="row g-4">
+
+
+        <div class="col-lg-7">
+
+            <div class="about-card">
+
+                <div class="contact-item">
+
+                    <div class="contact-icon">
+                        📧
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Email
+                        </strong>
+
+                        <div>
+                            dhanashri@example.com
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="contact-item">
+
+                    <div class="contact-icon">
+                        📱
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Phone
+                        </strong>
+
+                        <div>
+                            +91 9699809443
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="contact-item">
+
+                    <div class="contact-icon">
+                        📍
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Location
+                        </strong>
+
+                        <div>
+                            Maharashtra, India
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="social-links">
+
+                    <a href="#"
+                       class="social-btn">
+                        💼 LinkedIn
+                    </a>
+
+                    <a
+                        href="https://github.com/DhanashriPole/PYTHON-PROJECT"
+                        class="social-btn"
+                        target="_blank"
+                    >
+                        💻 GitHub
+                    </a>
+
+                    <a href="#"
+                       class="social-btn">
+                        📸 Instagram
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="col-lg-5">
+
+            <div class="about-card quote-card">
+
+                <div class="big-card-icon">
+                    🎓
+                </div>
+
+                <h3>
+                    Study Quiz Hub
+                </h3>
+
+                <p class="quote-text">
+
+                    Learn continuously.
+                    Practice regularly.
+                    Track your progress.
+                    Achieve your goals.
+
+                </p>
+
+                <div class="quote-line">
+
+                    📚 Learn • 📝 Practice •
+                    📊 Track • 🏆 Achieve
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FOOTER
+====================================================== -->
+
+<div class="about-footer">
+
+    © 2026
+
+    <strong>
+        Study Quiz Hub
+    </strong>
+
+    <br>
+
+    Designed & Developed by
+
+    <strong>
+        Dhanashri Dattarao Pole
+    </strong>
+
+    <br>
+
+    🎓 Learn Smarter • 🚀 Grow Faster
+
+</div>
+
+
+</div>
 
 </div>
 

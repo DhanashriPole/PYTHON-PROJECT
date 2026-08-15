@@ -2,253 +2,143 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Study Quiz Hub{% endblock %}</title>
-    
-   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <style>
-      
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}Study Quiz Hub{% endblock %}
+    </title>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <!-- Google Font -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+
+<style>
 
 /* =========================================================
-   BODY
+   GLOBAL
 ========================================================= */
 
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
 body {
+
     margin: 0;
     padding: 0;
 
     min-height: 100vh;
 
     overflow-x: hidden;
-    overflow-y: auto;
 
-    font-family: "Segoe UI", sans-serif;
+    font-family: "Inter", "Segoe UI", sans-serif;
 
-    color: white;
+    color: #ffffff;
 
     background:
+        radial-gradient(
+            circle at 15% 20%,
+            rgba(59,130,246,.16),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 85% 20%,
+            rgba(168,85,247,.14),
+            transparent 30%
+        ),
         linear-gradient(
-            -45deg,
-            #0f172a,
-            #111827,
-            #1e1b4b,
-            #172554,
-            #312e81,
-            #0f172a
+            135deg,
+            #050816,
+            #080d20,
+            #0d1028,
+            #080b18
         );
 
-    background-size: 500% 500%;
-
-    animation: bgMove 18s ease infinite;
-}
-
-
-@keyframes bgMove {
-
-    0% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
+    background-attachment: fixed;
 }
 
 
 /* =========================================================
-   MAIN NAVBAR
+   TOP NAVBAR
 ========================================================= */
 
-.custom-navbar {
+.sqh-navbar {
+
+    position: sticky;
+
+    top: 0;
 
     width: 100%;
+
+    z-index: 9999;
 
     background:
         linear-gradient(
             135deg,
-            rgba(10,15,35,.96),
-            rgba(17,24,39,.94)
-        ) !important;
-
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-
-    border-bottom:
-        1px solid rgba(255,255,255,.12);
-
-    box-shadow:
-        0 8px 30px rgba(0,0,0,.45);
-
-    position: relative;
-
-    z-index: 1000;
-
-    padding: 0 !important;
-
-    color: white;
-}
-
-
-/* =========================================================
-   TOP ROW
-========================================================= */
-
-.navbar-top {
-
-    width: 100%;
-
-    min-height: 88px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 28px;
-
-    padding: 12px 35px;
-
-    box-sizing: border-box;
-
-    border-bottom:
-        1px solid rgba(255,255,255,.06);
-}
-
-
-/* =========================================================
-   DATE + TIME
-========================================================= */
-
-.live-date-time {
-
-    width: 175px;
-
-    min-width: 175px;
-
-    padding: 9px 15px;
-
-    text-align: center;
-
-    border-radius: 16px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,.10),
-            rgba(255,255,255,.04)
+            rgba(5,8,25,.94),
+            rgba(13,18,45,.91)
         );
 
-    border:
-        1px solid rgba(255,255,255,.14);
+    backdrop-filter: blur(22px);
+
+    -webkit-backdrop-filter: blur(22px);
+
+    border-bottom:
+        1px solid rgba(255,255,255,.09);
 
     box-shadow:
-        0 5px 20px rgba(0,0,0,.25);
-
-    backdrop-filter: blur(15px);
-
-    transition: .3s ease;
+        0 10px 35px rgba(0,0,0,.28);
 }
 
 
-.live-date-time:hover {
+/* colorful top glow */
 
-    transform: translateY(-2px);
+.sqh-navbar::before {
 
-    border-color: rgba(34,211,238,.5);
+    content: "";
 
-    box-shadow:
-        0 0 20px rgba(34,211,238,.2);
-}
+    position: absolute;
 
+    top: 0;
+    left: 0;
 
-#liveDate {
-
-    font-size: 13px;
-
-    color: #cbd5e1;
-
-    margin-bottom: 3px;
-}
-
-
-#liveTime {
-
-    font-size: 20px;
-
-    font-weight: 800;
-
-    letter-spacing: 1px;
-
-    color: white;
-}
-
-
-/* =========================================================
-   LOGO
-========================================================= */
-
-.custom-brand {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 8px;
-
-    text-decoration: none !important;
-
-    white-space: nowrap;
-
-    font-size: 30px !important;
-
-    font-weight: 900 !important;
-
-    letter-spacing: -.5px;
+    width: 100%;
+    height: 2px;
 
     background:
         linear-gradient(
             90deg,
             #22d3ee,
-            #38bdf8,
-            #818cf8,
+            #6366f1,
+            #a855f7,
+            #ec4899,
+            #f59e0b,
             #22d3ee
         );
 
     background-size: 300%;
 
-    background-clip: text;
-
-    -webkit-background-clip: text;
-
-    -webkit-text-fill-color: transparent;
-
     animation:
-        logoGradient 6s linear infinite;
-
-    transition: .3s ease;
+        navbarRainbow 7s linear infinite;
 }
 
 
-.custom-brand:hover {
-
-    transform: scale(1.03);
-
-    filter:
-        drop-shadow(
-            0 0 12px
-            rgba(34,211,238,.45)
-        );
-}
-
-
-@keyframes logoGradient {
+@keyframes navbarRainbow {
 
     0% {
         background-position: 0%;
@@ -261,16 +151,203 @@ body {
 
 
 /* =========================================================
-   SEARCH BOX
+   NAV CONTAINER
+========================================================= */
+
+.sqh-nav-container {
+
+    width: 100%;
+
+    max-width: 1550px;
+
+    margin: auto;
+
+    min-height: 82px;
+
+    padding:
+        10px 24px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+}
+
+
+/* =========================================================
+   DATE TIME
+========================================================= */
+
+.live-date-time {
+
+    min-width: 145px;
+
+    padding:
+        8px 13px;
+
+    border-radius: 15px;
+
+    text-align: center;
+
+    background:
+        rgba(255,255,255,.055);
+
+    border:
+        1px solid rgba(255,255,255,.10);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.05);
+
+    transition: .3s ease;
+}
+
+
+.live-date-time:hover {
+
+    transform:
+        translateY(-2px);
+
+    border-color:
+        rgba(56,189,248,.45);
+
+    box-shadow:
+        0 0 25px
+        rgba(56,189,248,.12);
+}
+
+
+#liveDate {
+
+    color:
+        rgba(255,255,255,.62);
+
+    font-size:
+        11px;
+
+    font-weight:
+        600;
+
+    white-space:
+        nowrap;
+}
+
+
+#liveTime {
+
+    margin-top: 2px;
+
+    color:
+        #ffffff;
+
+    font-size:
+        17px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        .5px;
+
+    white-space:
+        nowrap;
+}
+
+
+/* =========================================================
+   BRAND
+========================================================= */
+
+.sqh-brand {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    min-width: max-content;
+
+    text-decoration: none;
+
+    font-size: 25px;
+
+    font-weight: 900;
+
+    letter-spacing: -.8px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #22d3ee,
+            #38bdf8,
+            #818cf8,
+            #c084fc,
+            #22d3ee
+        );
+
+    background-size: 300%;
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    -webkit-text-fill-color:
+        transparent;
+
+    animation:
+        brandRainbow 6s linear infinite;
+
+    transition:
+        .3s ease;
+}
+
+
+.sqh-brand-icon {
+
+    font-size:
+        27px;
+
+    -webkit-text-fill-color:
+        initial;
+}
+
+
+.sqh-brand:hover {
+
+    transform:
+        scale(1.03);
+
+    filter:
+        drop-shadow(
+            0 0 12px
+            rgba(34,211,238,.5)
+        );
+}
+
+
+@keyframes brandRainbow {
+
+    0% {
+        background-position: 0%;
+    }
+
+    100% {
+        background-position: 300%;
+    }
+}
+
+
+/* =========================================================
+   SEARCH
 ========================================================= */
 
 .search-box {
 
     position: relative;
 
-    width: 280px;
+    width: 235px;
 
-    min-width: 280px;
+    margin-left: 4px;
 }
 
 
@@ -278,49 +355,53 @@ body {
 
     width: 100%;
 
-    height: 48px;
+    height: 43px;
 
-    box-sizing: border-box;
+    padding:
+        8px 17px;
 
-    padding: 10px 20px;
-
-    border-radius: 50px;
+    border-radius:
+        50px;
 
     border:
-        1px solid rgba(255,255,255,.16);
+        1px solid rgba(255,255,255,.12);
 
     outline: none;
 
     color: white;
 
     background:
-        rgba(255,255,255,.07);
+        rgba(255,255,255,.055);
 
-    backdrop-filter: blur(15px);
+    backdrop-filter:
+        blur(15px);
 
-    font-size: 14px;
+    font-size:
+        13px;
 
-    transition: .3s ease;
+    transition:
+        .3s ease;
 }
 
 
 #searchInput::placeholder {
 
-    color: #cbd5e1;
+    color:
+        rgba(255,255,255,.55);
 }
 
 
 #searchInput:focus {
 
-    background:
-        rgba(255,255,255,.12);
-
     border-color:
-        #22d3ee;
+        rgba(34,211,238,.7);
+
+    background:
+        rgba(255,255,255,.09);
 
     box-shadow:
-        0 0 20px
-        rgba(34,211,238,.25);
+        0 0 22px
+        rgba(34,211,238,.15);
 }
 
 
@@ -332,28 +413,30 @@ body {
 
     position: absolute;
 
-    top: calc(100% + 8px);
+    top:
+        calc(100% + 8px);
 
     left: 0;
 
     width: 100%;
 
-    max-height: 250px;
+    max-height: 260px;
 
     overflow-y: auto;
 
+    border-radius: 15px;
+
     background:
-        rgba(17,24,39,.98);
+        rgba(8,12,30,.98);
 
     border:
-        1px solid rgba(255,255,255,.15);
-
-    border-radius: 14px;
+        1px solid rgba(255,255,255,.12);
 
     box-shadow:
-        0 15px 35px rgba(0,0,0,.5);
+        0 20px 45px rgba(0,0,0,.5);
 
-    z-index: 9999;
+    z-index:
+        99999;
 }
 
 
@@ -361,1039 +444,1561 @@ body {
 
     display: block;
 
-    padding: 11px 15px;
+    padding:
+        11px 14px;
 
     color: white;
 
     text-decoration: none;
 
-    transition: .25s;
+    font-size:
+        13px;
+
+    transition:
+        .2s ease;
 }
 
 
 #suggestions a:hover {
 
+    color: white;
+
     background:
         linear-gradient(
             90deg,
-            #2563eb,
-            #0891b2
+            rgba(37,99,235,.8),
+            rgba(124,58,237,.8)
         );
-
-    color: white;
 }
 
 
 /* =========================================================
-   SECOND NAVIGATION ROW
+   NAVIGATION
 ========================================================= */
 
-.navbar-bottom {
+.sqh-nav-links {
 
-    width: 100%;
+    margin-left:
+        auto;
 
-    display: flex;
+    display:
+        flex;
 
-    justify-content: center;
+    align-items:
+        center;
 
-    align-items: center;
+    justify-content:
+        flex-end;
 
-    padding: 7px 20px 9px;
+    gap:
+        4px;
 
-    box-sizing: border-box;
+    flex-wrap:
+        wrap;
 }
 
 
-.custom-nav {
+.sqh-nav-link {
 
-    display: flex !important;
+    position: relative;
 
-    align-items: center;
+    display:
+        inline-flex;
 
-    justify-content: center;
+    align-items:
+        center;
 
-    gap: 5px;
+    justify-content:
+        center;
 
-    flex-wrap: wrap;
+    gap:
+        5px;
 
-    width: 100%;
-}
+    padding:
+        9px 10px;
 
+    border-radius:
+        11px;
 
-/* =========================================================
-   NAV LINKS
-========================================================= */
+    color:
+        rgba(255,255,255,.88) !important;
 
-.custom-nav .nav-link {
+    text-decoration:
+        none;
 
-    display: flex;
+    white-space:
+        nowrap;
 
-    align-items: center;
+    font-size:
+        12px;
 
-    justify-content: center;
-
-    gap: 5px;
-
-    color:white !important;
-
-    font-size: 14px !important;
-
-    font-weight: 700 !important;
-
-    padding: 9px 13px !important;
-
-    margin: 0 !important;
-
-    border-radius: 11px;
-
-    white-space: nowrap;
-
-    text-decoration: none;
+    font-weight:
+        700;
 
     transition:
         .25s ease;
-
-    position: relative;
 }
 
 
-.custom-nav .nav-link:hover {
+.sqh-nav-link:hover {
 
-    color: #22d3ee !important;
+    color:
+        #ffffff !important;
 
     background:
-        rgba(255,255,255,.08);
+        rgba(255,255,255,.075);
 
     transform:
         translateY(-2px);
-
-    box-shadow:
-        0 5px 18px
-        rgba(34,211,238,.15);
 }
 
 
-/* Bottom glowing line */
+.sqh-nav-link::after {
 
-.custom-nav .nav-link::after {
+    content:
+        "";
 
-    content: "";
+    position:
+        absolute;
 
-    position: absolute;
+    left:
+        50%;
 
-    left: 50%;
+    bottom:
+        3px;
 
-    bottom: 3px;
+    width:
+        0;
 
-    width: 0;
+    height:
+        2px;
 
-    height: 2px;
-
-    border-radius: 10px;
+    border-radius:
+        10px;
 
     background:
         linear-gradient(
             90deg,
             #22d3ee,
-            #818cf8
+            #a855f7,
+            #ec4899
         );
 
     transform:
         translateX(-50%);
 
-    transition: .3s ease;
+    transition:
+        .3s ease;
 }
 
 
-.custom-nav .nav-link:hover::after {
+.sqh-nav-link:hover::after {
 
-    width: 60%;
+    width:
+        55%;
 }
 
-/* ================================
-   NAVBAR LINKS - WHITE COLOR
-================================ */
 
-.navbar .nav-link,
-.navbar-nav .nav-link {
-    color: #ffffff !important;
-    font-size: 14px !important;
-    font-weight: 700 !important;
-    opacity: 1 !important;
-    text-shadow: 0 1px 8px rgba(255,255,255,0.15);
-}
-
-/* Hover */
-.navbar .nav-link:hover,
-.navbar-nav .nav-link:hover {
-    color: #38f5ff !important;
-    background: rgba(255,255,255,0.10);
-    transform: translateY(-2px);
-    border-radius: 10px;
-}
-
-/* Active link */
-.navbar .nav-link.active,
-.navbar-nav .nav-link.active {
-    color: #38f5ff !important;
-    background: rgba(56,189,248,0.12);
-    border-radius: 10px;
-}
-
-/* Icons bhi white/bright */
-.navbar .nav-link i,
-.navbar .nav-link span {
-    color: inherit !important;
-}
-/* ================================
-   NAVBAR BRAND / LOGO
-================================ */
-
-.navbar .navbar-brand {
-    color: #17f3ff !important;
-
-    font-size: 30px !important;
-    font-weight: 900 !important;
-
-    text-decoration: none !important;
-
-    background: linear-gradient(
-        90deg,
-        #17f3ff,
-        #38bdf8,
-        #ffffff,
-        #17f3ff
-    );
-
-    background-size: 300%;
-
-    -webkit-background-clip: text;
-    background-clip: text;
-
-    -webkit-text-fill-color: transparent;
-
-    animation: brandGlow 6s linear infinite;
-
-    opacity: 1 !important;
-}
-
-/* Logo hover */
-.navbar .navbar-brand:hover {
-    -webkit-text-fill-color: #17f3ff !important;
-    transform: scale(1.03);
-    filter: drop-shadow(0 0 10px rgba(23,243,255,.6));
-}
-
-/* Gradient animation */
-@keyframes brandGlow {
-    0% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
-}
 /* =========================================================
-   RESPONSIVE
+   LOGIN
 ========================================================= */
-/* ================================
-   STUDENT PROFILE NAVBAR
-================================ */
+
+.sqh-login {
+
+    padding:
+        8px 14px !important;
+
+    border:
+        1px solid rgba(34,211,238,.35);
+
+    background:
+        rgba(34,211,238,.07);
+
+    border-radius:
+        50px;
+}
+
+
+.sqh-login:hover {
+
+    background:
+        rgba(34,211,238,.14);
+
+    box-shadow:
+        0 0 18px
+        rgba(34,211,238,.15);
+}
+
+
+/* =========================================================
+   PROFILE
+========================================================= */
 
 .profile-nav {
-    display: flex !important;
-    align-items: center;
-    gap: 8px;
 
-    padding: 5px 8px !important;
-    border-radius: 50px;
+    display:
+        flex !important;
 
-    color: white !important;
-    white-space: nowrap;
+    align-items:
+        center;
 
-    min-width: max-content;
+    gap:
+        7px;
 
-    transition: all .3s ease;
+    padding:
+        4px 8px !important;
+
+    border-radius:
+        50px;
+
+    color:
+        white !important;
+
+    text-decoration:
+        none;
+
+    transition:
+        .3s ease;
 }
+
 
 .profile-nav:hover {
-    background: rgba(255,255,255,.12);
-    box-shadow: 0 0 15px rgba(34,211,238,.25);
+
+    background:
+        rgba(255,255,255,.08);
+
+    transform:
+        none !important;
 }
 
-
-/* Profile Image */
 
 .profile-img {
-    width: 40px;
-    height: 40px;
 
-    min-width: 40px;
-    min-height: 40px;
+    width:
+        36px;
 
-    border-radius: 50%;
-    object-fit: cover;
+    height:
+        36px;
 
-    border: 2px solid #22d3ee;
+    min-width:
+        36px;
 
-    transition: .3s;
+    border-radius:
+        50%;
+
+    object-fit:
+        cover;
+
+    border:
+        2px solid #22d3ee;
+
+    box-shadow:
+        0 0 12px
+        rgba(34,211,238,.25);
+
+    transition:
+        .3s ease;
 }
+
 
 .profile-img:hover {
-    transform: scale(1.08);
-    box-shadow: 0 0 15px #22d3ee;
+
+    transform:
+        scale(1.08);
+
+    box-shadow:
+        0 0 18px
+        rgba(34,211,238,.55);
 }
 
-
-/* ================================
-   NAME + STUDENT TEXT
-================================ */
 
 .profile-info {
-    display: flex !important;
-    flex-direction: column;
 
-    justify-content: center;
+    display:
+        flex;
 
-    line-height: 1.15;
+    flex-direction:
+        column;
 
-    width: auto;
-    min-width: 80px;
+    line-height:
+        1.1;
 
-    white-space: nowrap;
-
-    overflow: visible;
+    white-space:
+        nowrap;
 }
 
-
-/* COMPLETE NAME */
 
 .profile-name {
-    display: block;
 
-    color: #ffffff !important;
+    color:
+        white !important;
 
-    font-size: 13px;       /* pehle 16px tha */
-    font-weight: 700;
+    font-size:
+        11px !important;
 
-    line-height: 1.1;
+    font-weight:
+        800 !important;
 
-    white-space: nowrap;
-
-    overflow: visible;
-    text-overflow: clip;
-
-    max-width: none;
+    white-space:
+        nowrap;
 }
+
 
 .profile-info small {
-    color: #cbd5e1 !important;
-    font-size: 9px;
-    line-height: 1;
-}
-/* =========================================
-   PROFILE NAME - FIX SIZE IN ALL STATES
-========================================= */
 
-.navbar .profile-nav .profile-info .profile-name,
-.navbar .profile-nav .profile-name {
-    font-size: 13px !important;
-    font-weight: 700 !important;
-    line-height: 1.1 !important;
+    color:
+        rgba(255,255,255,.55) !important;
 
-    color: #fff !important;
-
-    white-space: nowrap !important;
-    overflow: visible !important;
-    text-overflow: clip !important;
-
-    transform: none !important;
-}
-
-/* Same size when clicked / dropdown opened */
-.navbar .profile-nav:focus .profile-name,
-.navbar .profile-nav:active .profile-name,
-.navbar .profile-nav[aria-expanded="true"] .profile-name {
-    font-size: 13px !important;
-    font-weight: 700 !important;
-    transform: none !important;
-}
-
-/* Student text */
-.navbar .profile-nav .profile-info small {
-    font-size: 9px !important;
-    line-height: 1 !important;
-    color: #cbd5e1 !important;
-}
-
-/* Don't let Bootstrap change profile link appearance */
-.navbar .profile-nav {
-    font-size: 13px !important;
-    transform: none !important;
-}
-
-/* Click/Focus */
-.navbar .profile-nav:focus,
-.navbar .profile-nav:active {
-    font-size: 13px !important;
-    transform: none !important;
+    font-size:
+        8px !important;
 }
 
 
-/* Dropdown arrow */
-
-.profile-nav::after {
-    color: #ffffff;
-    margin-left: 3px;
-}
-
-
-/* ================================
+/* =========================================================
    DROPDOWN
-================================ */
+========================================================= */
 
 .dropdown-menu {
-    min-width: 220px;
 
-    background: rgba(20,25,40,.97);
+    margin-top:
+        10px !important;
 
-    backdrop-filter: blur(15px);
+    padding:
+        7px;
 
-    border: 1px solid rgba(255,255,255,.12) !important;
+    min-width:
+        210px;
 
-    box-shadow: 0 15px 35px rgba(0,0,0,.45);
+    border:
+        1px solid rgba(255,255,255,.11) !important;
+
+    border-radius:
+        16px !important;
+
+    background:
+        rgba(9,13,30,.97) !important;
+
+    backdrop-filter:
+        blur(20px);
+
+    box-shadow:
+        0 20px 50px
+        rgba(0,0,0,.45) !important;
 }
+
 
 .dropdown-item {
-    padding: 10px 15px;
 
-    color: #ffffff !important;
+    padding:
+        10px 12px;
 
-    font-weight: 600;
+    border-radius:
+        10px;
 
-    border-radius: 8px;
+    color:
+        rgba(255,255,255,.9) !important;
 
-    transition: .25s;
+    font-size:
+        13px;
+
+    font-weight:
+        600;
+
+    transition:
+        .2s ease;
 }
+
 
 .dropdown-item:hover {
-    background: #2563eb;
 
-    color: white !important;
+    color:
+        white !important;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(37,99,235,.85),
+            rgba(124,58,237,.85)
+        );
 }
 
-
-/* Divider */
 
 .dropdown-divider {
-    border-color: rgba(255,255,255,.15);
+
+    border-color:
+        rgba(255,255,255,.1);
 }
 
 
-/* ================================
-   LARGE SCREEN
-================================ */
-
-@media (min-width: 1200px) {
-
-    .profile-nav {
-        min-width: 125px;
-    }
-
-    .profile-name {
-        font-size: 16px;
-    }
-
-}
-
-
-/* ================================
-   TABLET
-================================ */
-
-@media (max-width: 1199px) {
-
-    .profile-nav {
-        min-width: 110px;
-    }
-
-    .profile-name {
-        font-size: 14px;
-    }
-
-}
-
-
-/* ================================
-   MOBILE
-================================ */
-
-@media (max-width: 768px) {
-
-    .profile-info {
-        display: none !important;
-    }
-
-    .profile-img {
-        width: 38px;
-        height: 38px;
-
-        min-width: 38px;
-        min-height: 38px;
-    }
-
-    .profile-nav {
-        padding: 4px 6px !important;
-    }
-
-}
-/* Laptop */
-
-@media (max-width: 1200px) {
-
-    .navbar-top {
-
-        gap: 18px;
-
-        padding-left: 20px;
-
-        padding-right: 20px;
-    }
-
-    .custom-brand {
-
-        font-size: 26px !important;
-    }
-
-    .search-box {
-
-        width: 240px;
-
-        min-width: 240px;
-    }
-
-    .custom-nav .nav-link {
-
-        font-size: 13px !important;
-
-        padding:
-            8px 10px !important;
-    }
-}
-
-
-/* Smaller laptop */
-
-@media (max-width: 992px) {
-
-    .navbar-top {
-
-        flex-wrap: wrap;
-
-        min-height: auto;
-
-        padding:
-            12px 15px;
-
-        gap: 12px;
-    }
-
-    .live-date-time {
-
-        width: 150px;
-
-        min-width: 150px;
-    }
-
-    .custom-brand {
-
-        font-size: 24px !important;
-    }
-
-    .search-box {
-
-        width: 230px;
-
-        min-width: 230px;
-    }
-
-    .navbar-bottom {
-
-        padding:
-            8px 10px;
-    }
-
-    .custom-nav {
-
-        gap: 3px;
-    }
-}
-
-
-/* Tablet */
-
-@media (max-width: 768px) {
-
-    .navbar-top {
-
-        flex-direction: column;
-
-        gap: 10px;
-    }
-
-    .live-date-time {
-
-        width: 160px;
-
-        min-width: 160px;
-    }
-
-    .custom-brand {
-
-        font-size: 25px !important;
-    }
-
-    .search-box {
-
-        width: 90%;
-
-        min-width: 0;
-    }
-
-    .navbar-bottom {
-
-        padding:
-            8px;
-    }
-
-    .custom-nav .nav-link {
-
-        font-size: 13px !important;
-
-        padding:
-            8px 10px !important;
-    }
-}
-
-
-/* Mobile */
-
-@media (max-width: 767.98px) {
-
-    .navbar .container-fluid {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .navbar-toggler {
-        position: absolute;
-        top: 14px;
-        right: 12px;
-        z-index: 1100;
-    }
-
-    .navbar-collapse {
-        width: 100%;
-    }
-
-    .navbar-collapse .navbar-nav {
-        display: flex !important;
-        flex-direction: column;
-        width: 100%;
-    }
-
-    .navbar-collapse .nav-item {
-        width: 100%;
-    }
-
-    .navbar-collapse .nav-link {
-        width: 100%;
-        min-height: 44px;
-        padding: 10px 14px !important;
-        background: rgba(255,255,255,.04);
-    }
-
-    .navbar-toggler-icon {
-        filter: brightness(0) invert(1);
-    }
-}
 /* =========================================================
-   MOBILE BOTTOM NAVIGATION
+   MOBILE TOGGLER
+========================================================= */
+
+.navbar-toggler {
+
+    border:
+        1px solid rgba(255,255,255,.2);
+
+    border-radius:
+        10px;
+
+    padding:
+        7px 9px;
+}
+
+
+.navbar-toggler:focus {
+
+    box-shadow:
+        0 0 15px
+        rgba(34,211,238,.2);
+}
+
+
+.navbar-toggler-icon {
+
+    filter:
+        brightness(0) invert(1);
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+.page-main {
+
+    width:
+        100%;
+
+    min-height:
+        calc(100vh - 82px);
+
+    padding:
+        0;
+
+    margin:
+        0;
+
+    position:
+        relative;
+}
+
+
+/*
+   Home page can now use full screen.
+   Other pages can still create their own
+   Bootstrap container if required.
+*/
+
+.page-main > .alert {
+
+    max-width:
+        1200px;
+
+    margin:
+        20px auto;
+
+}
+
+
+/* =========================================================
+   ABOUT PROJECT
+========================================================= */
+
+.about-project {
+
+    position:
+        relative;
+
+    margin-top:
+        0;
+
+    padding:
+        45px 20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #070b19,
+            #0d1330
+        );
+
+    border-top:
+        1px solid rgba(255,255,255,.08);
+
+    overflow:
+        hidden;
+}
+
+
+.about-project::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        400px;
+
+    height:
+        400px;
+
+    left:
+        -180px;
+
+    top:
+        -220px;
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(34,211,238,.08);
+
+    filter:
+        blur(50px);
+}
+
+
+.about-project h5 {
+
+    position:
+        relative;
+
+    color:
+        white;
+
+    font-weight:
+        900;
+}
+
+
+.about-project p {
+
+    position:
+        relative;
+
+    color:
+        rgba(255,255,255,.58);
+
+    font-size:
+        13px;
+
+    line-height:
+        1.7;
+}
+
+
+.about-project .row {
+
+    position:
+        relative;
+
+    color:
+        rgba(255,255,255,.72);
+
+    font-size:
+        12px;
+
+    font-weight:
+        700;
+}
+
+
+.about-project .row > div {
+
+    padding:
+        10px;
+}
+
+
+/* =========================================================
+   MOBILE BOTTOM NAV
 ========================================================= */
 
 .bottom-nav {
-    display: none;
+
+    display:
+        none;
 }
 
-@media (max-width: 768px) {
+
+@media(max-width:768px) {
 
     .bottom-nav {
-        position: fixed;
-        left: 0;
-        right: 0;
-        bottom: 0;
 
-        height: 68px;
+        position:
+            fixed;
 
-        display: flex !important;
-        align-items: center;
-        justify-content: space-around;
+        left:
+            0;
+
+        right:
+            0;
+
+        bottom:
+            0;
+
+        height:
+            67px;
+
+        display:
+            flex;
+
+        align-items:
+            center;
+
+        justify-content:
+            space-around;
+
+        padding:
+            4px;
+
+        z-index:
+            10000;
 
         background:
-            linear-gradient(
-                135deg,
-                rgba(10,15,35,.98),
-                rgba(17,24,39,.98)
-            );
+            rgba(6,9,25,.97);
 
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter:
+            blur(20px);
 
-        border-top: 1px solid rgba(255,255,255,.15);
+        border-top:
+            1px solid rgba(255,255,255,.1);
 
         box-shadow:
-            0 -8px 30px rgba(0,0,0,.45);
-
-        z-index: 9999;
-
-        padding: 5px 4px;
+            0 -10px 35px
+            rgba(0,0,0,.4);
     }
+
 
     .bottom-nav a {
-        flex: 1;
 
-        height: 58px;
+        flex:
+            1;
 
-        display: flex;
-        flex-direction: column;
+        height:
+            58px;
 
-        align-items: center;
-        justify-content: center;
+        display:
+            flex;
 
-        gap: 3px;
+        flex-direction:
+            column;
 
-        color: #cbd5e1 !important;
+        align-items:
+            center;
 
-        text-decoration: none;
+        justify-content:
+            center;
 
-        font-size: 11px;
-        font-weight: 600;
+        gap:
+            3px;
 
-        border-radius: 12px;
+        border-radius:
+            12px;
 
-        transition: .25s ease;
+        color:
+            rgba(255,255,255,.58) !important;
 
-        margin: 0 2px;
+        text-decoration:
+            none;
+
+        font-size:
+            10px;
+
+        font-weight:
+            700;
+
+        transition:
+            .25s ease;
     }
 
-    .bottom-nav a:first-line {
-        font-size: 18px;
-    }
 
     .bottom-nav a:hover,
     .bottom-nav a:active {
-        color: #22d3ee !important;
+
+        color:
+            #22d3ee !important;
 
         background:
-            rgba(229, 230, 222, 0.1);
+            rgba(34,211,238,.08);
 
-        transform: translateY(-2px);
+        transform:
+            translateY(-2px);
     }
 
-    /* Make emoji/icons larger */
-    .bottom-nav a {
-        font-size: 11px;
+
+    .page-main {
+
+        padding-bottom:
+            75px;
     }
 
-    /* Space for bottom navigation */
-    main {
-        padding-bottom: 85px !important;
+
+    .about-project {
+
+        padding-bottom:
+            90px;
     }
 }
 
 
+/* =========================================================
+   RESPONSIVE NAVBAR
+========================================================= */
+
+@media(max-width:1350px) {
+
+    .sqh-nav-link {
+
+        padding:
+            8px 7px;
+
+        font-size:
+            11px;
+    }
+
+    .search-box {
+
+        width:
+            200px;
+    }
+
+    .sqh-brand {
+
+        font-size:
+            22px;
+    }
+
+    .live-date-time {
+
+        min-width:
+            125px;
+    }
+}
+
+
+@media(max-width:1150px) {
+
+    .sqh-nav-container {
+
+        flex-wrap:
+            wrap;
+
+        padding:
+            10px 18px;
+    }
+
+    .sqh-nav-links {
+
+        width:
+            100%;
+
+        justify-content:
+            center;
+
+        order:
+            5;
+
+        padding-bottom:
+            5px;
+    }
+
+    .search-box {
+
+        margin-left:
+            auto;
+    }
+}
+
+
+@media(max-width:768px) {
+
+    .sqh-navbar {
+
+        position:
+            sticky;
+    }
+
+    .sqh-nav-container {
+
+        min-height:
+            68px;
+
+        padding:
+            9px 12px;
+
+        gap:
+            10px;
+    }
+
+    .live-date-time {
+
+        display:
+            none;
+    }
+
+    .sqh-brand {
+
+        font-size:
+            21px;
+    }
+
+    .sqh-brand-icon {
+
+        font-size:
+            23px;
+    }
+
+    .search-box {
+
+        width:
+            min(43vw, 210px);
+
+        margin-left:
+            auto;
+    }
+
+    #searchInput {
+
+        height:
+            39px;
+
+        font-size:
+            11px;
+
+        padding:
+            7px 12px;
+    }
+
+    .sqh-nav-links {
+
+        width:
+            100%;
+
+        display:
+            none;
+    }
+
+    .navbar-collapse {
+
+        width:
+            100%;
+
+        padding:
+            10px 0 5px;
+    }
+
+    .sqh-nav-links.show {
+
+        display:
+            flex;
+    }
+
+    .sqh-nav-link {
+
+        width:
+            100%;
+
+        justify-content:
+            flex-start;
+
+        padding:
+            11px 14px;
+
+        font-size:
+            13px;
+    }
+
+    .profile-info {
+
+        display:
+            none;
+    }
+
+    .profile-img {
+
+        width:
+            34px;
+
+        height:
+            34px;
+
+        min-width:
+            34px;
+    }
+}
+
+
+@media(max-width:480px) {
+
+    .sqh-brand {
+
+        font-size:
+            18px;
+    }
+
+    .sqh-brand-icon {
+
+        font-size:
+            20px;
+    }
+
+    .search-box {
+
+        width:
+            125px;
+    }
+
+    #searchInput {
+
+        font-size:
+            10px;
+    }
+}
+
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar {
+
+    width:
+        8px;
+}
+
+
+::-webkit-scrollbar-track {
+
+    background:
+        #070a17;
+}
+
+
+::-webkit-scrollbar-thumb {
+
+    border-radius:
+        10px;
+
+    background:
+        linear-gradient(
+            #22d3ee,
+            #8b5cf6
+        );
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+
+    background:
+        linear-gradient(
+            #38bdf8,
+            #ec4899
+        );
+}
+
+
+/* =========================================================
+   SELECTION
+========================================================= */
+
+::selection {
+
+    color:
+        white;
+
+    background:
+        #6366f1;
+}
+
+
+/* =========================================================
+   REDUCE MOTION
+========================================================= */
+
+@media(prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        animation:
+            none !important;
+
+        transition:
+            none !important;
+    }
+}
+
 </style>
 
-        
+</head>
+
 
 <body>
-    
 
-<!-- TOP NAVBAR -->
-<nav class="navbar navbar-expand-xl">
 
-    <div class="container-fluid">
+<!-- =========================================================
+     NAVBAR
+========================================================= -->
 
-        <!-- DATE TIME -->
+<nav class="sqh-navbar">
+
+    <div class="sqh-nav-container">
+
+
+        <!-- DATE / TIME -->
+
         <div class="live-date-time">
-            <div id="liveDate"></div>
-            <div id="liveTime"></div>
+
+            <div id="liveDate">
+                Loading...
+            </div>
+
+            <div id="liveTime">
+                --:--:--
+            </div>
+
         </div>
 
+
         <!-- LOGO -->
-        <a class="navbar-brand" href="/">
-            ⚡ Study Quiz Hub
+
+        <a
+            class="sqh-brand"
+            href="/">
+
+            <span class="sqh-brand-icon">
+                ⚡
+            </span>
+
+            Study Quiz Hub
+
         </a>
 
+
         <!-- SEARCH -->
+
         <div class="search-box">
+
             <input
                 type="text"
                 id="searchInput"
                 placeholder="🔍 Search Student"
-            >
+                autocomplete="off">
+
             <div id="suggestions"></div>
+
         </div>
 
 
-        <!-- MOBILE BUTTON -->
+        <!-- MOBILE TOGGLER -->
+
         <button
             class="navbar-toggler"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#mainNavbar"
-        >
+            aria-controls="mainNavbar"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+
             <span class="navbar-toggler-icon"></span>
+
         </button>
 
 
-        <!-- NAV LINKS -->
-        <div class="collapse navbar-collapse" id="mainNavbar">
+        <!-- NAVIGATION -->
 
-            <ul class="navbar-nav ms-auto align-items-center custom-nav">
+        <div
+            class="collapse navbar-collapse"
+            id="mainNavbar">
 
-                <li class="nav-item">
-                    <a class="nav-link" href="/">
-                        🏠 Home
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="/Quiz_page">
-                        🖍️ Quiz
-                    </a>
-                </li>
-
-               <li class="nav-item dropdown">
-
-   
-
-        <li>
-            <a class="nav-link" href="/askhub">
-                💬 AskHub
-            </a>
-        </li>
-
-        <li>
-            <a class="nav-link" href="/exam_roadmap">
-                📚 AI Exam Roadmap
-            </a>
-        </li>
-        <li>
-            <a class="nav-link" href="/code_lab">
-                💻 Code Lab
-            </a>
-        </li>
-        <li>
-            <a class="nav-link" href="/fun_quiz">
-    🎮 Fun Quiz
-</a>
-        </li>
-   
+            <div class="sqh-nav-links">
 
 
+                <a
+                    class="sqh-nav-link"
+                    href="/">
 
-                <li class="nav-item">
-                    <a class="nav-link" href="/score_history">
-                        ⏳ Record
-                    </a>
-                </li>
+                    🏠 Home
 
-                
-                <li class="nav-item">
-                    <a class="nav-link" href="/leaderboard">
-                        🏆 Leaderboard
-                    </a>
-                </li>
+                </a>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="/students">
-                        👨‍🎓 Students
-                    </a>
-                </li>
+
+                <a
+                    class="sqh-nav-link"
+                    href="/Quiz_page">
+
+                    📝 Quiz
+
+                </a>
+
+
+                <a
+                    class="sqh-nav-link"
+                    href="/askhub">
+
+                    💬 AskHub
+
+                </a>
+
+
+                <a
+                    class="sqh-nav-link"
+                    href="/exam_roadmap">
+
+                    📚 AI Roadmap
+
+                </a>
+
+
+                <a
+                    class="sqh-nav-link"
+                    href="/code_lab">
+
+                    💻 Code Lab
+
+                </a>
+
+
+                <a
+                    class="sqh-nav-link"
+                    href="/fun_quiz">
+
+                    🎮 Fun Quiz
+
+                </a>
+
+
+                <a
+                    class="sqh-nav-link"
+                    href="/ai_interview">
+
+                    🎙️ AI Interview
+
+                </a>
+
+
+                <a
+                    class="sqh-nav-link"
+                    href="/score_history">
+
+                    ⏳ Record
+
+                </a>
+
+
+                <a
+                    class="sqh-nav-link"
+                    href="/leaderboard">
+
+                    🏆 Leaderboard
+
+                </a>
+
+
+                <a
+                    class="sqh-nav-link"
+                    href="/students">
+
+                    👨‍🎓 Students
+
+                </a>
+
 
                 {% if session.get('student_name') %}
 
-                <li class="nav-item dropdown ms-2">
 
-    <a class="nav-link dropdown-toggle d-flex align-items-center profile-nav"
-       href="#"
-       id="profileDropdown"
-       role="button"
-       data-bs-toggle="dropdown"
-       aria-expanded="false">
+                <!-- PROFILE -->
 
-        <img src="{% if session.get('student_photo') %}
-                    {{ url_for('static', filename='uploads/' ~ session['student_photo']) }}
-                  {% else %}
-                    {{ url_for('static', filename='uploads/default.png') }}
-                  {% endif %}"
-             class="profile-img">
+                <div class="dropdown">
 
-        <div class="profile-info ms-2">
-            <span class="profile-name">{{ session['student_name'] }}</span>
-            <small class="text-light">Student</small>
-        </div>
+                    <a
+                        class="dropdown-toggle profile-nav"
+                        href="#"
+                        id="profileDropdown"
+                        role="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">
 
-    </a>
 
-    <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4">
+                        <img
+                            src="{% if session.get('student_photo') %}
+                            {{ url_for('static',
+                            filename='uploads/' ~ session['student_photo']) }}
+                            {% else %}
+                            {{ url_for('static',
+                            filename='uploads/default.png') }}
+                            {% endif %}"
+                            class="profile-img"
+                            alt="Student">
 
-         
-        <li>
-           {% if session.get('student_id') %}   
-         <a  class ="dropdown-item" href="{{ url_for('view_student', student_id=session.get('student_id')) }}">
-                 👤 My Profile
-        </a>
-        {% endif %}
-            </li>
-                       
 
-        <li><hr class="dropdown-divider"></li>
+                        <div class="profile-info">
 
-        <li>
-            <a class="dropdown-item text-danger"
-               href="{{ url_for('logout') }}">
-                🚪 Logout
-            </a>    
-        </li>
+                            <span class="profile-name">
 
-    </ul>
+                                {{ session['student_name'] }}
 
-</li>
+                            </span>
 
-{% else %}
+                            <small>
+                                Student
+                            </small>
 
-<li class="nav-item">
-    <a class="nav-link fw-bold" href="{{ url_for('login') }}">
-        🔑 Login
-    </a>
-</li>
+                        </div>
 
-{% endif %}
-                <li class="nav-item">
-                    <a class="nav-link" href="/Information">
-                        📒 Notes
                     </a>
-                </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="/About_us">
-                        ℹ️ About
-                    </a>
-                </li>
 
-            </ul>
+                    <ul
+                        class="dropdown-menu dropdown-menu-end">
+
+
+                        {% if session.get('student_id') %}
+
+                        <li>
+
+                            <a
+                                class="dropdown-item"
+                                href="{{ url_for(
+                                'view_student',
+                                student_id=session.get('student_id')
+                                ) }}">
+
+                                👤 My Profile
+
+                            </a>
+
+                        </li>
+
+                        {% endif %}
+
+
+                        <li>
+
+                            <hr
+                                class="dropdown-divider">
+
+                        </li>
+
+
+                        <li>
+
+                            <a
+                                class="dropdown-item"
+                                href="{{ url_for('logout') }}">
+
+                                🚪 Logout
+
+                            </a>
+
+                        </li>
+
+
+                    </ul>
+
+                </div>
+
+
+                {% else %}
+
+
+                <a
+                    class="sqh-nav-link sqh-login"
+                    href="{{ url_for('login') }}">
+
+                    🔑 Login
+
+                </a>
+
+
+                {% endif %}
+
+
+                <a
+                    class="sqh-nav-link"
+                    href="/Information">
+
+                    📒 Notes
+
+                </a>
+
+
+                <a
+                    class="sqh-nav-link"
+                    href="/About_us">
+
+                    ℹ️ About
+
+                </a>
+                
+
+            </div>
 
         </div>
 
     </div>
 
 </nav>
-<!-- MAIN CONTENT -->
-<main class="container py-5">
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        {% for category, message in messages %}
-        <div class="alert alert-{{ category }} alert-dismissible fade show">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-        {% endfor %}
-    {% endif %}
+
+
+<!-- =========================================================
+     MAIN CONTENT
+========================================================= -->
+
+<main class="page-main">
+
+
+    {% with messages =
+        get_flashed_messages(
+            with_categories=true
+        )
+    %}
+
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+                <div
+                    class="alert alert-{{ category }}
+                    alert-dismissible fade show">
+
+                    {{ message }}
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert">
+                    </button>
+
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
     {% endwith %}
 
-    {% block content %}{% endblock %}
+
+    {% block content %}
+
+    {% endblock %}
+
 
 </main>
 
-<!-- ABOUT PROJECT FULL WIDTH -->
+
+
+<!-- =========================================================
+     ABOUT PROJECT
+========================================================= -->
+
 <div class="about-project">
-    <div class="container py-4">
 
-        <h5 class="fw-bold">📘 About Study Quiz Hub Project</h5>
+    <div class="container">
 
-        <p class="mb-3">
-            Study Quiz Hub is a Flask-based learning platform where students can register,
-            take quizzes, track scores, and view leaderboards in real time.
+
+        <h5 class="mb-3">
+
+            📘 About Study Quiz Hub
+
+        </h5>
+
+
+        <p class="mb-4">
+
+            Study Quiz Hub is an interactive learning platform
+            where students can learn, practice quizzes, write code,
+            explore AI-powered tools and improve their technical
+            skills in an engaging environment.
+
         </p>
 
-        <div class="row text-center">
-            <div class="col-md-4">💻 Flask + Python Backend</div>
-            <div class="col-md-4">🎨 Bootstrap UI Design</div>
-            <div class="col-md-4">🗄️ SQLite Database</div>
+
+        <div class="row text-center g-2">
+
+
+            <div class="col-md-4">
+
+                💻 Flask + Python Backend
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                🎨 Responsive UI Design
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                🗄️ SQLite Database
+
+            </div>
+
+
         </div>
 
     </div>
-</div>
-
-<!-- BOTTOM NAVBAR -->
-<div class="bottom-nav d-md-none">
-    <a href="/">🏠 Home</a>
-    <a href="/Quiz_page">✏️ Quiz</a>
-    <a href="/leaderboard">🏆 Rank</a>
-    <a href="/students">👥 Users</a>
-    <a href="/logout">🚪 Exit</a>
 
 </div>
 
 
-<!-- SCRIPTS -->
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- =========================================================
+     MOBILE BOTTOM NAVIGATION
+========================================================= -->
+
+<div class="bottom-nav">
+
+
+    <a href="/">
+
+        🏠
+        <span>Home</span>
+
+    </a>
+
+
+    <a href="/Quiz_page">
+
+        📝
+        <span>Quiz</span>
+
+    </a>
+
+
+    <a href="/code_lab">
+
+        💻
+        <span>Code</span>
+
+    </a>
+
+
+    <a href="/fun_quiz">
+
+        🎮
+        <span>Fun</span>
+
+    </a>
+
+
+    <a href="/ai_interview">
+
+        🎙️
+        <span>Interview</span>
+
+    </a>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     BOOTSTRAP
+========================================================= -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+</script>
+
+
+
+<!-- =========================================================
+     LIVE DATE + TIME
+========================================================= -->
+
 <script>
 
 function updateLiveDateTime() {
 
     const now = new Date();
 
+
     const dateOptions = {
+
         weekday: "short",
+
         day: "2-digit",
+
         month: "short",
+
         year: "numeric"
+
     };
+
 
     const timeOptions = {
+
         hour: "2-digit",
+
         minute: "2-digit",
+
         second: "2-digit",
+
         hour12: true
+
     };
 
-    const date = now.toLocaleDateString(
-        "en-IN",
-        dateOptions
-    );
 
-    const time = now.toLocaleTimeString(
-        "en-IN",
-        timeOptions
-    );
+    const date =
+        now.toLocaleDateString(
+            "en-IN",
+            dateOptions
+        );
 
-    document.getElementById("liveDate").textContent = date;
 
-    document.getElementById("liveTime").textContent = time;
+    const time =
+        now.toLocaleTimeString(
+            "en-IN",
+            timeOptions
+        );
+
+
+    const dateElement =
+        document.getElementById(
+            "liveDate"
+        );
+
+
+    const timeElement =
+        document.getElementById(
+            "liveTime"
+        );
+
+
+    if (dateElement) {
+
+        dateElement.textContent =
+            date;
+
+    }
+
+
+    if (timeElement) {
+
+        timeElement.textContent =
+            time;
+
+    }
+
 }
 
 
 updateLiveDateTime();
+
 
 setInterval(
     updateLiveDateTime,
@@ -1401,33 +2006,149 @@ setInterval(
 );
 
 </script>
+
+
+
+<!-- =========================================================
+     STUDENT SEARCH
+========================================================= -->
+
 <script>
-const searchInput = document.getElementById("searchInput");
-const suggestions = document.getElementById("suggestions");
+    
 
-searchInput.addEventListener("keyup", function () {
-    let query = this.value;
 
-    if (query.length < 1) {
-        suggestions.innerHTML = "";
-        return;
-    }
 
-    fetch(`/search_suggestions?q=${query}`)
-        .then(res => res.json())
-        .then(data => {
-            suggestions.innerHTML = "";
-            data.forEach(student => {
-                suggestions.innerHTML += `
-                    <a href="/student/${student.id}"
-                       class="list-group-item list-group-item-action">
-                       👤 ${student.name}
-                    </a>
-                `;
-            });
-        });
-});
+
+
+
+const searchInput =
+    document.getElementById(
+        "searchInput"
+    );
+
+
+const suggestions =
+    document.getElementById(
+        "suggestions"
+    );
+
+
+if (searchInput && suggestions) {
+
+
+    searchInput.addEventListener(
+        "input",
+        function () {
+
+
+            const query =
+                this.value.trim();
+
+
+            if (query.length < 1) {
+
+                suggestions.innerHTML =
+                    "";
+
+                return;
+
+            }
+
+
+            fetch(
+                `/search_suggestions?q=${encodeURIComponent(query)}`
+            )
+
+            .then(
+                response =>
+                    response.json()
+            )
+
+            .then(
+                data => {
+
+
+                    suggestions.innerHTML =
+                        "";
+
+
+                    if (!data ||
+                        data.length === 0) {
+
+                        suggestions.innerHTML = `
+                            <div style="
+                                padding:12px;
+                                color:#94a3b8;
+                                font-size:12px;
+                            ">
+                                No student found
+                            </div>
+                        `;
+
+                        return;
+
+                    }
+
+
+                    data.forEach(
+                        student => {
+
+
+                            suggestions.innerHTML += `
+
+                                <a href="/student/${student.id}">
+
+                                    👤 ${student.name}
+
+                                </a>
+
+                            `;
+
+                        }
+                    );
+
+                }
+            )
+
+            .catch(
+                error => {
+
+                    console.error(
+                        "Search error:",
+                        error
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+    /* Close search when clicking outside */
+
+    document.addEventListener(
+        "click",
+        function(event) {
+
+            if (
+                !searchInput.contains(event.target) &&
+                !suggestions.contains(event.target)
+            ) {
+
+                suggestions.innerHTML =
+                    "";
+
+            }
+
+        }
+    );
+
+}
+
 </script>
 
+
 </body>
+
 </html>
