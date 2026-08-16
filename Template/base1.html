@@ -1430,6 +1430,604 @@ body {
             none !important;
     }
 }
+/* =========================================================
+   🔔 STUDY QUIZ HUB NOTIFICATIONS
+   ========================================================= */
+
+.sqh-notification-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    margin-left: 8px;
+}
+
+
+/* Bell button */
+
+.sqh-notification-btn {
+    position: relative;
+    width: 44px;
+    height: 44px;
+
+    border: 1px solid rgba(120, 90, 255, 0.45);
+    border-radius: 50%;
+
+    background: rgba(20, 20, 45, 0.75);
+
+    color: white;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease,
+        border-color .3s ease;
+}
+
+
+/* Hover glow */
+
+.sqh-notification-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+
+    border-color: #a855f7;
+
+    box-shadow:
+        0 0 15px rgba(168, 85, 247, .5),
+        0 0 30px rgba(59, 130, 246, .25);
+}
+
+
+/* Bell */
+
+.notification-bell {
+    font-size: 19px;
+
+    display: inline-block;
+
+    transform-origin: top center;
+}
+
+
+/* Animated bell */
+
+.sqh-notification-btn.has-notifications .notification-bell {
+    animation: bellRing 2.5s infinite;
+}
+
+
+@keyframes bellRing {
+
+    0%,
+    45%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    48% {
+        transform: rotate(14deg);
+    }
+
+    51% {
+        transform: rotate(-14deg);
+    }
+
+    54% {
+        transform: rotate(10deg);
+    }
+
+    57% {
+        transform: rotate(-10deg);
+    }
+
+    60% {
+        transform: rotate(5deg);
+    }
+
+    63% {
+        transform: rotate(-5deg);
+    }
+
+    66% {
+        transform: rotate(0deg);
+    }
+}
+
+
+/* Notification badge */
+
+.notification-badge {
+    position: absolute;
+
+    top: -4px;
+    right: -3px;
+
+    min-width: 19px;
+    height: 19px;
+
+    padding: 0 5px;
+
+    border-radius: 20px;
+
+    background: linear-gradient(
+        135deg,
+        #ff3b81,
+        #ff1744
+    );
+
+    color: white;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 2px solid #080817;
+
+    animation: notificationPulse 1.8s infinite;
+}
+
+
+@keyframes notificationPulse {
+
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 23, 68, .7);
+    }
+
+    70% {
+        box-shadow: 0 0 0 8px rgba(255, 23, 68, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 23, 68, 0);
+    }
+}
+
+
+/* =========================================================
+   NOTIFICATION PANEL
+   ========================================================= */
+
+.sqh-notification-panel {
+    position: absolute;
+
+    top: calc(100% + 14px);
+    right: 0;
+
+    width: 390px;
+    max-width: calc(100vw - 25px);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(20, 15, 35, .98),
+            rgba(8, 10, 25, .98)
+        );
+
+    border: 1px solid rgba(168, 85, 247, .35);
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 25px 70px rgba(0, 0, 0, .55),
+        0 0 35px rgba(126, 34, 206, .18);
+
+    backdrop-filter: blur(20px);
+
+    overflow: hidden;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transform:
+        translateY(-12px)
+        scale(.96);
+
+    transform-origin: top right;
+
+    transition:
+        opacity .25s ease,
+        transform .3s cubic-bezier(.2,.8,.2,1),
+        visibility .25s;
+}
+
+
+/* Open state */
+
+.sqh-notification-panel.show {
+    opacity: 1;
+    visibility: visible;
+
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+
+/* Top gradient line */
+
+.sqh-notification-panel::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 3px;
+
+    background: linear-gradient(
+        90deg,
+        #6366f1,
+        #a855f7,
+        #ec4899,
+        #22d3ee
+    );
+}
+
+
+/* Header */
+
+.notification-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 20px 20px 14px;
+}
+
+
+.notification-header h3 {
+    margin: 0;
+
+    color: white;
+
+    font-size: 18px;
+    font-weight: 800;
+}
+
+
+.notification-header span {
+    display: block;
+
+    margin-top: 3px;
+
+    color: #999;
+
+    font-size: 11px;
+}
+
+
+.notification-close {
+    width: 30px;
+    height: 30px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: rgba(255,255,255,.06);
+
+    color: #aaa;
+
+    font-size: 20px;
+
+    cursor: pointer;
+
+    transition: .25s;
+}
+
+
+.notification-close:hover {
+    background: rgba(255,255,255,.13);
+    color: white;
+    transform: rotate(90deg);
+}
+
+
+/* Search */
+
+.notification-search {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    margin: 0 16px;
+
+    padding: 10px 12px;
+
+    border-radius: 12px;
+
+    background: rgba(255,255,255,.045);
+
+    border: 1px solid rgba(255,255,255,.08);
+
+    color: #888;
+}
+
+
+.notification-search input {
+    width: 100%;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    color: white;
+
+    font-size: 12px;
+}
+
+
+.notification-search input::placeholder {
+    color: #777;
+}
+
+
+/* Filters */
+
+.notification-filters {
+    display: flex;
+
+    gap: 7px;
+
+    padding: 14px 16px;
+}
+
+
+.notification-filters button {
+    border: none;
+
+    padding: 7px 12px;
+
+    border-radius: 20px;
+
+    background: rgba(255,255,255,.06);
+
+    color: #aaa;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .25s;
+}
+
+
+.notification-filters button:hover,
+.notification-filters button.active {
+    background: linear-gradient(
+        135deg,
+        #6366f1,
+        #9333ea
+    );
+
+    color: white;
+
+    box-shadow:
+        0 5px 15px rgba(99,102,241,.25);
+}
+
+
+.notification-filters span {
+    margin-left: 3px;
+}
+
+
+/* Notification list */
+
+.notification-list {
+    max-height: 350px;
+
+    overflow-y: auto;
+}
+
+
+.notification-list::-webkit-scrollbar {
+    width: 5px;
+}
+
+
+.notification-list::-webkit-scrollbar-thumb {
+    background: rgba(168,85,247,.45);
+    border-radius: 10px;
+}
+
+
+/* Notification item */
+
+.notification-item {
+    position: relative;
+
+    display: flex;
+
+    gap: 12px;
+
+    padding: 15px 18px;
+
+    border-top: 1px solid rgba(255,255,255,.05);
+
+    cursor: pointer;
+
+    transition:
+        background .25s ease,
+        transform .25s ease;
+}
+
+
+.notification-item:hover {
+    background: rgba(168,85,247,.08);
+
+    transform: translateX(3px);
+}
+
+
+/* Unread */
+
+.notification-item.unread {
+    background: rgba(99,102,241,.055);
+}
+
+
+/* Icon */
+
+.notification-icon {
+    flex: 0 0 38px;
+
+    width: 38px;
+    height: 38px;
+
+    border-radius: 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 17px;
+
+    background: rgba(99,102,241,.14);
+
+    border: 1px solid rgba(99,102,241,.2);
+}
+
+
+/* Different icon backgrounds */
+
+.code-icon {
+    background: rgba(34,211,238,.1);
+}
+
+.update-icon {
+    background: rgba(245,158,11,.1);
+}
+
+.ai-icon {
+    background: rgba(236,72,153,.1);
+}
+
+
+/* Content */
+
+.notification-content {
+    min-width: 0;
+    flex: 1;
+}
+
+
+.notification-content strong {
+    display: block;
+
+    color: #fff;
+
+    font-size: 12px;
+
+    margin-bottom: 4px;
+}
+
+
+.notification-content p {
+    margin: 0;
+
+    color: #999;
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+
+.notification-content small {
+    display: block;
+
+    margin-top: 6px;
+
+    color: #666;
+
+    font-size: 10px;
+}
+
+
+/* Unread dot */
+
+.notification-dot {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #ec4899;
+
+    box-shadow:
+        0 0 10px #ec4899;
+
+    margin-top: 5px;
+}
+
+
+/* Footer */
+
+.notification-footer {
+    padding: 14px;
+
+    border-top: 1px solid rgba(255,255,255,.06);
+
+    text-align: center;
+}
+
+
+.notification-footer a {
+    color: #a855f7;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    text-decoration: none;
+
+    transition: .25s;
+}
+
+
+.notification-footer a:hover {
+    color: #22d3ee;
+    letter-spacing: .3px;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .sqh-notification-panel {
+        position: fixed;
+
+        top: 75px;
+        right: 12px;
+        left: 12px;
+
+        width: auto;
+
+        max-width: none;
+    }
+
+    .sqh-notification-wrapper {
+        margin-left: 4px;
+    }
+
+    .sqh-notification-btn {
+        width: 40px;
+        height: 40px;
+    }
+}
 
 </style>
 
@@ -1735,7 +2333,136 @@ body {
 
                 </a>
                 
+                <div class="sqh-notification-wrapper">
 
+    <button class="sqh-notification-btn"
+            id="notificationBtn"
+            type="button"
+            aria-label="Notifications">
+
+        <span class="notification-bell">🔔</span>
+
+        <!-- Unread count -->
+        <span class="notification-badge" id="notificationBadge">3</span>
+    </button>
+
+    <!-- Notification Popup -->
+    <div class="sqh-notification-panel" id="notificationPanel">
+
+        <div class="notification-header">
+            <div>
+                <h3>🔔 Notifications</h3>
+                <span>Latest updates from Study Quiz Hub</span>
+            </div>
+
+            <button class="notification-close"
+                    id="notificationClose">
+                ×
+            </button>
+        </div>
+
+        <!-- Search -->
+        <div class="notification-search">
+            🔍
+            <input type="text"
+                   id="notificationSearch"
+                   placeholder="Search updates...">
+        </div>
+
+        <!-- Filters -->
+        <div class="notification-filters">
+            <button class="active">All</button>
+            <button>Unread <span>3</span></button>
+            <button>Important</button>
+        </div>
+
+        <!-- Notifications -->
+        <div class="notification-list" id="notificationList">
+
+            <div class="notification-item unread">
+                <div class="notification-icon quiz-icon">
+                    📚
+                </div>
+
+                <div class="notification-content">
+                    <strong>New Quiz Available</strong>
+
+                    <p>
+                        A new Python quiz has been added.
+                    </p>
+
+                    <small>2 minutes ago</small>
+                </div>
+
+                <span class="notification-dot"></span>
+            </div>
+
+
+            <div class="notification-item unread">
+                <div class="notification-icon code-icon">
+                    💻
+                </div>
+
+                <div class="notification-content">
+                    <strong>New Coding Challenge</strong>
+
+                    <p>
+                        A new C++ challenge is now available.
+                    </p>
+
+                    <small>1 hour ago</small>
+                </div>
+
+                <span class="notification-dot"></span>
+            </div>
+
+
+            <div class="notification-item unread">
+                <div class="notification-icon update-icon">
+                    🏆
+                </div>
+
+                <div class="notification-content">
+                    <strong>Leaderboard Updated</strong>
+
+                    <p>
+                        Check your latest leaderboard position.
+                    </p>
+
+                    <small>Today</small>
+                </div>
+
+                <span class="notification-dot"></span>
+            </div>
+
+
+            <div class="notification-item">
+                <div class="notification-icon ai-icon">
+                    🤖
+                </div>
+
+                <div class="notification-content">
+                    <strong>AI Interview Available</strong>
+
+                    <p>
+                        Try the new AI Interview feature.
+                    </p>
+
+                    <small>Yesterday</small>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="notification-footer">
+            <a href="#">
+                View All Notifications →
+            </a>
+        </div>
+
+    </div>
+
+</div>
             </div>
 
         </div>
@@ -2141,6 +2868,132 @@ if (searchInput && suggestions) {
     );
 
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const notificationBtn =
+        document.getElementById("notificationBtn");
+
+    const notificationPanel =
+        document.getElementById("notificationPanel");
+
+    const notificationClose =
+        document.getElementById("notificationClose");
+
+    const notificationBadge =
+        document.getElementById("notificationBadge");
+
+    const notificationItems =
+        document.querySelectorAll(".notification-item");
+
+
+    /* Start bell animation */
+    notificationBtn.classList.add("has-notifications");
+
+
+    /* Open / close notification panel */
+
+    notificationBtn.addEventListener("click", function (event) {
+
+        event.stopPropagation();
+
+        notificationPanel.classList.toggle("show");
+
+    });
+
+
+    /* Close button */
+
+    notificationClose.addEventListener("click", function (event) {
+
+        event.stopPropagation();
+
+        notificationPanel.classList.remove("show");
+
+    });
+
+
+    /* Click outside */
+
+    document.addEventListener("click", function (event) {
+
+        if (
+            !notificationPanel.contains(event.target) &&
+            !notificationBtn.contains(event.target)
+        ) {
+            notificationPanel.classList.remove("show");
+        }
+
+    });
+
+
+    /* Clicking notification marks it as read */
+
+    notificationItems.forEach(function (item) {
+
+        item.addEventListener("click", function () {
+
+            if (item.classList.contains("unread")) {
+
+                item.classList.remove("unread");
+
+                const dot =
+                    item.querySelector(".notification-dot");
+
+                if (dot) {
+                    dot.remove();
+                }
+
+                let count =
+                    parseInt(notificationBadge.textContent) || 0;
+
+                count = Math.max(0, count - 1);
+
+                notificationBadge.textContent = count;
+
+
+                /* Stop animation when no unread notifications */
+
+                if (count === 0) {
+
+                    notificationBadge.style.display = "none";
+
+                    notificationBtn.classList.remove(
+                        "has-notifications"
+                    );
+                }
+            }
+
+        });
+
+    });
+
+
+    /* Search notifications */
+
+    const search =
+        document.getElementById("notificationSearch");
+
+    search.addEventListener("input", function () {
+
+        const searchText =
+            search.value.toLowerCase().trim();
+
+        notificationItems.forEach(function (item) {
+
+            const text =
+                item.innerText.toLowerCase();
+
+            item.style.display =
+                text.includes(searchText)
+                    ? "flex"
+                    : "none";
+
+        });
+
+    });
+
+});
 
 </script>
 
