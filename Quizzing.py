@@ -3628,18 +3628,14 @@ The goal is practice, confidence and learning.
         interview_modes=interview_modes
     )
 
-# ============================================================
-# AI LECTURES HOME
-# ============================================================
+
 
 @app.route("/ai_lectures")
 def ai_lectures():
     return render_template("ai_lectures.html")
 
 
-# ============================================================
-# GENERATE AI LECTURE USING GROQ
-# ============================================================
+
 
 @app.route("/generate_ai_lecture", methods=["POST"])
 def generate_ai_lecture():
@@ -3654,9 +3650,7 @@ def generate_ai_lecture():
         language = data.get("language", "English").strip()
         style = data.get("style", "Visual and practical").strip()
 
-        # ----------------------------------------------------
-        # VALIDATION
-        # ----------------------------------------------------
+        
 
         if not course or not topic:
 
@@ -3666,9 +3660,7 @@ def generate_ai_lecture():
             }), 400
 
 
-        # ----------------------------------------------------
-        # GROQ PROMPT
-        # ----------------------------------------------------
+       
 
         prompt = f"""
 You are an expert educational teacher and lecture creator.
@@ -3767,9 +3759,7 @@ IMPORTANT RULES:
 """
 
 
-        # ----------------------------------------------------
-        # GROQ API
-        # ----------------------------------------------------
+        
 
         response = client.chat.completions.create(
 
@@ -3799,16 +3789,12 @@ IMPORTANT RULES:
         )
 
 
-        # ----------------------------------------------------
-        # GET AI RESPONSE
-        # ----------------------------------------------------
+        
 
         result = response.choices[0].message.content.strip()
 
 
-        # ----------------------------------------------------
-        # REMOVE MARKDOWN FENCES IF GROQ ADDS THEM
-        # ----------------------------------------------------
+       
 
         if result.startswith("```"):
 
@@ -3817,16 +3803,12 @@ IMPORTANT RULES:
             result = result.strip()
 
 
-        # ----------------------------------------------------
-        # CONVERT JSON
-        # ----------------------------------------------------
+        
 
         lecture = json.loads(result)
 
 
-        # ----------------------------------------------------
-        # BASIC STRUCTURE CHECK
-        # ----------------------------------------------------
+        
 
         required_fields = [
             "title",
@@ -3847,18 +3829,14 @@ IMPORTANT RULES:
                 )
 
 
-        # ----------------------------------------------------
-        # STORE LECTURE IN SESSION
-        # ----------------------------------------------------
+       
 
         session["ai_lecture"] = lecture
 
         session.modified = True
 
 
-        # ----------------------------------------------------
-        # RETURN SESSION PAGE URL
-        # ----------------------------------------------------
+        
 
         return jsonify({
 
@@ -3871,9 +3849,7 @@ IMPORTANT RULES:
         })
 
 
-    # ========================================================
-    # INVALID JSON
-    # ========================================================
+    
 
     except json.JSONDecodeError:
 
@@ -3890,9 +3866,7 @@ IMPORTANT RULES:
         }), 500
 
 
-    # ========================================================
-    # OTHER ERRORS
-    # ========================================================
+    
 
     except Exception as e:
 
@@ -3913,9 +3887,7 @@ IMPORTANT RULES:
 
 
 
-# ============================================================
-# AI LECTURE SESSION
-# ============================================================
+
 
 @app.route("/ai_lecture_session")
 def ai_lecture_session():
@@ -3942,9 +3914,7 @@ def ai_lecture_session():
 
 
 
-# ============================================================
-# CLEAR AI LECTURE SESSION
-# ============================================================
+
 
 @app.route("/clear_ai_lecture")
 def clear_ai_lecture():
