@@ -6,6 +6,7 @@ import secrets
 from flask import Flask, render_template, request,session, redirect, url_for, flash,jsonify
 from groq import Groq
 from datetime import datetime
+from urllib.parse import quote
 import os
 import sys
 import tempfile
@@ -3625,6 +3626,336 @@ The goal is practice, confidence and learning.
         student_name=student_name,
         subjects=subjects,
         interview_modes=interview_modes
+    )
+
+# ============================================================
+# AI LECTURES HOME
+# ============================================================
+
+@app.route("/ai_lectures")
+def ai_lectures():
+    return render_template("ai_lectures.html")
+
+
+# ============================================================
+# GENERATE AI LECTURE USING GROQ
+# ============================================================
+
+@app.route("/generate_ai_lecture", methods=["POST"])
+def generate_ai_lecture():
+
+    try:
+
+        data = request.get_json() or {}
+
+        course = data.get("course", "").strip()
+        topic = data.get("topic", "").strip()
+        level = data.get("level", "Beginner").strip()
+        language = data.get("language", "English").strip()
+        style = data.get("style", "Visual and practical").strip()
+
+        # ----------------------------------------------------
+        # VALIDATION
+        # ----------------------------------------------------
+
+        if not course or not topic:
+
+            return jsonify({
+                "success": False,
+                "error": "Please select a course and enter a topic."
+            }), 400
+
+
+        # ----------------------------------------------------
+        # GROQ PROMPT
+        # ----------------------------------------------------
+
+        prompt = f"""
+You are an expert educational teacher and lecture creator.
+
+Create a high-quality educational lecture for students.
+
+Course: {course}
+Topic: {topic}
+Level: {level}
+Language: {language}
+Teaching Style: {style}
+
+IMPORTANT:
+The lecture will be displayed as a text-based learning session.
+
+Do NOT create images.
+Do NOT create image prompts.
+Do NOT mention image generation.
+Do NOT include visual prompts.
+
+The lecture must be:
+
+- Accurate
+- Student friendly
+- Easy to understand
+- Well structured
+- Step-by-step
+- Engaging
+- Useful for exams and practical learning
+
+Return ONLY valid JSON.
+
+Use EXACTLY this structure:
+
+{{
+    "title": "Lecture title",
+
+    "introduction": "Short engaging introduction",
+
+    "duration": "Approximate duration",
+
+    "learning_objectives": [
+        "objective 1",
+        "objective 2",
+        "objective 3"
+    ],
+
+    "sections": [
+        {{
+            "heading": "Section heading",
+
+            "explanation": "Detailed but easy-to-understand explanation of this part of the topic.",
+
+            "example": "Useful example related to this section."
+        }}
+    ],
+
+    "key_points": [
+        "important point 1",
+        "important point 2",
+        "important point 3"
+    ],
+
+    "summary": "Clear lecture summary"
+}}
+
+IMPORTANT RULES:
+
+1. Create 4 to 6 sections.
+
+2. Every section must explain a different part of the topic.
+
+3. Use simple student-friendly language.
+
+4. Explain difficult concepts step-by-step.
+
+5. For programming topics, include correct code examples where useful.
+
+6. For programming examples, keep code technically correct.
+
+7. For hardware topics, explain components and working clearly.
+
+8. For networking topics, explain concepts with simple real-world examples.
+
+9. For DBMS topics, explain tables, keys, queries and relationships when relevant.
+
+10. For mathematics, explain formulas and solve examples step-by-step.
+
+11. Do not invent facts.
+
+12. Do not use markdown outside the JSON.
+
+13. The response MUST be valid JSON.
+
+14. Do not add ```json or ``` around the response.
+"""
+
+
+        # ----------------------------------------------------
+        # GROQ API
+        # ----------------------------------------------------
+
+        response = client.chat.completions.create(
+
+            model="llama-3.3-70b-versatile",
+
+            messages=[
+
+                {
+                    "role": "system",
+                    "content": (
+                        "You are an expert educational teacher. "
+                        "Return accurate educational lectures "
+                        "strictly in valid JSON format."
+                    )
+                },
+
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+
+            ],
+
+            temperature=0.5,
+
+            max_tokens=7000
+        )
+
+
+        # ----------------------------------------------------
+        # GET AI RESPONSE
+        # ----------------------------------------------------
+
+        result = response.choices[0].message.content.strip()
+
+
+        # ----------------------------------------------------
+        # REMOVE MARKDOWN FENCES IF GROQ ADDS THEM
+        # ----------------------------------------------------
+
+        if result.startswith("```"):
+
+            result = result.replace("```json", "")
+            result = result.replace("```", "")
+            result = result.strip()
+
+
+        # ----------------------------------------------------
+        # CONVERT JSON
+        # ----------------------------------------------------
+
+        lecture = json.loads(result)
+
+
+        # ----------------------------------------------------
+        # BASIC STRUCTURE CHECK
+        # ----------------------------------------------------
+
+        required_fields = [
+            "title",
+            "introduction",
+            "duration",
+            "learning_objectives",
+            "sections",
+            "key_points",
+            "summary"
+        ]
+
+        for field in required_fields:
+
+            if field not in lecture:
+
+                raise ValueError(
+                    f"AI response is missing field: {field}"
+                )
+
+
+        # ----------------------------------------------------
+        # STORE LECTURE IN SESSION
+        # ----------------------------------------------------
+
+        session["ai_lecture"] = lecture
+
+        session.modified = True
+
+
+        # ----------------------------------------------------
+        # RETURN SESSION PAGE URL
+        # ----------------------------------------------------
+
+        return jsonify({
+
+            "success": True,
+
+            "redirect_url": url_for(
+                "ai_lecture_session"
+            )
+
+        })
+
+
+    # ========================================================
+    # INVALID JSON
+    # ========================================================
+
+    except json.JSONDecodeError:
+
+        print("AI returned invalid JSON.")
+
+        return jsonify({
+
+            "success": False,
+
+            "error":
+                "AI returned an invalid lecture format. "
+                "Please try again."
+
+        }), 500
+
+
+    # ========================================================
+    # OTHER ERRORS
+    # ========================================================
+
+    except Exception as e:
+
+        print(
+            "AI Lecture Error:",
+            str(e)
+        )
+
+        return jsonify({
+
+            "success": False,
+
+            "error":
+                "Unable to generate the lecture right now. "
+                "Please try again."
+
+        }), 500
+
+
+
+# ============================================================
+# AI LECTURE SESSION
+# ============================================================
+
+@app.route("/ai_lecture_session")
+def ai_lecture_session():
+
+    lecture = session.get("ai_lecture")
+
+
+    # If no lecture exists, go back to generator
+
+    if not lecture:
+
+        return redirect(
+            url_for("ai_lectures")
+        )
+
+
+    return render_template(
+
+        "ai_lecture_session.html",
+
+        lecture=lecture
+
+    )
+
+
+
+# ============================================================
+# CLEAR AI LECTURE SESSION
+# ============================================================
+
+@app.route("/clear_ai_lecture")
+def clear_ai_lecture():
+
+    session.pop(
+        "ai_lecture",
+        None
+    )
+
+    return redirect(
+        url_for("ai_lectures")
     )
 if __name__ == "__main__":
    

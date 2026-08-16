@@ -1,0 +1,960 @@
+{% extends "base1.html" %}
+
+{% block title %}
+AI Lecture Session | Study Quiz Hub
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* =========================================================
+   AI LECTURE SESSION
+   ========================================================= */
+
+.ai-session-page {
+
+    min-height: 100vh;
+
+    padding:
+        40px 20px 80px;
+
+    background:
+
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(99,102,241,.15),
+            transparent 30%
+        ),
+
+        radial-gradient(
+            circle at 90% 20%,
+            rgba(236,72,153,.10),
+            transparent 30%
+        );
+}
+
+
+/* =========================================================
+   TOP NAVIGATION
+   ========================================================= */
+
+.session-topbar {
+
+    max-width: 1100px;
+
+    margin:
+        0 auto 25px;
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    align-items: center;
+
+    gap: 12px;
+
+    flex-wrap: wrap;
+}
+
+
+.session-back-buttons {
+
+    display: flex;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+}
+
+
+.session-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding:
+        11px 17px;
+
+    border-radius: 12px;
+
+    border:
+        1px solid
+        rgba(139,92,246,.25);
+
+    background:
+        rgba(139,92,246,.09);
+
+    color: #c4b5fd;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    transition: .25s;
+}
+
+
+.session-btn:hover {
+
+    transform:
+        translateY(-2px);
+
+    background:
+        rgba(139,92,246,.18);
+
+    color: white;
+}
+
+
+.home-btn {
+
+    background:
+        rgba(34,211,238,.08);
+
+    border-color:
+        rgba(34,211,238,.20);
+
+    color: #67e8f9;
+}
+
+
+/* =========================================================
+   MAIN SESSION
+   ========================================================= */
+
+.lecture-session {
+
+    max-width: 1100px;
+
+    margin: auto;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.session-header {
+
+    padding: 35px;
+
+    border-radius: 25px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            rgba(99,102,241,.18),
+            rgba(168,85,247,.10)
+        );
+
+    border:
+        1px solid
+        rgba(139,92,246,.25);
+
+    margin-bottom: 22px;
+}
+
+
+.session-label {
+
+    display: inline-block;
+
+    padding:
+        7px 12px;
+
+    border-radius: 20px;
+
+    background:
+        rgba(139,92,246,.12);
+
+    color:
+        #c4b5fd;
+
+    font-size: 10px;
+
+    font-weight: 900;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        .5px;
+
+    margin-bottom: 15px;
+}
+
+
+.session-header h1 {
+
+    margin:
+        0 0 12px;
+
+    color: white;
+
+    font-size:
+        clamp(
+            30px,
+            5vw,
+            48px
+        );
+
+    font-weight: 900;
+}
+
+
+.session-introduction {
+
+    color: #aaa;
+
+    font-size: 14px;
+
+    line-height: 1.8;
+
+    max-width: 900px;
+}
+
+
+.session-meta {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    margin-top: 20px;
+}
+
+
+.session-meta span {
+
+    padding:
+        8px 13px;
+
+    border-radius: 20px;
+
+    background:
+        rgba(255,255,255,.06);
+
+    color: #bbb;
+
+    font-size: 10px;
+
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   OBJECTIVES
+   ========================================================= */
+
+.session-card {
+
+    padding: 28px;
+
+    border-radius: 22px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:
+        1px solid
+        rgba(255,255,255,.07);
+
+    margin-bottom: 22px;
+}
+
+
+.session-card h2 {
+
+    margin:
+        0 0 18px;
+
+    color: white;
+
+    font-size: 20px;
+}
+
+
+.objective {
+
+    display: flex;
+
+    gap: 10px;
+
+    margin:
+        11px 0;
+
+    color: #aaa;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+
+.objective-check {
+
+    color:
+        #a855f7;
+
+    font-weight: 900;
+}
+
+
+/* =========================================================
+   SECTIONS
+   ========================================================= */
+
+.lecture-section {
+
+    margin-bottom: 22px;
+
+    padding: 28px;
+
+    border-radius: 22px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:
+        1px solid
+        rgba(255,255,255,.07);
+
+    transition: .25s;
+}
+
+
+.lecture-section:hover {
+
+    border-color:
+        rgba(139,92,246,.25);
+
+    transform:
+        translateY(-2px);
+}
+
+
+.section-number {
+
+    display: inline-flex;
+
+    width: 34px;
+    height: 34px;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6366f1,
+            #a855f7
+        );
+
+    color: white;
+
+    font-size: 12px;
+
+    font-weight: 900;
+
+    margin-bottom: 12px;
+}
+
+
+.lecture-section h2 {
+
+    margin:
+        0 0 14px;
+
+    color: white;
+
+    font-size: 22px;
+}
+
+
+.section-explanation {
+
+    color: #aaa;
+
+    font-size: 14px;
+
+    line-height: 1.9;
+
+    white-space: pre-line;
+}
+
+
+/* =========================================================
+   EXAMPLE
+   ========================================================= */
+
+.example-box {
+
+    margin-top: 20px;
+
+    padding: 18px;
+
+    border-left:
+        3px solid
+        #8b5cf6;
+
+    border-radius: 10px;
+
+    background:
+        rgba(139,92,246,.07);
+}
+
+
+.example-title {
+
+    color:
+        #c4b5fd;
+
+    font-size: 11px;
+
+    font-weight: 900;
+
+    margin-bottom: 8px;
+}
+
+
+.example-text {
+
+    color: #aaa;
+
+    font-size: 13px;
+
+    line-height: 1.7;
+
+    white-space: pre-line;
+}
+
+
+/* =========================================================
+   KEY POINTS
+   ========================================================= */
+
+.key-points {
+
+    padding: 28px;
+
+    border-radius: 22px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            rgba(34,211,238,.06),
+            rgba(139,92,246,.08)
+        );
+
+    border:
+        1px solid
+        rgba(139,92,246,.15);
+
+    margin-bottom: 22px;
+}
+
+
+.key-points h2 {
+
+    margin:
+        0 0 15px;
+
+    color: white;
+
+    font-size: 20px;
+}
+
+
+.key-point {
+
+    color: #aaa;
+
+    font-size: 13px;
+
+    padding:
+        9px 0;
+
+    line-height: 1.6;
+}
+
+
+.key-point::before {
+
+    content:
+        "✦";
+
+    color:
+        #22d3ee;
+
+    margin-right: 9px;
+}
+
+
+/* =========================================================
+   SUMMARY
+   ========================================================= */
+
+.summary-card {
+
+    padding: 30px;
+
+    border-radius: 22px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            rgba(99,102,241,.15),
+            rgba(236,72,153,.08)
+        );
+
+    border:
+        1px solid
+        rgba(139,92,246,.20);
+
+    margin-bottom: 25px;
+}
+
+
+.summary-card h2 {
+
+    margin:
+        0 0 15px;
+
+    color: white;
+
+    font-size: 20px;
+}
+
+
+.summary-card p {
+
+    margin: 0;
+
+    color: #aaa;
+
+    line-height: 1.9;
+
+    font-size: 14px;
+
+    white-space: pre-line;
+}
+
+
+/* =========================================================
+   BOTTOM BUTTONS
+   ========================================================= */
+
+.session-actions {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 12px;
+
+    flex-wrap: wrap;
+
+    padding-top: 10px;
+}
+
+
+.session-action {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding:
+        13px 22px;
+
+    border-radius: 13px;
+
+    border:
+        1px solid
+        rgba(139,92,246,.25);
+
+    background:
+        rgba(139,92,246,.10);
+
+    color:
+        #c4b5fd;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    font-weight: 800;
+
+    font-size: 12px;
+
+    transition: .25s;
+}
+
+
+.session-action:hover {
+
+    transform:
+        translateY(-2px);
+
+    background:
+        rgba(139,92,246,.20);
+
+    color: white;
+}
+
+
+.session-action.home {
+
+    background:
+        rgba(34,211,238,.08);
+
+    border-color:
+        rgba(34,211,238,.20);
+
+    color:
+        #67e8f9;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .ai-session-page {
+
+        padding:
+            25px 15px 60px;
+    }
+
+
+    .session-header {
+
+        padding: 24px 20px;
+    }
+
+
+    .session-card,
+    .lecture-section,
+    .key-points,
+    .summary-card {
+
+        padding: 21px;
+    }
+
+
+    .session-topbar {
+
+        align-items:
+            flex-start;
+    }
+
+
+    .session-btn {
+
+        padding:
+            10px 13px;
+    }
+
+}
+
+</style>
+
+
+<div class="ai-session-page">
+
+
+    <!-- =====================================================
+         TOP BUTTONS
+         ===================================================== -->
+
+    <div class="session-topbar">
+
+        <div class="session-back-buttons">
+
+            <a
+                href="{{ url_for('ai_lectures') }}"
+                class="session-btn">
+
+                ← New Lecture
+
+            </a>
+
+
+            <a
+                href="{{ url_for('home_page') }}"
+                class="session-btn home-btn">
+
+                🏠 Home
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         LECTURE
+         ===================================================== -->
+
+    <main class="lecture-session">
+
+
+        <!-- HEADER -->
+
+        <section class="session-header">
+
+            <div class="session-label">
+
+                🤖 Groq AI Lecture
+
+            </div>
+
+
+            <h1>
+
+                {{ lecture.title }}
+
+            </h1>
+
+
+            <div class="session-introduction">
+
+                {{ lecture.introduction }}
+
+            </div>
+
+
+            <div class="session-meta">
+
+                <span>
+
+                    ⏱️ {{ lecture.duration }}
+
+                </span>
+
+
+                <span>
+
+                    🧠 AI Personalized
+
+                </span>
+
+
+                <span>
+
+                    📚 Study Session
+
+                </span>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             OBJECTIVES
+             ================================================= -->
+
+        <section class="session-card">
+
+            <h2>
+
+                🎯 What You'll Learn
+
+            </h2>
+
+
+            {% for objective in lecture.learning_objectives %}
+
+                <div class="objective">
+
+                    <span class="objective-check">
+
+                        ✓
+
+                    </span>
+
+                    <span>
+
+                        {{ objective }}
+
+                    </span>
+
+                </div>
+
+            {% endfor %}
+
+        </section>
+
+
+
+        <!-- =================================================
+             SECTIONS
+             ================================================= -->
+
+        {% for section in lecture.sections %}
+
+            <article class="lecture-section">
+
+
+                <div class="section-number">
+
+                    {{ loop.index }}
+
+                </div>
+
+
+                <h2>
+
+                    {{ section.heading }}
+
+                </h2>
+
+
+                <div class="section-explanation">
+
+                    {{ section.explanation }}
+
+                </div>
+
+
+                {% if section.example %}
+
+                    <div class="example-box">
+
+                        <div class="example-title">
+
+                            💡 Example
+
+                        </div>
+
+
+                        <div class="example-text">
+
+                            {{ section.example }}
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+
+            </article>
+
+        {% endfor %}
+
+
+
+        <!-- =================================================
+             KEY POINTS
+             ================================================= -->
+
+        <section class="key-points">
+
+            <h2>
+
+                ⭐ Key Points
+
+            </h2>
+
+
+            {% for point in lecture.key_points %}
+
+                <div class="key-point">
+
+                    {{ point }}
+
+                </div>
+
+            {% endfor %}
+
+        </section>
+
+
+
+        <!-- =================================================
+             SUMMARY
+             ================================================= -->
+
+        <section class="summary-card">
+
+            <h2>
+
+                📚 Lecture Summary
+
+            </h2>
+
+
+            <p>
+
+                {{ lecture.summary }}
+
+            </p>
+
+        </section>
+
+
+
+        <!-- =================================================
+             BOTTOM ACTIONS
+             ================================================= -->
+
+        <div class="session-actions">
+
+
+            <a
+                href="{{ url_for('ai_lectures') }}"
+                class="session-action">
+
+                🔄 Create Another Lecture
+
+            </a>
+
+
+            <a
+                href="{{ url_for('home_page') }}"
+                class="session-action home">
+
+                🏠 Back to Home
+
+            </a>
+
+
+            <button
+                class="session-action"
+                onclick="window.print()">
+
+                📄 Print Lecture
+
+            </button>
+
+        </div>
+
+
+    </main>
+
+</div>
+
+{% endblock %}
