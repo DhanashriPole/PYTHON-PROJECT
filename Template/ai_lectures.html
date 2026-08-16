@@ -1,0 +1,2001 @@
+{% extends "base1.html" %}
+
+{% block title %}
+AI Lectures | Study Quiz Hub
+{% endblock %}
+
+
+{% block content %}
+
+<style>
+
+/* =========================================================
+   AI LECTURES PAGE
+========================================================= */
+
+.ai-lecture-page {
+
+    min-height: 100vh;
+
+    padding: 40px 6% 80px;
+
+    background:
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(99,102,241,.18),
+            transparent 32%
+        ),
+        radial-gradient(
+            circle at 90% 20%,
+            rgba(236,72,153,.12),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 50% 100%,
+            rgba(34,211,238,.08),
+            transparent 35%
+        );
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   ANIMATED BACKGROUND
+========================================================= */
+
+.ai-lecture-page::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 350px;
+    height: 350px;
+
+    top: 120px;
+    left: -180px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(99,102,241,.08);
+
+    filter: blur(50px);
+
+    animation:
+        floatingGlow 7s ease-in-out infinite;
+}
+
+
+.ai-lecture-page::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 300px;
+    height: 300px;
+
+    right: -150px;
+    bottom: 100px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(236,72,153,.08);
+
+    filter: blur(50px);
+
+    animation:
+        floatingGlow 8s ease-in-out infinite reverse;
+}
+
+
+@keyframes floatingGlow {
+
+    0%,
+    100% {
+
+        transform:
+            translate(0,0)
+            scale(1);
+
+    }
+
+    50% {
+
+        transform:
+            translate(30px,-25px)
+            scale(1.15);
+
+    }
+
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.ai-lecture-hero {
+
+    max-width: 900px;
+
+    margin: 0 auto;
+
+    text-align: center;
+
+    position: relative;
+
+    z-index: 2;
+
+    animation:
+        heroAppear .7s ease;
+}
+
+
+@keyframes heroAppear {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(25px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0);
+
+    }
+
+}
+
+
+/* =========================================================
+   BADGE
+========================================================= */
+
+.ai-lecture-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    padding:
+        9px 18px;
+
+    border-radius: 30px;
+
+    background:
+        rgba(139,92,246,.12);
+
+    border:
+        1px solid
+        rgba(139,92,246,.35);
+
+    color:
+        #c4b5fd;
+
+    font-size: 12px;
+
+    font-weight: 900;
+
+    letter-spacing: .5px;
+
+    animation:
+        aiFloat 3s ease-in-out infinite;
+}
+
+
+@keyframes aiFloat {
+
+    0%,
+    100% {
+
+        transform:
+            translateY(0);
+
+    }
+
+    50% {
+
+        transform:
+            translateY(-6px);
+
+    }
+
+}
+
+
+/* =========================================================
+   HERO TITLE
+========================================================= */
+
+.ai-lecture-hero h1 {
+
+    margin:
+        20px 0 12px;
+
+    font-size:
+        clamp(42px,6vw,72px);
+
+    line-height: 1.05;
+
+    font-weight: 950;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ffffff,
+            #a78bfa,
+            #ec4899,
+            #67e8f9
+        );
+
+    -webkit-background-clip:
+        text;
+
+    background-clip:
+        text;
+
+    color:
+        transparent;
+
+    background-size:
+        250% auto;
+
+    animation:
+        gradientMove 5s linear infinite;
+}
+
+
+@keyframes gradientMove {
+
+    0% {
+
+        background-position:
+            0% center;
+
+    }
+
+    100% {
+
+        background-position:
+            250% center;
+
+    }
+
+}
+
+
+/* =========================================================
+   HERO DESCRIPTION
+========================================================= */
+
+.ai-lecture-hero p {
+
+    max-width: 700px;
+
+    margin:
+        0 auto;
+
+    color:
+        #999;
+
+    line-height:
+        1.8;
+
+    font-size:
+        15px;
+}
+
+
+/* =========================================================
+   HOME BUTTON
+========================================================= */
+
+.lecture-home-wrapper {
+
+    max-width: 950px;
+
+    margin:
+        25px auto 0;
+
+    position:
+        relative;
+
+    z-index: 5;
+}
+
+
+.back-home-btn {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        8px;
+
+    padding:
+        11px 18px;
+
+    border-radius:
+        12px;
+
+    text-decoration:
+        none;
+
+    color:
+        #c4b5fd;
+
+    background:
+        rgba(139,92,246,.10);
+
+    border:
+        1px solid
+        rgba(139,92,246,.25);
+
+    font-size:
+        12px;
+
+    font-weight:
+        800;
+
+    transition:
+        .25s;
+}
+
+
+.back-home-btn:hover {
+
+    transform:
+        translateX(-4px);
+
+    background:
+        rgba(139,92,246,.18);
+
+    color:
+        white;
+
+}
+
+
+/* =========================================================
+   GENERATOR CARD
+========================================================= */
+
+.lecture-generator {
+
+    max-width:
+        850px;
+
+    margin:
+        40px auto 0;
+
+    padding:
+        30px;
+
+    border-radius:
+        25px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(25,23,50,.96),
+            rgba(10,11,27,.97)
+        );
+
+    border:
+        1px solid
+        rgba(139,92,246,.25);
+
+    box-shadow:
+        0 25px 70px
+        rgba(0,0,0,.35);
+
+    backdrop-filter:
+        blur(20px);
+
+    position:
+        relative;
+
+    z-index:
+        3;
+
+    animation:
+        cardAppear .8s ease;
+}
+
+
+@keyframes cardAppear {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(30px)
+            scale(.98);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+
+    }
+
+}
+
+
+/* =========================================================
+   GENERATOR TITLE
+========================================================= */
+
+.generator-title {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
+
+    margin-bottom:
+        25px;
+}
+
+
+.generator-title-icon {
+
+    width:
+        48px;
+
+    height:
+        48px;
+
+    flex-shrink:
+        0;
+
+    border-radius:
+        14px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6366f1,
+            #a855f7
+        );
+
+    font-size:
+        22px;
+
+    box-shadow:
+        0 8px 25px
+        rgba(99,102,241,.25);
+
+    animation:
+        iconPulse 2.5s ease-in-out infinite;
+}
+
+
+@keyframes iconPulse {
+
+    0%,
+    100% {
+
+        box-shadow:
+            0 8px 25px
+            rgba(99,102,241,.25);
+
+    }
+
+    50% {
+
+        box-shadow:
+            0 8px 35px
+            rgba(168,85,247,.55);
+
+    }
+
+}
+
+
+.generator-title h2 {
+
+    margin:
+        0;
+
+    color:
+        white;
+
+    font-size:
+        20px;
+
+    font-weight:
+        900;
+}
+
+
+.generator-title p {
+
+    margin:
+        3px 0 0;
+
+    color:
+        #777;
+
+    font-size:
+        11px;
+}
+
+
+/* =========================================================
+   FORM GRID
+========================================================= */
+
+.lecture-form-grid {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap:
+        18px;
+}
+
+
+.form-group {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        8px;
+}
+
+
+.form-group.full {
+
+    grid-column:
+        1 / -1;
+
+}
+
+
+.form-group label {
+
+    color:
+        #aaa;
+
+    font-size:
+        11px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        .2px;
+}
+
+
+/* =========================================================
+   INPUTS
+========================================================= */
+
+.form-group input,
+.form-group select {
+
+    width:
+        100%;
+
+    box-sizing:
+        border-box;
+
+    padding:
+        14px 15px;
+
+    border-radius:
+        13px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.09);
+
+    outline:
+        none;
+
+    background:
+        rgba(255,255,255,.045);
+
+    color:
+        white;
+
+    font-size:
+        13px;
+
+    transition:
+        .25s;
+}
+
+
+.form-group input::placeholder {
+
+    color:
+        #666;
+}
+
+
+.form-group input:focus,
+.form-group select:focus {
+
+    border-color:
+        #8b5cf6;
+
+    background:
+        rgba(139,92,246,.07);
+
+    box-shadow:
+        0 0 20px
+        rgba(139,92,246,.12);
+
+}
+
+
+.form-group select option {
+
+    background:
+        #16142b;
+
+    color:
+        white;
+}
+
+
+/* =========================================================
+   GENERATE BUTTON
+========================================================= */
+
+.generate-btn {
+
+    width:
+        100%;
+
+    margin-top:
+        22px;
+
+    padding:
+        16px;
+
+    border:
+        none;
+
+    border-radius:
+        14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6366f1,
+            #9333ea,
+            #ec4899
+        );
+
+    color:
+        white;
+
+    font-size:
+        14px;
+
+    font-weight:
+        900;
+
+    cursor:
+        pointer;
+
+    box-shadow:
+        0 12px 30px
+        rgba(139,92,246,.25);
+
+    transition:
+        .3s;
+
+    position:
+        relative;
+
+    overflow:
+        hidden;
+}
+
+
+.generate-btn::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    top:
+        0;
+
+    left:
+        -120%;
+
+    width:
+        80%;
+
+    height:
+        100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.25),
+            transparent
+        );
+
+    transform:
+        skewX(-20deg);
+
+    transition:
+        .6s;
+}
+
+
+.generate-btn:hover::before {
+
+    left:
+        140%;
+}
+
+
+.generate-btn:hover {
+
+    transform:
+        translateY(-3px);
+
+    box-shadow:
+        0 18px 40px
+        rgba(139,92,246,.35);
+
+}
+
+
+.generate-btn:active {
+
+    transform:
+        translateY(-1px);
+
+}
+
+
+.generate-btn:disabled {
+
+    opacity:
+        .65;
+
+    cursor:
+        wait;
+
+    transform:
+        none;
+
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.lecture-loading {
+
+    display:
+        none;
+
+    max-width:
+        700px;
+
+    margin:
+        35px auto;
+
+    padding:
+        35px 20px;
+
+    text-align:
+        center;
+
+    position:
+        relative;
+
+    z-index:
+        5;
+}
+
+
+.ai-loader {
+
+    width:
+        58px;
+
+    height:
+        58px;
+
+    margin:
+        auto;
+
+    border-radius:
+        50%;
+
+    border:
+        3px solid
+        rgba(255,255,255,.08);
+
+    border-top-color:
+        #a855f7;
+
+    border-right-color:
+        #6366f1;
+
+    animation:
+        aiSpin 1s linear infinite;
+
+}
+
+
+@keyframes aiSpin {
+
+    to {
+
+        transform:
+            rotate(360deg);
+
+    }
+
+}
+
+
+.lecture-loading h3 {
+
+    margin:
+        18px 0 5px;
+
+    color:
+        white;
+
+    font-size:
+        17px;
+
+}
+
+
+.lecture-loading p {
+
+    color:
+        #777;
+
+    font-size:
+        12px;
+
+    line-height:
+        1.6;
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.lecture-error {
+
+    display:
+        none;
+
+    max-width:
+        850px;
+
+    margin:
+        25px auto;
+
+    padding:
+        15px 18px;
+
+    border-radius:
+        12px;
+
+    background:
+        rgba(239,68,68,.08);
+
+    border:
+        1px solid
+        rgba(239,68,68,.25);
+
+    color:
+        #fca5a5;
+
+    font-size:
+        12px;
+
+    text-align:
+        center;
+
+    position:
+        relative;
+
+    z-index:
+        5;
+
+}
+
+
+/* =========================================================
+   INFO CARDS
+========================================================= */
+
+.lecture-info-grid {
+
+    max-width:
+        850px;
+
+    margin:
+        30px auto 0;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:
+        15px;
+
+    position:
+        relative;
+
+    z-index:
+        2;
+}
+
+
+.lecture-info-card {
+
+    padding:
+        20px;
+
+    text-align:
+        center;
+
+    border-radius:
+        18px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:
+        1px solid
+        rgba(255,255,255,.07);
+
+    transition:
+        .3s;
+
+}
+
+
+.lecture-info-card:hover {
+
+    transform:
+        translateY(-5px);
+
+    border-color:
+        rgba(139,92,246,.25);
+
+    background:
+        rgba(139,92,246,.06);
+
+}
+
+
+.info-icon {
+
+    font-size:
+        28px;
+
+    margin-bottom:
+        9px;
+}
+
+
+.lecture-info-card h3 {
+
+    margin:
+        0 0 6px;
+
+    color:
+        white;
+
+    font-size:
+        13px;
+}
+
+
+.lecture-info-card p {
+
+    margin:
+        0;
+
+    color:
+        #777;
+
+    font-size:
+        10px;
+
+    line-height:
+        1.5;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .ai-lecture-page {
+
+        padding:
+            28px 15px 60px;
+
+    }
+
+
+    .ai-lecture-hero h1 {
+
+        font-size:
+            clamp(38px,12vw,58px);
+
+    }
+
+
+    .ai-lecture-hero p {
+
+        font-size:
+            13px;
+
+    }
+
+
+    .lecture-home-wrapper {
+
+        margin-top:
+            20px;
+
+    }
+
+
+    .lecture-generator {
+
+        margin-top:
+            25px;
+
+        padding:
+            20px;
+
+        border-radius:
+            20px;
+
+    }
+
+
+    .lecture-form-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .form-group.full {
+
+        grid-column:
+            auto;
+
+    }
+
+
+    .lecture-info-grid {
+
+        grid-template-columns:
+            1fr;
+
+        gap:
+            12px;
+
+    }
+
+
+    .lecture-info-card {
+
+        padding:
+            18px;
+
+    }
+
+
+    .generator-title h2 {
+
+        font-size:
+            17px;
+
+    }
+
+
+    .generator-title p {
+
+        font-size:
+            10px;
+
+    }
+
+}
+
+
+@media (max-width: 480px) {
+
+    .ai-lecture-page {
+
+        padding-left:
+            12px;
+
+        padding-right:
+            12px;
+
+    }
+
+
+    .ai-lecture-badge {
+
+        font-size:
+            10px;
+
+        padding:
+            8px 13px;
+
+    }
+
+
+    .lecture-generator {
+
+        padding:
+            17px;
+
+    }
+
+
+    .generator-title-icon {
+
+        width:
+            42px;
+
+        height:
+            42px;
+
+    }
+
+
+    .generate-btn {
+
+        font-size:
+            13px;
+
+    }
+
+}
+
+</style>
+
+
+<!-- =========================================================
+     PAGE
+========================================================= -->
+
+<div class="ai-lecture-page">
+
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <section class="ai-lecture-hero">
+
+        <div class="ai-lecture-badge">
+
+            🤖 AI POWERED LEARNING
+
+        </div>
+
+
+        <h1>
+
+            AI Lectures
+
+        </h1>
+
+
+        <p>
+
+            Enter any topic and let AI create a personalized,
+            clear and engaging educational lecture for you.
+
+        </p>
+
+    </section>
+
+
+    <!-- =====================================================
+         BACK TO HOME
+    ====================================================== -->
+
+    <div class="lecture-home-wrapper">
+
+        <a
+            href="{{ url_for('home_page') }}"
+            class="back-home-btn">
+
+            ← Back to Home
+
+        </a>
+
+    </div>
+
+
+    <!-- =====================================================
+         GENERATOR
+    ====================================================== -->
+
+    <section class="lecture-generator">
+
+
+        <!-- TITLE -->
+
+        <div class="generator-title">
+
+            <div class="generator-title-icon">
+
+                ✨
+
+            </div>
+
+
+            <div>
+
+                <h2>
+
+                    Create Your AI Lecture
+
+                </h2>
+
+                <p>
+
+                    Generate a personalized lesson with Groq AI
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             FORM
+        ================================================= -->
+
+        <div class="lecture-form-grid">
+
+
+            <!-- COURSE -->
+
+            <div class="form-group">
+
+                <label>
+
+                    📚 Course
+
+                </label>
+
+
+                <select id="lectureCourse">
+
+                    <option value="Python">
+
+                        Python
+
+                    </option>
+
+
+                    <option value="C">
+
+                        C Programming
+
+                    </option>
+
+
+                    <option value="C++">
+
+                        C++
+
+                    </option>
+
+
+                    <option value="Java">
+
+                        Java
+
+                    </option>
+
+
+                    <option value="Web Development">
+
+                        Web Development
+
+                    </option>
+
+
+                    <option value="Data Science">
+
+                        Data Science
+
+                    </option>
+
+
+                    <option value="Digital Techniques">
+
+                        Digital Techniques
+
+                    </option>
+
+
+                    <option value="Computer Networks">
+
+                        Computer Networks
+
+                    </option>
+
+
+                    <option value="DBMS">
+
+                        DBMS
+
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- LEVEL -->
+
+            <div class="form-group">
+
+                <label>
+
+                    🎯 Difficulty
+
+                </label>
+
+
+                <select id="lectureLevel">
+
+                    <option value="Beginner">
+
+                        Beginner
+
+                    </option>
+
+
+                    <option value="Intermediate">
+
+                        Intermediate
+
+                    </option>
+
+
+                    <option value="Advanced">
+
+                        Advanced
+
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- TOPIC -->
+
+            <div class="form-group full">
+
+                <label>
+
+                    📖 What do you want to learn?
+
+                </label>
+
+
+                <input
+                    type="text"
+                    id="lectureTopic"
+                    autocomplete="off"
+                    placeholder="Example: Python Functions, 8086 Architecture, SQL Joins..."
+                >
+
+            </div>
+
+
+            <!-- LANGUAGE -->
+
+            <div class="form-group">
+
+                <label>
+
+                    🌐 Lecture Language
+
+                </label>
+
+
+                <select id="lectureLanguage">
+
+                    <option value="English">
+
+                        English
+
+                    </option>
+
+
+                    <option value="Hindi">
+
+                        Hindi
+
+                    </option>
+
+
+                    <option value="Hinglish">
+
+                        Hinglish
+
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- STYLE -->
+
+            <div class="form-group">
+
+                <label>
+
+                    🎓 Teaching Style
+
+                </label>
+
+
+                <select id="lectureStyle">
+
+                    <option value="Visual and practical">
+
+                        Visual & Practical
+
+                    </option>
+
+
+                    <option value="Exam focused">
+
+                        Exam Focused
+
+                    </option>
+
+
+                    <option value="Concept focused">
+
+                        Concept Focused
+
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             GENERATE BUTTON
+        ================================================= -->
+
+        <button
+            type="button"
+            class="generate-btn"
+            id="generateLectureBtn"
+            onclick="generateLecture()">
+
+            ✨ Generate AI Lecture
+
+        </button>
+
+    </section>
+
+
+    <!-- =====================================================
+         LOADING
+    ====================================================== -->
+
+    <div
+        class="lecture-loading"
+        id="lectureLoading">
+
+
+        <div class="ai-loader"></div>
+
+
+        <h3>
+
+            🤖 AI is creating your lecture...
+
+        </h3>
+
+
+        <p>
+
+            Groq AI is preparing explanations,
+            examples and concept-specific visuals.
+
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         ERROR
+    ====================================================== -->
+
+    <div
+        class="lecture-error"
+        id="lectureError">
+
+    </div>
+
+
+    <!-- =====================================================
+         INFORMATION CARDS
+    ====================================================== -->
+
+    <div class="lecture-info-grid">
+
+
+        <div class="lecture-info-card">
+
+            <div class="info-icon">
+
+                🧠
+
+            </div>
+
+
+            <h3>
+
+                AI Generated
+
+            </h3>
+
+
+            <p>
+
+                Personalized lectures generated
+                according to your selected topic.
+
+            </p>
+
+        </div>
+
+
+        <div class="lecture-info-card">
+
+            <div class="info-icon">
+
+                🎓
+
+            </div>
+
+
+            <h3>
+
+                Student Friendly
+
+            </h3>
+
+
+            <p>
+
+                Simple explanations designed
+                for easier learning.
+
+            </p>
+
+        </div>
+
+
+        <div class="lecture-info-card">
+
+            <div class="info-icon">
+
+                ✨
+
+            </div>
+
+
+            <h3>
+
+                New Session
+
+            </h3>
+
+
+            <p>
+
+                Your generated lecture opens
+                in a separate session page.
+
+            </p>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script>
+
+
+async function generateLecture() {
+
+
+    /* =====================================================
+       GET FORM VALUES
+    ===================================================== */
+
+    const course =
+        document.getElementById(
+            "lectureCourse"
+        ).value;
+
+
+    const topic =
+        document.getElementById(
+            "lectureTopic"
+        ).value.trim();
+
+
+    const level =
+        document.getElementById(
+            "lectureLevel"
+        ).value;
+
+
+    const language =
+        document.getElementById(
+            "lectureLanguage"
+        ).value;
+
+
+    const style =
+        document.getElementById(
+            "lectureStyle"
+        ).value;
+
+
+    /* =====================================================
+       ELEMENTS
+    ===================================================== */
+
+    const button =
+        document.getElementById(
+            "generateLectureBtn"
+        );
+
+
+    const loading =
+        document.getElementById(
+            "lectureLoading"
+        );
+
+
+    const errorBox =
+        document.getElementById(
+            "lectureError"
+        );
+
+
+    /* =====================================================
+       VALIDATION
+    ===================================================== */
+
+    if (!topic) {
+
+        errorBox.textContent =
+            "⚠️ Please enter the topic you want to learn.";
+
+        errorBox.style.display =
+            "block";
+
+        document.getElementById(
+            "lectureTopic"
+        ).focus();
+
+        return;
+    }
+
+
+    /* =====================================================
+       CLEAR OLD ERROR
+    ===================================================== */
+
+    errorBox.style.display =
+        "none";
+
+
+    /* =====================================================
+       LOADING
+    ===================================================== */
+
+    loading.style.display =
+        "block";
+
+
+    button.disabled =
+        true;
+
+
+    button.textContent =
+        "🤖 Creating AI Session...";
+
+
+    /* =====================================================
+       SCROLL TO LOADING
+    ===================================================== */
+
+    loading.scrollIntoView({
+
+        behavior:
+            "smooth",
+
+        block:
+            "center"
+
+    });
+
+
+    try {
+
+
+        /* =================================================
+           SEND REQUEST TO FLASK
+        ================================================= */
+
+        const response =
+            await fetch(
+                "{{ url_for('generate_ai_lecture') }}",
+                {
+
+                    method:
+                        "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            course:
+                                course,
+
+                            topic:
+                                topic,
+
+                            level:
+                                level,
+
+                            language:
+                                language,
+
+                            style:
+                                style
+
+                        })
+
+                }
+            );
+
+
+        /* =================================================
+           READ RESPONSE
+        ================================================= */
+
+        const data =
+            await response.json();
+
+
+        /* =================================================
+           ERROR FROM SERVER
+        ================================================= */
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            throw new Error(
+
+                data.error ||
+                "Unable to generate the AI lecture."
+
+            );
+
+        }
+
+
+        /* =================================================
+           REDIRECT TO NEW SESSION PAGE
+        ================================================= */
+
+        if (
+            data.redirect_url
+        ) {
+
+            window.location.href =
+                data.redirect_url;
+
+        }
+
+        else {
+
+            throw new Error(
+                "Lecture session URL was not returned by the server."
+            );
+
+        }
+
+
+    }
+
+
+    catch (error) {
+
+
+        console.error(
+            "AI Lecture Error:",
+            error
+        );
+
+
+        errorBox.textContent =
+            "❌ " +
+            (
+                error.message ||
+                "Something went wrong. Please try again."
+            );
+
+
+        errorBox.style.display =
+            "block";
+
+
+        loading.style.display =
+            "none";
+
+
+        button.disabled =
+            false;
+
+
+        button.textContent =
+            "✨ Generate AI Lecture";
+
+    }
+
+}
+
+
+/* =========================================================
+   ENTER KEY
+========================================================= */
+
+document
+    .getElementById("lectureTopic")
+    .addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                event.preventDefault();
+
+                generateLecture();
+
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   CLEAR ERROR WHEN USER STARTS TYPING
+========================================================= */
+
+document
+    .getElementById("lectureTopic")
+    .addEventListener(
+        "input",
+        function() {
+
+            document.getElementById(
+                "lectureError"
+            ).style.display =
+                "none";
+
+        }
+    );
+
+</script>
+
+
+{% endblock %}
