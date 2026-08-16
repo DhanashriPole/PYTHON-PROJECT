@@ -1,229 +1,1330 @@
+
 {% extends "base1.html" %}
+
 {% block title %}Quiz Challenge{% endblock %}
 
 {% block content %}
 
 <style>
+
+/* =========================================================
+   PROFESSIONAL COLORFUL QUIZ PAGE
+========================================================= */
+
+.quiz-page {
+    min-height: 100vh;
+    padding: 30px 0 50px;
+    position: relative;
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 10% 15%,
+            rgba(124,58,237,.35),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 90% 20%,
+            rgba(236,72,153,.25),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 50% 100%,
+            rgba(14,165,233,.25),
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #0f172a,
+            #17133a 45%,
+            #111d3b
+        );
+}
+
+
+/* =========================================================
+   BACKGROUND LIGHTS
+========================================================= */
+
+.quiz-page::before,
+.quiz-page::after {
+
+    content: "";
+
+    position: absolute;
+
+    border-radius: 50%;
+
+    filter: blur(90px);
+
+    pointer-events: none;
+
+    opacity: .35;
+}
+
+.quiz-page::before {
+
+    width: 300px;
+    height: 300px;
+
+    background: #8b5cf6;
+
+    top: -100px;
+    left: -100px;
+
+    animation: backgroundFloat 9s ease-in-out infinite alternate;
+}
+
+.quiz-page::after {
+
+    width: 280px;
+    height: 280px;
+
+    background: #ec4899;
+
+    right: -100px;
+    bottom: -100px;
+
+    animation: backgroundFloat2 11s ease-in-out infinite alternate;
+}
+
+@keyframes backgroundFloat {
+
+    from {
+        transform: translate(0,0);
+    }
+
+    to {
+        transform: translate(100px,100px);
+    }
+}
+
+@keyframes backgroundFloat2 {
+
+    from {
+        transform: translate(0,0);
+    }
+
+    to {
+        transform: translate(-100px,-80px);
+    }
+}
+
+
+/* =========================================================
+   MAIN CONTAINER
+========================================================= */
+
+.quiz-container {
+
+    position: relative;
+    z-index: 2;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(30,41,75,.92),
+            rgba(23,30,58,.94)
+        );
+
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+
+    border-radius: 28px;
+
+    border: 1px solid rgba(255,255,255,.12);
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,.45),
+        0 0 50px rgba(99,102,241,.10);
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   RAINBOW TOP ACCENT
+========================================================= */
+
+.quiz-container::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 5px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ff0080,
+            #ff8a00,
+            #ffe600,
+            #00d084,
+            #00b8ff,
+            #7c3aed,
+            #ff0080
+        );
+
+    background-size: 350% 100%;
+
+    animation: rainbowMove 6s linear infinite;
+}
+
+@keyframes rainbowMove {
+
+    0% {
+        background-position: 0% center;
+    }
+
+    100% {
+        background-position: 350% center;
+    }
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.quiz-header {
+
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    margin-bottom: 25px;
+}
+
+.quiz-header-icon {
+
+    width: 62px;
+    height: 62px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6366f1,
+            #8b5cf6,
+            #ec4899
+        );
+
+    color: white;
+
+    box-shadow:
+        0 10px 30px rgba(139,92,246,.35);
+
+    animation: iconGlow 3s ease-in-out infinite;
+}
+
+.quiz-header-icon i {
+    font-size: 1.9rem;
+}
+
+@keyframes iconGlow {
+
+    0%,100% {
+        transform: translateY(0);
+        box-shadow:
+            0 10px 30px rgba(139,92,246,.25);
+    }
+
+    50% {
+        transform: translateY(-5px);
+        box-shadow:
+            0 15px 40px rgba(236,72,153,.35);
+    }
+}
+
+
+/* =========================================================
+   TITLE
+========================================================= */
+
+.quiz-title {
+
+    margin: 0;
+
+    font-size: 2rem;
+
+    font-weight: 850;
+
+    background:
+        linear-gradient(
+            90deg,
+            #60a5fa,
+            #a78bfa,
+            #f472b6,
+            #fbbf24,
+            #34d399,
+            #60a5fa
+        );
+
+    background-size: 300% auto;
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    animation: titleRainbow 6s linear infinite;
+}
+
+@keyframes titleRainbow {
+
+    0% {
+        background-position: 0% center;
+    }
+
+    100% {
+        background-position: 300% center;
+    }
+}
+
+.quiz-subtitle {
+
+    margin: 5px 0 0;
+
+    color: #a5b4fc;
+
+    font-size: .9rem;
+}
+
+
+/* =========================================================
+   TIMER
+========================================================= */
+
+.timer-box {
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 9px;
+
+    margin-bottom: 25px;
+
+    padding: 13px 18px;
+
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(245,158,11,.16),
+            rgba(234,88,12,.12)
+        );
+
+    border: 1px solid rgba(245,158,11,.25);
+
+    color: #fde68a;
+
+    font-weight: 700;
+
+    box-shadow:
+        inset 0 1px rgba(255,255,255,.05);
+}
+
+#timer {
+
+    min-width: 45px;
+
+    padding: 6px 10px;
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f59e0b,
+            #ea580c
+        );
+
+    color: white;
+
+    text-align: center;
+
+    font-weight: 800;
+
+    box-shadow:
+        0 5px 18px rgba(245,158,11,.30);
+
+    transition: .3s;
+}
+
+
+/* =========================================================
+   FEEDBACK
+========================================================= */
+
+.quiz-feedback {
+
+    border-radius: 15px;
+
+    border: none;
+
+    box-shadow:
+        0 10px 25px rgba(0,0,0,.20);
+}
+
+
+/* =========================================================
+   COURSE BADGE
+========================================================= */
+
+.course-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 8px 13px;
+
+    border-radius: 10px;
+
+    color: #bfdbfe;
+
+    background:
+        rgba(59,130,246,.15);
+
+    border: 1px solid rgba(96,165,250,.25);
+
+    font-weight: 700;
+
+    box-shadow:
+        0 5px 15px rgba(59,130,246,.10);
+}
+
+
+/* =========================================================
+   QUESTION CARD
+========================================================= */
+
+.question-card {
+
+    position: relative;
+
+    border: 1px solid rgba(255,255,255,.10) !important;
+
+    border-radius: 23px !important;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(51,65,100,.90),
+            rgba(30,41,70,.94)
+        );
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.28) !important;
+
+    overflow: hidden;
+}
+
+
+/* Rainbow side */
+
+.question-card::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 5px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #ff0080,
+            #8b5cf6,
+            #00b8ff,
+            #00d084,
+            #fbbf24
+        );
+
+    background-size: 100% 300%;
+
+    animation: sideRainbow 5s linear infinite;
+}
+
+@keyframes sideRainbow {
+
+    0% {
+        background-position: 50% 0%;
+    }
+
+    100% {
+        background-position: 50% 300%;
+    }
+}
+
+.question-card-body {
+
+    padding: 28px;
+
+}
+
+
+/* =========================================================
+   QUESTION HEADER
+========================================================= */
+
+.question-number {
+
+    color: #f8fafc;
+
+    font-size: 1.12rem;
+
+    font-weight: 800;
+}
+
+.question-help {
+
+    color: #94a3b8;
+
+    font-size: .84rem;
+
+    margin-top: 3px;
+}
+
+.question-counter {
+
+    padding: 8px 13px;
+
+    border-radius: 11px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6366f1,
+            #8b5cf6,
+            #ec4899
+        );
+
+    color: white;
+
+    font-weight: 800;
+
+    box-shadow:
+        0 7px 20px rgba(139,92,246,.25);
+}
+
+
+/* =========================================================
+   CONCEPT
+========================================================= */
+
+.concept-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    margin-top: 8px;
+
+    padding: 6px 10px;
+
+    border-radius: 8px;
+
+    color: #67e8f9;
+
+    background:
+        rgba(6,182,212,.12);
+
+    border: 1px solid rgba(34,211,238,.20);
+
+    font-size: .76rem;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+.quiz-progress {
+
+    height: 11px;
+
+    border-radius: 20px;
+
+    background: rgba(255,255,255,.10);
+
+    overflow: hidden;
+}
+
+.quiz-progress-bar {
+
+    height: 100%;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ff0080,
+            #8b5cf6,
+            #00b8ff,
+            #00d084,
+            #fbbf24
+        );
+
+    background-size: 300% 100%;
+
+    animation: progressRainbow 5s linear infinite;
+
+    box-shadow:
+        0 0 15px rgba(139,92,246,.35);
+}
+
+@keyframes progressRainbow {
+
+    0% {
+        background-position: 0% center;
+    }
+
+    100% {
+        background-position: 300% center;
+    }
+}
+
+
+/* =========================================================
+   QUESTION TEXT
+========================================================= */
+
+.question-text {
+
+    color: #f8fafc;
+
+    font-size: 1.28rem;
+
+    line-height: 1.6;
+
+    font-weight: 750;
+
+    margin-bottom: 25px;
+}
+
+
+/* =========================================================
+   OPTION CARDS
+========================================================= */
+
+.option-card {
+
+    position: relative;
+
+    min-height: 66px;
+
+    background:
+        rgba(255,255,255,.055);
+
+    color: #e2e8f0;
+
+    cursor: pointer;
+
+    border: 1px solid rgba(255,255,255,.12) !important;
+
+    border-radius: 16px !important;
+
+    transition:
+        transform .25s ease,
+        border-color .25s ease,
+        background .25s ease,
+        box-shadow .25s ease;
+
+    overflow: hidden;
+}
+
+
+/* Left colorful accent */
+
+.option-card::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 0;
+
+    background:
+        linear-gradient(
+            180deg,
+            #ff0080,
+            #8b5cf6,
+            #00b8ff,
+            #00d084
+        );
+
+    transition: width .25s ease;
+}
+
+.option-card:hover {
+
+    transform: translateY(-4px);
+
+    background:
+        rgba(99,102,241,.14);
+
+    border-color: rgba(167,139,250,.65) !important;
+
+    box-shadow:
+        0 12px 30px rgba(0,0,0,.20),
+        0 0 20px rgba(139,92,246,.10);
+}
+
+.option-card:hover::before {
+
+    width: 4px;
+}
+
+
+/* Radio */
+
+.option-card input {
+
+    transform: scale(1.2);
+
+    accent-color: #8b5cf6;
+
+    cursor: pointer;
+}
+
+
+/* Selected */
+
+.option-card:has(input:checked) {
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(99,102,241,.20),
+            rgba(236,72,153,.12)
+        );
+
+    border-color: #8b5cf6 !important;
+
+    box-shadow:
+        0 10px 30px rgba(139,92,246,.18),
+        inset 0 0 20px rgba(139,92,246,.05);
+}
+
+.option-card:has(input:checked)::before {
+
+    width: 4px;
+}
+
+.option-card:has(input:checked)::after {
+
+    content: "✓";
+
+    position: absolute;
+
+    right: 15px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    width: 28px;
+    height: 28px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #8b5cf6,
+            #ec4899
+        );
+
+    color: white;
+
+    font-weight: 900;
+
+    box-shadow:
+        0 5px 15px rgba(236,72,153,.30);
+}
+
+.option-text {
+
+    font-weight: 600;
+
+    line-height: 1.4;
+
+    padding-right: 30px;
+}
+
+
+/* =========================================================
+   BUTTON
+========================================================= */
+
+.quiz-btn {
+
+    border: none;
+
+    border-radius: 15px;
+
+    padding: 14px 32px;
+
+    color: white;
+
+    font-size: 1rem;
+
+    font-weight: 800;
+
+    background:
+        linear-gradient(
+            90deg,
+            #6366f1,
+            #8b5cf6,
+            #ec4899,
+            #6366f1
+        );
+
+    background-size: 300% auto;
+
+    animation: buttonRainbow 5s linear infinite;
+
+    box-shadow:
+        0 12px 30px rgba(99,102,241,.30);
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease;
+}
+
+@keyframes buttonRainbow {
+
+    0% {
+        background-position: 0% center;
+    }
+
+    100% {
+        background-position: 300% center;
+    }
+}
+
+.quiz-btn:hover {
+
+    color: white;
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 18px 40px rgba(139,92,246,.40);
+}
+
+.quiz-btn:active {
+
+    transform: scale(.98);
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:768px) {
+
+    .quiz-page {
+
+        padding: 12px 0 30px;
+
+    }
+
     .quiz-container {
-        background: #374151;
-        border-radius: 25px;
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+
+        padding: 18px !important;
+
+        border-radius: 21px;
+
     }
 
-    .option-card {
-        background: #4b5563;
-        color: white;
-        cursor: pointer;
-        transition: all 0.3s ease;
+    .quiz-header {
+
+        gap: 11px;
+
     }
 
-    .option-card:hover {
-        background: #2563eb;
-        transform: translateY(-3px);
-        border-color: #2563eb !important;
+    .quiz-header-icon {
+
+        width: 49px;
+        height: 49px;
+
+        border-radius: 14px;
+
     }
 
-    .option-card input {
-        transform: scale(1.2);
+    .quiz-header-icon i {
+
+        font-size: 1.45rem;
+
     }
 
-    .quiz-btn {
-        border-radius: 15px;
-        padding: 12px 30px;
-        font-size: 1.1rem;
-        font-weight: 600;
+    .quiz-title {
+
+        font-size: 1.4rem;
+
     }
 
-    .progress {
-        height: 12px;
-        border-radius: 20px;
+    .quiz-subtitle {
+
+        font-size: .76rem;
+
     }
 
     .timer-box {
-        background: #fff3cd;
-        color: #664d03;
-        border-radius: 15px;
-        padding: 12px;
-        font-weight: bold;
-        text-align: center;
-        font-size: 1.2rem;
+
+        font-size: .9rem;
+
     }
 
-    @media(max-width:768px) {
+    .question-card-body {
 
-        .quiz-container {
-            padding: 20px !important;
-        }
+        padding: 20px;
 
-        .quiz-btn {
-            width: 100%;
-        }
-
-        .timer-box {
-            font-size: 1rem;
-        }
     }
+
+    .question-text {
+
+        font-size: 1.08rem;
+
+    }
+
+    .option-card {
+
+        min-height: 58px;
+
+        padding: 13px !important;
+
+        font-size: .88rem;
+
+    }
+
+    .quiz-btn {
+
+        width: 100%;
+
+    }
+
+}
+
 </style>
 
-<div class="page-card quiz-container p-4">
 
-    <div class="section-heading">
-        <i class="bi bi-question-circle-fill text-primary"></i>
+<!-- =========================================================
+     QUIZ PAGE
+========================================================= -->
 
-        <div>
-            <h1 class="h3 mb-1 text-white">
-                Quiz Challenge
-            </h1>
+<div class="quiz-page">
 
-            <p class="text-white mb-0">
-                Answer one question at a time and track your score.
-            </p>
-        </div>
-    </div>
+    <div class="container">
 
-    <!-- Timer -->
+        <div class="page-card quiz-container p-4">
 
-    <div class="timer-box mb-4">
-        ⏳ Time Left:
-        <span id="timer">30</span> Seconds
-    </div>
 
-    <form method="post" action="{{ request.path }}" id="quizForm">
+            <!-- =================================================
+                 HEADER
+            ================================================== -->
 
-        {% if feedback %}
-        <div class="alert alert-{{ 'success' if feedback.correct else 'danger' }} shadow-sm">
-            <strong>
-                {% if feedback.correct %}
-                Correct answer!
-                {% else %}
-                Incorrect answer.
-                {% endif %}
-            </strong>
-            {% if not feedback.correct %}
-            You selected {{ feedback.selected }}.
-            {% endif %}
-            Correct answer: {{ feedback.correct_option }}.
-        </div>
-        {% endif %}
+            <div class="quiz-header">
 
-        {% if course_name %}
-        <div class="mb-3">
-            <span class="badge bg-info text-dark">
-                <i class="bi bi-journal-bookmark-fill me-1"></i>
-                {{ course_name }}
-            </span>
-        </div>
-        {% endif %}
+                <div class="quiz-header-icon">
 
-        <div class="card border-0 shadow-lg rounded-4 mb-4">
-
-            <div class="card-body" style="background:#374151;">
-
-                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3">
-
-                    <div>
-                        <h3 class="h5 mb-1 text-white">
-                            Question {{ idx + 1 }} of {{ total }}
-                        </h3>
-
-                        <small class="text-light">
-                            Select the correct answer
-                        </small>
-                        {% set concept_name = quiz.concept if quiz is mapping and quiz.concept else 'General' %}
-                        <div class="mt-2">
-                            <span class="badge bg-secondary">
-                                Concept: {{ concept_name }}
-                            </span>
-                        </div>
-                    </div>
-
-                    <span class="badge bg-success mt-2 mt-md-0">
-                        {{ idx + 1 }}/{{ total }}
-                    </span>
+                   🌟
 
                 </div>
 
-                <!-- Progress Bar -->
+                <div>
 
-                <div class="progress mb-4">
+                    <h1 class="quiz-title">
 
-                    <div class="progress-bar bg-success" style="width: {{ ((idx)/total)*100 }}%">
-                    </div>
+                        Quiz Challenge
 
-                </div>
+                    </h1>
 
-                <h4 class="text-white mb-4">
-                    {{ quiz.questions }}
-                </h4>
+                    <p class="quiz-subtitle">
 
-                <div class="row">
+                        Test your knowledge • Learn • Improve • Succeed
 
-                    {% for option in quiz.Option %}
-
-                    <div class="col-md-6 mb-3">
-
-                        <label class="form-check option-card p-3 rounded-4 border border-2 d-flex align-items-center">
-
-                            <input class="form-check-input me-3" type="radio" name="choice"
-                                value="{{ option[0]|upper }}" required>
-
-                            <span>{{ option }}</span>
-
-                        </label>
-
-                    </div>
-
-                    {% endfor %}
+                    </p>
 
                 </div>
 
             </div>
 
+
+            <!-- =================================================
+                 TIMER
+            ================================================== -->
+
+            <div class="timer-box">
+
+                <span>⏳</span>
+
+                <span>Time Left:</span>
+
+                <span id="timer">30</span>
+
+                <span>Seconds</span>
+
+            </div>
+
+
+            <form
+                method="post"
+                action="{{ request.path }}"
+                id="quizForm"
+            >
+
+
+                <!-- =================================================
+                     FEEDBACK
+                ================================================== -->
+
+                {% if feedback %}
+
+                <div class="alert alert-{{
+                    'success' if feedback.correct else 'danger'
+                }} quiz-feedback">
+
+                    <strong>
+
+                        {% if feedback.correct %}
+
+                        <i class="bi bi-check-circle-fill me-1"></i>
+                        Correct answer!
+
+                        {% else %}
+
+                        <i class="bi bi-x-circle-fill me-1"></i>
+                        Incorrect answer.
+
+                        {% endif %}
+
+                    </strong>
+
+                    {% if not feedback.correct %}
+
+                    You selected {{ feedback.selected }}.
+
+                    {% endif %}
+
+                    Correct answer:
+                    <strong>{{ feedback.correct_option }}</strong>.
+
+                </div>
+
+                {% endif %}
+
+
+                <!-- =================================================
+                     COURSE
+                ================================================== -->
+
+                {% if course_name %}
+
+                <div class="mb-3">
+
+                    <span class="course-badge">
+
+                        <i class="bi bi-journal-bookmark-fill"></i>
+
+                        {{ course_name }}
+
+                    </span>
+
+                </div>
+
+                {% endif %}
+
+
+                <!-- =================================================
+                     QUESTION
+                ================================================== -->
+
+                <div class="card question-card mb-4">
+
+                    <div class="question-card-body">
+
+
+                        <!-- Question Header -->
+
+                        <div class="
+                            d-flex
+                            flex-column
+                            flex-md-row
+                            justify-content-between
+                            align-items-md-center
+                            mb-3
+                        ">
+
+                            <div>
+
+                                <div class="question-number">
+
+                                    Question {{ idx + 1 }} of {{ total }}
+
+                                </div>
+
+                                <div class="question-help">
+
+                                    Select the correct answer
+
+                                </div>
+
+
+                                {% set concept_name =
+                                    quiz.concept
+                                    if quiz is mapping and quiz.concept
+                                    else 'General'
+                                %}
+
+                                <div>
+
+                                    <span class="concept-badge">
+
+                                        <i class="bi bi-lightbulb-fill"></i>
+
+                                        Concept: {{ concept_name }}
+
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <span class="question-counter mt-2 mt-md-0">
+
+                                {{ idx + 1 }}/{{ total }}
+
+                            </span>
+
+                        </div>
+
+
+                        <!-- Progress -->
+
+                        <div class="quiz-progress mb-4">
+
+                            <div
+                                class="quiz-progress-bar"
+                                style="width: {{ ((idx)/total)*100 }}%"
+                            ></div>
+
+                        </div>
+
+
+                        <!-- Question -->
+
+                        <h4 class="question-text">
+
+                            {{ quiz.questions }}
+
+                        </h4>
+
+
+                        <!-- Options -->
+
+                        <div class="row">
+
+                            {% for option in quiz.Option %}
+
+                            <div class="col-md-6 mb-3">
+
+                                <label
+                                    class="
+                                        form-check
+                                        option-card
+                                        p-3
+                                        d-flex
+                                        align-items-center
+                                    "
+                                >
+
+                                    <input
+                                        class="form-check-input me-3"
+                                        type="radio"
+                                        name="choice"
+                                        value="{{ option[0]|upper }}"
+                                        required
+                                    >
+
+                                    <span class="option-text">
+
+                                        {{ option }}
+
+                                    </span>
+
+                                </label>
+
+                            </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Button -->
+
+                <button
+                    type="submit"
+                    class="quiz-btn"
+                >
+
+                    {% if idx + 1 == total %}
+
+                    <i class="bi bi-trophy-fill me-2"></i>
+
+                    Finish Quiz
+
+                    {% else %}
+
+                    <i class="bi bi-arrow-right-circle-fill me-2"></i>
+
+                    Next Question
+
+                    {% endif %}
+
+                </button>
+
+
+            </form>
+
         </div>
 
-        <button type="submit" class="btn btn-primary btn-lg quiz-btn shadow">
-
-            <i class="bi bi-arrow-right-circle-fill me-2"></i>
-
-            {% if idx + 1 == total %}
-            Finish Quiz
-            {% else %}
-            Next Question
-            {% endif %}
-
-        </button>
-
-    </form>
+    </div>
 
 </div>
 
+
 <script>
 
-    let timeLeft = 30;
+/* =========================================================
+   TIMER
+========================================================= */
 
-    const timer = document.getElementById("timer");
+let timeLeft = 30;
 
-    const countdown = setInterval(function () {
+const timer = document.getElementById("timer");
 
-        timeLeft--;
+const quizForm = document.getElementById("quizForm");
 
-        timer.innerText = timeLeft;
 
-        if (timeLeft <= 10) {
-            timer.style.color = "red";
+const countdown = setInterval(function () {
+
+    timeLeft--;
+
+    timer.innerText = timeLeft;
+
+
+    if (timeLeft <= 10) {
+
+        timer.style.background =
+            "linear-gradient(135deg,#ef4444,#dc2626)";
+
+        timer.style.boxShadow =
+            "0 0 20px rgba(239,68,68,.45)";
+
+    }
+
+
+    if (timeLeft <= 5) {
+
+        timer.style.transform = "scale(1.12)";
+
+    } else {
+
+        timer.style.transform = "scale(1)";
+
+    }
+
+
+    if (timeLeft <= 0) {
+
+        clearInterval(countdown);
+
+        timer.innerText = "0";
+
+        alert("⏰ Time is up!");
+
+        quizForm.submit();
+
+    }
+
+}, 1000);
+
+
+/* =========================================================
+   STOP TIMER ON SUBMIT
+========================================================= */
+
+quizForm.addEventListener("submit", function () {
+
+    clearInterval(countdown);
+
+});
+
+
+/* =========================================================
+   OPTION CLICK
+========================================================= */
+
+document.querySelectorAll(".option-card").forEach(function(card) {
+
+    card.addEventListener("click", function() {
+
+        const radio =
+            card.querySelector("input[type='radio']");
+
+        if (radio) {
+
+            radio.checked = true;
+
         }
 
-        if (timeLeft <= 0) {
+    });
 
-            clearInterval(countdown);
-
-            alert("⏰ Time is up!");
-
-            document.getElementById("quizForm").submit();
-        }
-
-    }, 1000);
+});
 
 </script>
 
+
 {% endblock %}
+
