@@ -812,7 +812,7 @@ def Quiz_page():
                  """
 
             response = client.chat.completions.create(
-                model="llama-3.1-8b-instant",
+                model="openai/gpt-oss-20b",
             messages=[
            
                {
@@ -1032,7 +1032,7 @@ Do not return code block.
     try:
 
         response = client.chat.completions.create(
-            model="llama-3.1-8b-instant",
+           model="openai/gpt-oss-20b",
             messages=[
                 {
                     "role": "user",
@@ -1223,7 +1223,7 @@ def ai_quiz_page():
                 plz provide study tip for student and short summary of student performance,it should not be more than 3 lines.
             """
             response = client.chat.completions.create(
-                model="llama-3.1-8b-instant",
+                model="openai/gpt-oss-20b",
                 messages=[{"role": "user", "content": prompt}]
             )
             ai_tip = response.choices[0].message.content
@@ -1513,7 +1513,7 @@ Include:
 
     try:
         response = client.chat.completions.create(
-            model="llama-3.1-8b-instant",
+            model="openai/gpt-oss-20b",
             messages=[
                 {
                     "role": "user",
@@ -1754,7 +1754,7 @@ def askhub():
 
             response = client.chat.completions.create(
 
-                model="llama-3.1-8b-instant",
+                model="openai/gpt-oss-20b",
 
                 messages=[
                     {
@@ -1999,7 +1999,7 @@ Use exactly this structure:
             )
 
             response = client.chat.completions.create(
-                model="llama-3.1-8b-instant",
+                model="openai/gpt-oss-20b",
                 messages=[
                     {
                         "role": "system",
@@ -2460,7 +2460,7 @@ Return exactly this structure:
 """
 
         response = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model="openai/gpt-oss-20b",
             messages=[
                 {
                     "role": "system",
@@ -2536,7 +2536,7 @@ Rules:
 
     try:
         response = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model="openai/gpt-oss-20b",
             messages=[
                 {
                     "role": "system",
@@ -3310,7 +3310,7 @@ Introduce yourself briefly and ask the first question.
 
                 response = client.chat.completions.create(
 
-                    model="llama-3.3-70b-versatile",
+                   model="openai/gpt-oss-20b",
 
                     messages=[
                         {
@@ -3480,7 +3480,7 @@ The goal is practice, confidence and learning.
 
                 response = client.chat.completions.create(
 
-                    model="llama-3.3-70b-versatile",
+                    model="openai/gpt-oss-20b",
 
                     messages=conversation,
 
@@ -3763,7 +3763,7 @@ IMPORTANT RULES:
 
         response = client.chat.completions.create(
 
-            model="llama-3.3-70b-versatile",
+            model="openai/gpt-oss-20b",
 
             messages=[
 
